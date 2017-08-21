@@ -85,7 +85,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.example.administrator.thinker_soft.activity.MoveGuideActivity"
+            android:name=".Security_check.activity.MoveGuideActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -96,75 +96,75 @@
 
         //移动查询
         <activity
-            android:name="com.example.administrator.thinker_soft.activity.QueryActivity"
+            android:name=".Security_check.activity.QueryActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.example.administrator.thinker_soft.activity.CostListviewActivity"
+            android:name=".Security_check.activity.CostListviewActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.example.administrator.thinker_soft.activity.CostDetailActivity"
+            android:name=".Security_check.activity.CostDetailActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.example.administrator.thinker_soft.activity.BusinessManageActivity"
+            android:name=".Security_check.activity.BusinessManageActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.example.administrator.thinker_soft.activity.BusinessManageLoginActivity"
+            android:name=".Security_check.activity.BusinessManageLoginActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.example.administrator.thinker_soft.activity.BusinessCheckActivity"
+            android:name=".Security_check.activity.BusinessCheckActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.example.administrator.thinker_soft.activity.MoreSettingsActivity"
+            android:name=".Security_check.activity.MoreSettingsActivity"
             android:screenOrientation="portrait"/>
 
         //安检
         <activity
-            android:name="com.example.administrator.thinker_soft.activity.MobileSecurityLoginActivity"
+            android:name=".Security_check.activity.MobileSecurityLoginActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.example.administrator.thinker_soft.activity.SecurityChooseActivity"
+            android:name=".Security_check.activity.SecurityChooseActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.example.administrator.thinker_soft.activity.NewTaskActivity"
+            android:name=".Security_check.activity.NewTaskActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.example.administrator.thinker_soft.activity.NoCheckUserListActivity"
+            android:name=".Security_check.activity.NoCheckUserListActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.example.administrator.thinker_soft.activity.TaskChooseActivity"
+            android:name=".Security_check.activity.TaskChooseActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.example.administrator.thinker_soft.activity.SecurityStatisticsActivity"
+            android:name=".Security_check.activity.SecurityStatisticsActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.example.administrator.thinker_soft.activity.UserDetailInfoActivity"
+            android:name=".Security_check.activity.UserDetailInfoActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.example.administrator.thinker_soft.activity.UserListActivity"
+            android:name=".Security_check.activity.UserListActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.example.administrator.thinker_soft.activity.UploadActivity"
+            android:name=".Security_check.activity.UploadActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.example.administrator.thinker_soft.activity.FileManageActivity"
+            android:name=".Security_check.activity.FileManageActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.example.administrator.thinker_soft.activity.IpSettingActivity"
+            android:name=".Security_check.activity.IpSettingActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.example.administrator.thinker_soft.activity.SystemSettingActivity"
+            android:name=".Security_check.activity.SystemSettingActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.example.administrator.thinker_soft.activity.NewTaskDetailActivity"
+            android:name=".Security_check.activity.NewTaskDetailActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.example.administrator.thinker_soft.activity.ContinueCheckUserActivity"
+            android:name=".Security_check.activity.ContinueCheckUserActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.example.administrator.thinker_soft.activity.MyPhotoGalleryActivity"
+            android:name=".Security_check.activity.MyPhotoGalleryActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.example.administrator.thinker_soft.activity.SecurityGuideActivity"
+            android:name=".Security_check.activity.SecurityGuideActivity"
             android:screenOrientation="portrait"/>
 
         //掌上办公
@@ -286,13 +286,13 @@
 
         //智慧平台
         <activity
-            android:name="com.example.administrator.thinker_soft.activity.MoveLoginActivity"
+            android:name=".Security_check.activity.MoveLoginActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.example.administrator.thinker_soft.activity.MoveHomePageActivity"
+            android:name=".Security_check.activity.MoveHomePageActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.example.administrator.thinker_soft.activity.BusinessWebviewActivity"
+            android:name=".Security_check.activity.BusinessWebviewActivity"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".mobile_business.BusinessDataInfoActivity"

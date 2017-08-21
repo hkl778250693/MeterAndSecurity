@@ -40,8 +40,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.administrator.thinker_soft.R;
-import com.example.administrator.thinker_soft.activity.MyPhotoGalleryActivity;
-import com.example.administrator.thinker_soft.adapter.GridviewImageAdapter;
+import com.example.administrator.thinker_soft.Security_check.activity.MyPhotoGalleryActivity;
+import com.example.administrator.thinker_soft.Security_check.adapter.GridviewImageAdapter;
 import com.example.administrator.thinker_soft.mode.MyPhotoUtils;
 import com.example.administrator.thinker_soft.mode.MySqliteHelper;
 import com.example.administrator.thinker_soft.mode.Tools;
