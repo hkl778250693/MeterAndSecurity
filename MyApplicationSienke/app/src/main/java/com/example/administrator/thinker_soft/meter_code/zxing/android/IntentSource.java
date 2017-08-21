@@ -1,4 +1,4 @@
-package com.example.administrator.thinker_soft.zxing.android;
+package com.example.administrator.thinker_soft.meter_code.zxing.android;
 
 public enum IntentSource {
 

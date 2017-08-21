@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.administrator.thinker_soft.zxing.decoding;
+package com.example.administrator.thinker_soft.meter_code.zxing.decoding;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -24,8 +24,8 @@ import android.os.Message;
 import android.util.Log;
 
 import com.example.administrator.thinker_soft.R;
-import com.example.administrator.thinker_soft.zxing.camera.CameraManager;
-import com.example.administrator.thinker_soft.zxing.view.ViewfinderResultPointCallback;
+import com.example.administrator.thinker_soft.meter_code.zxing.camera.CameraManager;
+import com.example.administrator.thinker_soft.meter_code.zxing.view.ViewfinderResultPointCallback;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 

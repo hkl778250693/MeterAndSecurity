@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.administrator.thinker_soft.zxing.decoding;
+package com.example.administrator.thinker_soft.meter_code.zxing.decoding;
 
 /**
  * This class provides the constants to use when sending an Intent to Barcode Scanner.

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.administrator.thinker_soft.zxing.view;
+package com.example.administrator.thinker_soft.meter_code.zxing.view;
 
 
 import android.annotation.SuppressLint;
@@ -30,7 +30,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.example.administrator.thinker_soft.R;
-import com.example.administrator.thinker_soft.zxing.camera.CameraManager;
+import com.example.administrator.thinker_soft.meter_code.zxing.camera.CameraManager;
 import com.google.zxing.ResultPoint;
 
 import java.util.ArrayList;

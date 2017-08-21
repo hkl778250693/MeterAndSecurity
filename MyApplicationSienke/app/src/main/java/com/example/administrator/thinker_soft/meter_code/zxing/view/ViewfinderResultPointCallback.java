@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.administrator.thinker_soft.zxing.view;
+package com.example.administrator.thinker_soft.meter_code.zxing.view;
 
 import com.google.zxing.ResultPoint;
 import com.google.zxing.ResultPointCallback;

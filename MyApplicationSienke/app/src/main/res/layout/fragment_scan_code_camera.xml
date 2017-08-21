@@ -10,7 +10,7 @@
         android:layout_height="match_parent"/>
 
     <!-- 扫描取景框 -->
-    <com.example.administrator.thinker_soft.zxing.view.ViewfinderView
+    <com.example.administrator.thinker_soft.meter_code.zxing.view.ViewfinderView
         android:id="@+id/viewfinder_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

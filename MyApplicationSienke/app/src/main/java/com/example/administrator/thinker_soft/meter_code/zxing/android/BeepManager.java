@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.administrator.thinker_soft.zxing.android;
+package com.example.administrator.thinker_soft.meter_code.zxing.android;
 
 import android.content.Context;
 import android.content.SharedPreferences;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.administrator.thinker_soft.zxing.decoding;
+package com.example.administrator.thinker_soft.meter_code.zxing.decoding;
 
 import android.app.Activity;
 import android.content.DialogInterface;

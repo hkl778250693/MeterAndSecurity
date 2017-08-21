@@ -1,4 +1,4 @@
-package com.example.administrator.thinker_soft.zxing.fragment;
+package com.example.administrator.thinker_soft.meter_code.zxing.fragment;
 
 import android.content.Context;
 import android.content.Intent;
@@ -21,13 +21,13 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.administrator.thinker_soft.R;
-import com.example.administrator.thinker_soft.zxing.android.BeepManager;
-import com.example.administrator.thinker_soft.zxing.android.IntentSource;
-import com.example.administrator.thinker_soft.zxing.camera.CameraManager;
-import com.example.administrator.thinker_soft.zxing.decoding.CaptureActivityHandler;
-import com.example.administrator.thinker_soft.zxing.decoding.DecodeHandlerInterface;
-import com.example.administrator.thinker_soft.zxing.decoding.InactivityTimer;
-import com.example.administrator.thinker_soft.zxing.view.ViewfinderView;
+import com.example.administrator.thinker_soft.meter_code.zxing.android.BeepManager;
+import com.example.administrator.thinker_soft.meter_code.zxing.android.IntentSource;
+import com.example.administrator.thinker_soft.meter_code.zxing.camera.CameraManager;
+import com.example.administrator.thinker_soft.meter_code.zxing.decoding.CaptureActivityHandler;
+import com.example.administrator.thinker_soft.meter_code.zxing.decoding.DecodeHandlerInterface;
+import com.example.administrator.thinker_soft.meter_code.zxing.decoding.InactivityTimer;
+import com.example.administrator.thinker_soft.meter_code.zxing.view.ViewfinderView;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.Result;

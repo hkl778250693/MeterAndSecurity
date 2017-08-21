@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.administrator.thinker_soft.zxing.decoding;
+package com.example.administrator.thinker_soft.meter_code.zxing.decoding;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -24,7 +24,7 @@ import android.os.Message;
 import android.util.Log;
 
 import com.example.administrator.thinker_soft.R;
-import com.example.administrator.thinker_soft.zxing.camera.CameraManager;
+import com.example.administrator.thinker_soft.meter_code.zxing.camera.CameraManager;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.MultiFormatReader;

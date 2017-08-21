@@ -1,10 +1,10 @@
-package com.example.administrator.thinker_soft.zxing.decoding;
+package com.example.administrator.thinker_soft.meter_code.zxing.decoding;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Handler;
 
-import com.example.administrator.thinker_soft.zxing.view.ViewfinderView;
+import com.example.administrator.thinker_soft.meter_code.zxing.view.ViewfinderView;
 import com.google.zxing.Result;
 
 /***

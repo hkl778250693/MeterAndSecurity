@@ -1,4 +1,4 @@
-package com.example.administrator.thinker_soft.zxing.android;
+package com.example.administrator.thinker_soft.meter_code.zxing.android;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -20,11 +20,11 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.administrator.thinker_soft.R;
-import com.example.administrator.thinker_soft.zxing.camera.CameraManager;
-import com.example.administrator.thinker_soft.zxing.decoding.CaptureActivityHandler;
-import com.example.administrator.thinker_soft.zxing.decoding.DecodeHandlerInterface;
-import com.example.administrator.thinker_soft.zxing.decoding.InactivityTimer;
-import com.example.administrator.thinker_soft.zxing.view.ViewfinderView;
+import com.example.administrator.thinker_soft.meter_code.zxing.camera.CameraManager;
+import com.example.administrator.thinker_soft.meter_code.zxing.decoding.CaptureActivityHandler;
+import com.example.administrator.thinker_soft.meter_code.zxing.decoding.DecodeHandlerInterface;
+import com.example.administrator.thinker_soft.meter_code.zxing.decoding.InactivityTimer;
+import com.example.administrator.thinker_soft.meter_code.zxing.view.ViewfinderView;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 

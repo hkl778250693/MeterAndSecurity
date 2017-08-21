@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.administrator.thinker_soft.zxing.camera;
+package com.example.administrator.thinker_soft.meter_code.zxing.camera;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -25,7 +25,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
-import com.example.administrator.thinker_soft.zxing.android.PreferencesActivity;
+import com.example.administrator.thinker_soft.meter_code.zxing.android.PreferencesActivity;
 import java.lang.reflect.Method;
 
 /**

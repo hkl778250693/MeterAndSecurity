@@ -1,4 +1,4 @@
-package com.example.administrator.thinker_soft.zxing.encoding;
+package com.example.administrator.thinker_soft.meter_code.zxing.encoding;
 
 import java.util.Hashtable;
 

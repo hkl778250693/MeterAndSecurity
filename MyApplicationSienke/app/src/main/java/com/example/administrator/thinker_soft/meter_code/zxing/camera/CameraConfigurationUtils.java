@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.administrator.thinker_soft.zxing.camera;
+package com.example.administrator.thinker_soft.meter_code.zxing.camera;
 
 import android.annotation.SuppressLint;
 import android.graphics.Point;
