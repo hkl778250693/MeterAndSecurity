@@ -332,7 +332,11 @@
             android:name=".meter_code.activity.TesseractOcrActivity"
             android:screenOrientation="portrait"/>
         <activity
+<<<<<<< HEAD
             android:name=".zxing.android.CaptureActivity"
+=======
+            android:name=".meter_code.zxing.android.CaptureActivity"
+>>>>>>> 9aba882861cb87d5b8db702d955c8e00ed392e44
             android:screenOrientation="portrait"/>
 
         <activity

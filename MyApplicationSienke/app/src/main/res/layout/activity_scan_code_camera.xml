@@ -9,7 +9,11 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center" />
 
+<<<<<<< HEAD
     <com.example.administrator.thinker_soft.zxing.view.ViewfinderView
+=======
+    <com.example.administrator.thinker_soft.meter_code.zxing.view.ViewfinderView
+>>>>>>> 9aba882861cb87d5b8db702d955c8e00ed392e44
         android:id="@+id/viewfinder_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
