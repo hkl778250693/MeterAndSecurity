@@ -367,9 +367,6 @@
         <activity
             android:name=".meter_code.activity.MapMeterActivity"
             android:screenOrientation="portrait"/>
-        <activity
-            android:name=".myfirstpro.navigation.BNavigatorActivity"
-            android:configChanges="orientation|screenSize|keyboard|keyboardHidden"/>
 
         <activity
             android:name=".meter_code.activity.MeterUserCoordinateManageActivity"
@@ -377,15 +374,6 @@
 
         <activity
             android:name=".meter_code.activity.MeterPrintNoteActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan|stateHidden"/>
-
-        <activity
-            android:name=".myfirstpro.fragment.newWorkXiangQing"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan|stateHidden"/>
-        <activity
-            android:name=".myfirstpro.fragment.oldWorkXiangQing"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateHidden"/>
 
@@ -412,14 +400,7 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".meter_code.activity.BluetoothActivity" android:screenOrientation="portrait"/>
         <activity android:name=".meter_code.activity.PrintDataActivity" android:screenOrientation="portrait"/>
-
-        <receiver android:name=".myfirstpro.broadcast.MyBroadcast">
-            <intent-filter>
-                <action android:name="cc.thksoft.myfirstpro.broadcast.MyBroadcast">
-
-                </action>
-            </intent-filter>
-        </receiver>
+        <activity android:name=".meter_code.activity.MeterTrackActivity" android:screenOrientation="portrait"/>
 
         <!-- 百度地图 验证码  -->
         <meta-data
@@ -434,12 +415,6 @@
                 <action android:name="com.baidu.location.service_v2.2"></action>
             </intent-filter>
         </service>
-
-        <!-- uCrop图片裁剪 -->
-        <activity
-            android:name="com.yalantis.ucrop.UCropActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
 
     </application>
 

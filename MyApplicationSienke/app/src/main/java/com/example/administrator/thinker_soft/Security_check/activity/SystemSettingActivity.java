@@ -7,6 +7,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 
 import com.example.administrator.thinker_soft.R;
@@ -16,8 +18,9 @@ import com.example.administrator.thinker_soft.R;
  */
 public class SystemSettingActivity extends Activity {
     private ImageView back;
-    private CardView ip, clearData;
+    private CardView ip, clearData,tempdata_cardview;
     private SharedPreferences sharedPreferences,sharedPreferences_login;
+    private CheckBox show_tempdata;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,13 +37,18 @@ public class SystemSettingActivity extends Activity {
     private void bindView() {
         back = (ImageView) findViewById(R.id.back);
         ip = (CardView) findViewById(R.id.ip);
+        tempdata_cardview = (CardView) findViewById(R.id.tempdata_cardview);
         clearData = (CardView) findViewById(R.id.clear_data);
+        show_tempdata = (CheckBox) findViewById(R.id.show_tempdata);
     }
 
     //初始化设置
     private void defaultSetting() {
         sharedPreferences_login = this.getSharedPreferences("login_info", Context.MODE_PRIVATE);
         sharedPreferences = this.getSharedPreferences(sharedPreferences_login.getString("userId","")+"data", Context.MODE_PRIVATE);
+        if(!sharedPreferences_login.getBoolean("have_logined",false)){
+            tempdata_cardview.setVisibility(View.VISIBLE);
+        }
     }
 
     //点击事件
@@ -48,6 +56,16 @@ public class SystemSettingActivity extends Activity {
         back.setOnClickListener(clickListener);
         ip.setOnClickListener(clickListener);
         clearData.setOnClickListener(clickListener);
+        show_tempdata.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    sharedPreferences.edit().putBoolean("show_temp_data",true).apply();
+                }else {
+                    sharedPreferences.edit().putBoolean("show_temp_data",false).apply();
+                }
+            }
+        });
     }
 
     View.OnClickListener clickListener = new View.OnClickListener() {

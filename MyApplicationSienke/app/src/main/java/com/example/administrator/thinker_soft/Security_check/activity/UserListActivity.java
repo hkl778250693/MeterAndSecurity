@@ -83,11 +83,15 @@ public class UserListActivity extends Activity {
         new Thread() {
             @Override
             public void run() {
-                if (!"".equals(sharedPreferences.getString("currentTaskId",""))) {
-                    getUserData(sharedPreferences.getString("currentTaskId",""), sharedPreferences_login.getString("userId", ""));//读取所有安检用户数据
-                    Log.i("UserListActivity----", "查询的任务编号是：" + sharedPreferences.getString("currentTaskId",""));
-                } else {
-                    handler.sendEmptyMessage(1);
+                if (sharedPreferences.getBoolean("show_temp_data", false)) {   //显示演示数据
+                    getTempData();
+                }else {
+                    if (!"".equals(sharedPreferences.getString("currentTaskId",""))) {
+                        getUserData(sharedPreferences.getString("currentTaskId",""), sharedPreferences_login.getString("userId", ""));//读取所有安检用户数据
+                        Log.i("UserListActivity----", "查询的任务编号是：" + sharedPreferences.getString("currentTaskId",""));
+                    } else {
+                        handler.sendEmptyMessage(1);
+                    }
                 }
             }
         }.start();
@@ -272,6 +276,32 @@ public class UserListActivity extends Activity {
         }
         cursor.close(); //游标关闭
         handler.sendEmptyMessage(0);
+    }
+
+    public void getTempData(){
+        for(int i = 0;i<20;i++){
+            UserListviewItem userListviewItem = new UserListviewItem();
+            userListviewItem.setSecurityNumber("001");
+            userListviewItem.setUserName("马云");
+            userListviewItem.setTaskId("007");
+            userListviewItem.setNumber("002");
+            userListviewItem.setPhoneNumber("123456789");
+            userListviewItem.setSecurityType("年度安检");
+            userListviewItem.setUserId("110");
+            userListviewItem.setUserNewId("010");
+            userListviewItem.setAdress("重庆市江北区鲁溉路星耀天地");
+            userListviewItem.setUserProperty("居民");
+            if(i == 0 || i == 2){
+                userListviewItem.setIfEdit(R.mipmap.meter_true);
+                userListviewItem.setIfChecked("已检");
+                userListviewItem.setIfUpload("已上传");
+            }else {
+                userListviewItem.setIfEdit(R.mipmap.meter_false);
+                userListviewItem.setIfChecked("未检");
+                userListviewItem.setIfUpload("");
+            }
+            userListviewItemList.add(userListviewItem);
+        }
     }
 
     //更新用户表是否安检状态
