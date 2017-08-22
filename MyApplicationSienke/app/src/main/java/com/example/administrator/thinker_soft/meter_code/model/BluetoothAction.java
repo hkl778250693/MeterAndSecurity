@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.administrator.thinker_soft.R;
 import com.example.administrator.thinker_soft.meter_code.activity.BluetoothActivity;
@@ -13,7 +15,8 @@ import com.example.administrator.thinker_soft.meter_code.activity.BluetoothActiv
  * Created by Administrator on 2017/8/1.
  */
 public class BluetoothAction implements View.OnClickListener {
-    private Button switchBT = null;
+    private CheckBox switchBT = null;
+    private TextView textView = null;
     private Button searchDevices = null;
     private Activity activity = null;
 
@@ -23,26 +26,30 @@ public class BluetoothAction implements View.OnClickListener {
     private BluetoothActivity.BluetoothService bluetoothService = null;
 
     public BluetoothAction(Context context, ListView unbondDevices,
-                           ListView bondDevices, Button switchBT, Button searchDevices,
+                           ListView bondDevices, CheckBox switchBT,TextView textView, Button searchDevices,
                            Activity activity) {
         super();
         this.context = context;
         this.unbondDevices = unbondDevices;
         this.bondDevices = bondDevices;
         this.switchBT = switchBT;
+        this.textView = textView;
         this.searchDevices = searchDevices;
         this.activity = activity;
         this.bluetoothService = new BluetoothActivity.BluetoothService(this.context,
-                this.unbondDevices,this.bondDevices,
-                this.switchBT,this.searchDevices);
+                this.unbondDevices, this.bondDevices, this.textView,
+        this.switchBT, this.searchDevices);
     }
 
-    public void setSwitchBT(Button switchBT) {
+    public void setSwitchBT(CheckBox switchBT) {
         this.switchBT = switchBT;
     }
 
     public void setSearchDevices(Button searchDevices) {
         this.searchDevices = searchDevices;
+    }
+    public void setTextView(TextView textView){
+        this.textView =textView;
     }
 
     public void setUnbondDevices(ListView unbondDevices) {
@@ -56,17 +63,19 @@ public class BluetoothAction implements View.OnClickListener {
 
         if (this.bluetoothService.isOpen()) {
             System.out.println("蓝牙有开!");
-            switchBT.setText("关闭蓝牙");
+            /*textView.setText("关闭蓝牙");*/
         }
         if (!this.bluetoothService.isOpen()) {
             System.out.println("蓝牙没开!");
-            switchBT.setText("打开蓝牙");
+            /*textView.setText("打开蓝牙");*/
             this.searchDevices.setEnabled(false);
         }
     }
+
     private void searchDevices() {
         bluetoothService.searchDevices();
     }
+
     /**
      * 各种按钮的监听
      */

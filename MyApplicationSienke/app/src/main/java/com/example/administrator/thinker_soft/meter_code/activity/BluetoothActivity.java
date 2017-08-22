@@ -9,12 +9,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.administrator.thinker_soft.R;
@@ -42,14 +44,15 @@ public class BluetoothActivity extends Activity {
         ListView unbondDevices = (ListView) this
                 .findViewById(R.id.unbondDevices);
         ListView bondDevices = (ListView) this.findViewById(R.id.bondDevices);
-        Button switchBT = (Button) this.findViewById(R.id.openBluetooth_tb);
+        TextView textView = (TextView) this.findViewById(R.id.text);
+        CheckBox switchBT = (CheckBox) this.findViewById(R.id.openBluetooth_tb);
         Button searchDevices = (Button) this.findViewById(R.id.searchDevices);
 
         BluetoothAction bluetoothAction = new BluetoothAction(this.context,
-                unbondDevices, bondDevices, switchBT, searchDevices,
+                unbondDevices, bondDevices, switchBT,textView, searchDevices,
                 BluetoothActivity.this);
 
-        Button returnButton = (Button) this
+        ImageView returnButton = (ImageView) this
                 .findViewById(R.id.return_Bluetooth_btn);
         bluetoothAction.setSearchDevices(searchDevices);
         bluetoothAction.initView();
@@ -59,14 +62,14 @@ public class BluetoothActivity extends Activity {
         returnButton.setOnClickListener(bluetoothAction);
     }
 
-    //屏蔽返回键的代码:
+    /*//屏蔽返回键的代码:
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
             case KeyEvent.KEYCODE_BACK:
                 return true;
         }
         return super.onKeyDown(keyCode, event);
-    }
+    }*/
 
     public static class BluetoothService {
         private Context context = null;
@@ -74,8 +77,9 @@ public class BluetoothActivity extends Activity {
                 .getDefaultAdapter();
         private ArrayList<BluetoothDevice> unbondDevices = null; // 用于存放未配对蓝牙设备
         private ArrayList<BluetoothDevice> bondDevices = null;// 用于存放已配对蓝牙设备
-        private Button switchBT = null;
+        private TextView textView = null;
         private Button searchDevices = null;
+        private CheckBox switchBT = null;
         private ListView unbondDevicesListView = null;
         private ListView bondDevicesListView = null;
 
@@ -105,7 +109,7 @@ public class BluetoothActivity extends Activity {
                         public void onItemClick(AdapterView<?> arg0, View arg1,
                                                 int arg2, long arg3) {
                             BluetoothDevice device = bondDevices.get(arg2);
-                            Intent intent = new Intent(context,PrintDataActivity.class);
+                            Intent intent = new Intent(context, PrintDataActivity.class);
                             /*intent.setClassName(context,
                                     ".meter_code.PrintDataActivity");*/
                             intent.putExtra("deviceAddress", device.getAddress());
@@ -161,15 +165,17 @@ public class BluetoothActivity extends Activity {
                         }
                     });
         }
+
         public BluetoothService(Context context, ListView unbondDevicesListView,
-                                ListView bondDevicesListView, Button switchBT, Button searchDevices) {
+                                ListView bondDevicesListView, TextView textView,CheckBox switchBT, Button searchDevices) {
             this.context = context;
             this.unbondDevicesListView = unbondDevicesListView;
             this.bondDevicesListView = bondDevicesListView;
             // this.bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             this.unbondDevices = new ArrayList<BluetoothDevice>();
             this.bondDevices = new ArrayList<BluetoothDevice>();
-            this.switchBT = switchBT;
+            this.textView = textView;
+            this.switchBT =  switchBT;
             this.searchDevices = searchDevices;
             this.initIntentFilter();
 
@@ -282,14 +288,14 @@ public class BluetoothActivity extends Activity {
                 }
                 if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
                     if (bluetoothAdapter.getState() == BluetoothAdapter.STATE_ON) {
-                        System.out.println("--------打开蓝牙-----------");
-                        switchBT.setText("关闭蓝牙");
+                        System.out.println("--------关闭蓝牙-----------");
+                        /*textView.setText("打开蓝牙");*/
                         searchDevices.setEnabled(true);
                         bondDevicesListView.setEnabled(true);
                         unbondDevicesListView.setEnabled(true);
                     } else if (bluetoothAdapter.getState() == BluetoothAdapter.STATE_OFF) {
-                        System.out.println("--------关闭蓝牙-----------");
-                        switchBT.setText("打开蓝牙");
+                        System.out.println("--------打开蓝牙-----------");
+                        /*textView.setText("关闭蓝牙");*/
                         searchDevices.setEnabled(false);
                         bondDevicesListView.setEnabled(false);
                         unbondDevicesListView.setEnabled(false);

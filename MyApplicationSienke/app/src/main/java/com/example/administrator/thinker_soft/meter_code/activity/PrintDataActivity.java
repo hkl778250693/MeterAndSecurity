@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -62,11 +63,24 @@ public class PrintDataActivity extends Activity {
         EditText printData = (EditText) this.findViewById(R.id.print_data);
         Button send = (Button) this.findViewById(R.id.send);
         Button command = (Button) this.findViewById(R.id.command);
+        Button back = (Button)this.findViewById(R.id.back);
         printDataAction.setPrintData(printData);
 
         send.setOnClickListener(printDataAction);
         command.setOnClickListener(printDataAction);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()){
+                    case R.id.back:
+                        finish();
+                        break;
+                }
+            }
+        });
     }
+
+
 
 
     @Override
