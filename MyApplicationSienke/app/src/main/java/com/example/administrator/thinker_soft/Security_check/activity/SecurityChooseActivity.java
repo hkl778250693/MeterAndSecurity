@@ -29,6 +29,7 @@ import android.widget.TextView;
 import com.example.administrator.thinker_soft.R;
 import com.example.administrator.thinker_soft.Security_check.adapter.SecurityCheckViewPagerAdapter;
 import com.example.administrator.thinker_soft.Security_check.fragment.DataTransferFragment;
+import com.example.administrator.thinker_soft.Security_check.fragment.MyInfoFragment;
 import com.example.administrator.thinker_soft.Security_check.fragment.SecurityChooseFragment;
 import com.example.administrator.thinker_soft.mode.MySqliteHelper;
 import com.example.administrator.thinker_soft.mode.Tools;
@@ -55,19 +56,19 @@ public class SecurityChooseActivity extends FragmentActivity {
     private RadioButton settings, quite; //文件管理 系统设置 退出应用
     private boolean isFirst;   //是否第一次近日app
     private LayoutInflater inflater; //转换器
-    private View popupwindowView,quiteView;
-    private Button cancelRb,saveRb;
+    private View popupwindowView, quiteView;
+    private Button cancelRb, saveRb;
     private LinearLayout rootLinearlayout;
     private RelativeLayout rootRelative;
-    private PopupWindow popupWindow,quitePopup;
-    private ImageView back,security_check_go;
+    private PopupWindow popupWindow, quitePopup;
+    private ImageView back, security_check_go;
     private RadioButton optionRbt;  //选项按钮
-    private TextView name, userName,tips;
-    private RadioButton dataTransferRbt;  //数据传输按钮
+    private TextView name, userName, tips;
+    private RadioButton dataTransferRbt, radioButton3;  //数据传输按钮
     private List<Fragment> fragmentList;
     private ViewPager viewPager;
     private SecurityCheckViewPagerAdapter adapter;
-    private SharedPreferences sharedPreferences,sharedPreferences_login,public_sharedPreferences;
+    private SharedPreferences sharedPreferences, sharedPreferences_login, public_sharedPreferences;
     private SharedPreferences.Editor editor;
     private SQLiteDatabase db;  //数据库
     private MySqliteHelper helper; //数据库帮助类
@@ -83,7 +84,7 @@ public class SecurityChooseActivity extends FragmentActivity {
         Log.i("SecurityChooseActivity", "onResume");
     }
 
-    public void checkIpAndPort(){
+    public void checkIpAndPort() {
         Log.i("SecurityChooseActivity", "checkIpAndPort执行了！");
         db.delete("SecurityState", null, null);  //删除SecurityState表中的所有数据
         db.delete("security_content", null, null);  //删除security_content表中的所有数据
@@ -129,7 +130,7 @@ public class SecurityChooseActivity extends FragmentActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-        Log.i("SecurityChooseActivity", "onRestart" );
+        Log.i("SecurityChooseActivity", "onRestart");
     }
 
     @Override
@@ -141,7 +142,7 @@ public class SecurityChooseActivity extends FragmentActivity {
         defaultSetting();//初始化设置
         setViewPager();//设置viewPager
         setViewClickListener();//点击事件
-        Log.i("SecurityChooseActivity", "onCreate" );
+        Log.i("SecurityChooseActivity", "onCreate");
     }
 
     //绑定控件
@@ -150,6 +151,7 @@ public class SecurityChooseActivity extends FragmentActivity {
         security_check_go = (ImageView) findViewById(R.id.security_check_go);
         optionRbt = (RadioButton) findViewById(R.id.option_rbt);
         dataTransferRbt = (RadioButton) findViewById(R.id.data_transfer_rbt);
+        radioButton3 = (RadioButton) findViewById(R.id.radio_button3);
         viewPager = (ViewPager) findViewById(R.id.security_viewpager);
         name = (TextView) findViewById(R.id.name);
         userName = (TextView) findViewById(R.id.user_name);
@@ -163,6 +165,7 @@ public class SecurityChooseActivity extends FragmentActivity {
         security_check_go.setOnClickListener(onClickListener);
         optionRbt.setOnClickListener(onClickListener);
         dataTransferRbt.setOnClickListener(onClickListener);
+        radioButton3.setOnClickListener(onClickListener);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -175,12 +178,20 @@ public class SecurityChooseActivity extends FragmentActivity {
                     case 0:
                         optionRbt.setChecked(true);
                         dataTransferRbt.setChecked(false);
-                        name.setText("安检选项");
+                        radioButton3.setChecked(false);
+                        name.setText("首页");
                         break;
                     case 1:
                         optionRbt.setChecked(false);
                         dataTransferRbt.setChecked(true);
-                        name.setText("数据传输");
+                        radioButton3.setChecked(false);
+                        name.setText("传输");
+                        break;
+                    case 2:
+                        optionRbt.setChecked(false);
+                        dataTransferRbt.setChecked(false);
+                        radioButton3.setChecked(true);
+                        name.setText("我");
                         break;
                 }
             }
@@ -204,11 +215,15 @@ public class SecurityChooseActivity extends FragmentActivity {
                     break;
                 case R.id.option_rbt:
                     viewPager.setCurrentItem(0);
-                    name.setText("安检选项");
+                    name.setText("首页");
                     break;
                 case R.id.data_transfer_rbt:
                     viewPager.setCurrentItem(1);
-                    name.setText("数据传输");
+                    name.setText("传输");
+                    break;
+                case R.id.radio_button3:
+                    viewPager.setCurrentItem(2);
+                    name.setText("我");
                     break;
                 default:
                     break;
@@ -265,7 +280,7 @@ public class SecurityChooseActivity extends FragmentActivity {
         popupWindow.update();
         popupWindow.setBackgroundDrawable(getResources().getDrawable(R.color.white_transparent));
         popupWindow.setAnimationStyle(R.style.mypopwindow_anim_style);
-        popupWindow.showAsDropDown(security_check_go,-200,0);
+        popupWindow.showAsDropDown(security_check_go, -200, 0);
         backgroundAlpha(0.6F);
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
@@ -300,7 +315,7 @@ public class SecurityChooseActivity extends FragmentActivity {
                 quitePopup.dismiss();
                 Intent intent = new Intent(SecurityChooseActivity.this, MobileSecurityLoginActivity.class);
                 startActivity(intent);
-                sharedPreferences_login.edit().putBoolean("have_logined",false).apply();
+                sharedPreferences_login.edit().putBoolean("have_logined", false).apply();
                 finish();
             }
         });
@@ -335,30 +350,30 @@ public class SecurityChooseActivity extends FragmentActivity {
         helper = new MySqliteHelper(SecurityChooseActivity.this, 1);
         db = helper.getWritableDatabase();
         sharedPreferences_login = this.getSharedPreferences("login_info", Context.MODE_PRIVATE);  //退出登录以后需要这个备份记录是否更换账号
-        sharedPreferences = this.getSharedPreferences(sharedPreferences_login.getString("userId","")+"data", Context.MODE_PRIVATE);
+        sharedPreferences = this.getSharedPreferences(sharedPreferences_login.getString("userId", "") + "data", Context.MODE_PRIVATE);
         public_sharedPreferences = this.getSharedPreferences("data", Context.MODE_PRIVATE);
         editor = public_sharedPreferences.edit();
-        isFirst = sharedPreferences.getBoolean("FIRST",true);
-        if(isFirst){
+        isFirst = sharedPreferences.getBoolean("FIRST", true);
+        if (isFirst) {
             Log.i("SecurityChooseActivity", "第一次进入APP");  //第一次进入APP不管IP端口是否改变都要下载
-            sharedPreferences.edit().putBoolean("FIRST",false).apply();
+            sharedPreferences.edit().putBoolean("FIRST", false).apply();
             checkIpAndPort();
-        }else {
-            if(public_sharedPreferences.getBoolean("ip_port_changed",false)){
+        } else {
+            if (public_sharedPreferences.getBoolean("ip_port_changed", false)) {
                 Log.i("SecurityChooseActivity", "IP和端口改变了！");
                 if (Tools.NetIsAvilable(SecurityChooseActivity.this)) {
                     checkIpAndPort();
-                    editor.putBoolean("ip_port_changed",false);
+                    editor.putBoolean("ip_port_changed", false);
                     editor.apply();
                 } else {
-                    Log.i("SecurityChooseActivity", "网络未连接" );
+                    Log.i("SecurityChooseActivity", "网络未连接");
                     //Toast.makeText(SecurityChooseActivity.this, "网络未连接，请打开网络！", Toast.LENGTH_SHORT).show();
                 }
             }
         }
         userName.setText(sharedPreferences_login.getString("user_name", "")); //设置登录用户的名称
         if (sharedPreferences_login.getBoolean("user_exchanged", false)) {
-            Log.i("user_exchanged", "用户改变了" );
+            Log.i("user_exchanged", "用户改变了");
         }
     }
 
@@ -397,6 +412,7 @@ public class SecurityChooseActivity extends FragmentActivity {
         //添加fragment到list
         fragmentList.add(new SecurityChooseFragment());
         fragmentList.add(new DataTransferFragment());
+        fragmentList.add(new MyInfoFragment());
         //避免报空指针
         if (fragmentList != null) {
             adapter = new SecurityCheckViewPagerAdapter(getSupportFragmentManager(), fragmentList);

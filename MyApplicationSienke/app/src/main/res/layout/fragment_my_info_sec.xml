@@ -16,12 +16,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginTop="10dp"
-                android:background="@color/gray_little_thin" />
-
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -106,57 +100,6 @@
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginBottom="10dp"
-                android:background="@color/gray_little_thin" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginTop="10dp"
-                android:background="@color/gray_little_thin" />
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/scan_code"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:foreground="?android:attr/selectableItemBackground"
-                app:cardBackgroundColor="@android:color/white"
-                app:cardCornerRadius="0dp"
-                app:cardElevation="0dp"
-                app:contentPadding="14dp"
-                tools:targetApi="lollipop">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@mipmap/scan_code" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginStart="10dp"
-                        android:layout_weight="1"
-                        android:text="扫一扫"
-                        android:textColor="@color/text_black"
-                        android:textSize="16sp" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@mipmap/thick_right_arrows" />
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
 
             <View
                 android:layout_width="match_parent"
@@ -223,46 +166,6 @@
                     android:layout_marginLeft="15dp"
                     android:layout_marginStart="15dp"
                     android:background="@color/gray_little_thin" />
-
-                <android.support.v7.widget.CardView
-                    android:id="@+id/map_manage"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    app:cardBackgroundColor="@android:color/white"
-                    app:cardCornerRadius="0dp"
-                    app:cardElevation="0dp"
-                    app:contentPadding="14dp"
-                    tools:targetApi="lollipop">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@mipmap/map_manager" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginStart="10dp"
-                            android:layout_weight="1"
-                            android:text="地图管理"
-                            android:textColor="@color/text_black"
-                            android:textSize="16sp" />
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@mipmap/thick_right_arrows" />
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
 
                 <View
                     android:layout_width="match_parent"

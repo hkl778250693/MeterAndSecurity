@@ -80,7 +80,7 @@
             android:drawablePadding="5dp"
             android:drawableTop="@drawable/radiogroup_task_choose_selector"
             android:gravity="center"
-            android:text="安检选项"
+            android:text="首页"
             android:textColor="@drawable/radiogroup_text_selector"
             android:textSize="12sp" />
 
@@ -94,7 +94,21 @@
             android:drawablePadding="5dp"
             android:drawableTop="@drawable/radiogroup_data_transfer_selector"
             android:gravity="center"
-            android:text="数据传输"
+            android:text="传输"
+            android:textColor="@drawable/radiogroup_text_selector"
+            android:textSize="12sp" />
+
+        <RadioButton
+            android:id="@+id/radio_button3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawablePadding="5dp"
+            android:drawableTop="@drawable/select_icon_2"
+            android:gravity="center"
+            android:text="@string/page_two"
             android:textColor="@drawable/radiogroup_text_selector"
             android:textSize="12sp" />
     </RadioGroup>
