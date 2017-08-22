@@ -72,7 +72,7 @@
                         android:gravity="center_vertical"
                         android:paddingLeft="10dp"
                         android:paddingTop="10dp"
-                        android:text="抄表数据"
+                        android:text="位置信息"
                         android:textColor="@color/text_gray"
                         android:textSize="16sp"/>
                     <!-- 经纬度 -->
@@ -98,15 +98,15 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_vertical"
-                                android:orientation="horizontal">
+                                android:orientation="horizontal"
+                                android:padding="5dp">
 
                                 <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:gravity="center_vertical"
-                                    android:orientation="horizontal"
-                                    android:padding="5dp">
+                                    android:orientation="horizontal">
 
                                     <TextView
                                         android:layout_width="wrap_content"
@@ -125,7 +125,7 @@
                                         android:id="@+id/longitude"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="111"
+                                        android:text=""
                                         android:textColor="@color/text_gray"
                                         android:textSize="12sp"/>
                                 </LinearLayout>
@@ -135,8 +135,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:gravity="center_vertical"
-                                    android:orientation="horizontal"
-                                    android:padding="5dp">
+                                    android:orientation="horizontal">
 
                                     <TextView
                                         android:layout_width="wrap_content"
@@ -155,7 +154,7 @@
                                         android:id="@+id/latitude"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="111"
+                                        android:text=""
                                         android:textColor="@color/text_gray"
                                         android:textSize="12sp"/>
                                 </LinearLayout>
@@ -164,13 +163,12 @@
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="0.5dp"
-                                android:background="@color/gray_thin"/>
+                                android:background="@color/gray_little_thin"/>
 
                             <android.support.v7.widget.CardView
                                 android:id="@+id/location_cardview"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
                                 android:foreground="?android:attr/selectableItemBackground"
                                 app:cardBackgroundColor="@android:color/white"
                                 app:cardCornerRadius="5dp"
@@ -217,6 +215,16 @@
 
                     </android.support.v7.widget.CardView>
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="10dp"
+                        android:paddingTop="10dp"
+                        android:text="抄表数据"
+                        android:textColor="@color/text_gray"
+                        android:textSize="16sp"/>
+
                     <!-- 本月读数 -->
                     <android.support.v7.widget.CardView
                         android:layout_width="match_parent"
@@ -242,7 +250,7 @@
                                 android:background="@android:color/white"
                                 android:gravity="center_vertical"
                                 android:orientation="horizontal"
-                                android:padding="5dp">
+                                android:padding="10dp">
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -282,7 +290,7 @@
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="0.5dp"
-                                android:background="@color/gray_thin"/>
+                                android:background="@color/gray_little_thin"/>
                             <!-- 本月用量 -->
 
                             <LinearLayout
@@ -291,7 +299,7 @@
                                 android:background="@android:color/white"
                                 android:gravity="center_vertical"
                                 android:orientation="horizontal"
-                                android:padding="5dp">
+                                android:padding="10dp">
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -326,7 +334,7 @@
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="0.5dp"
-                                android:background="@color/gray_thin"/>
+                                android:background="@color/gray_little_thin"/>
                             <!-- 上月读数 -->
 
                             <LinearLayout
@@ -335,7 +343,7 @@
                                 android:background="@android:color/white"
                                 android:gravity="center_vertical"
                                 android:orientation="horizontal"
-                                android:padding="5dp">
+                                android:padding="10dp">
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -370,7 +378,7 @@
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="0.5dp"
-                                android:background="@color/gray_thin"/>
+                                android:background="@color/gray_little_thin"/>
 
                             <!-- 上月用量 -->
 
@@ -380,7 +388,7 @@
                                 android:background="@android:color/white"
                                 android:gravity="center_vertical"
                                 android:orientation="horizontal"
-                                android:padding="5dp">
+                                android:padding="10dp">
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -415,7 +423,7 @@
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="0.5dp"
-                                android:background="@color/gray_thin"/>
+                                android:background="@color/gray_little_thin"/>
                             <!-- 抄表日期 -->
 
                             <LinearLayout
@@ -424,7 +432,7 @@
                                 android:background="@android:color/white"
                                 android:gravity="center_vertical"
                                 android:orientation="horizontal"
-                                android:padding="5dp">
+                                android:padding="10dp">
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -459,7 +467,7 @@
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="0.5dp"
-                                android:background="@color/gray_thin"/>
+                                android:background="@color/gray_little_thin"/>
                             <!-- 抄表标志 -->
 
                             <LinearLayout
@@ -468,7 +476,7 @@
                                 android:background="@android:color/white"
                                 android:gravity="center_vertical"
                                 android:orientation="horizontal"
-                                android:padding="5dp">
+                                android:padding="10dp">
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -498,7 +506,6 @@
                                         android:textColor="@color/text_gray"
                                         android:textSize="12sp"/>
                                 </LinearLayout>
-
                             </LinearLayout>
                         </LinearLayout>
                     </android.support.v7.widget.CardView>

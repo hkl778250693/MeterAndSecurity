@@ -70,8 +70,8 @@ public class UserDetailInfoActivity extends AppCompatActivity {
     private RelativeLayout rootRelative;
     private LinearLayout hiddenTypeRoot, hiddenReasonRoot;
     private TextView securityCaseTv, securityHiddenType, securityHiddenReason;  //安全情况,安全隐患类型，安全隐患原因
-    private CardView caseCardview,typeCardview,reasonCardview;
-    private Button saveBtn, takePhoto, cancel;  //保存、拍照、相册、取消
+    private CardView caseCardview,typeCardview,reasonCardview,saveCardview;
+    private Button takePhoto, cancel;  //保存、拍照、相册、取消
     private ListView listView;
     private TextView tips,confirm,selectCounts,noDataTip;
     private RadioButton cancelRb, saveRb, remarksRb1, remarksRb2;
@@ -89,7 +89,7 @@ public class UserDetailInfoActivity extends AppCompatActivity {
     private SharedPreferences.Editor editor;
     private String ifUpload,taskId;
     private EditText meterNumberEt, userPhoneNumber, userAddress;
-    private TextView userNewIdTv, userNameTv, securityTypeTv;
+    private TextView userNewIdTv, userNameTv, securityTypeTv,saveTv;
     private GridviewImageAdapter iamgeAdapter;
     private PopupwindowListAdapter adapter;
     private String cropPhotoPath;  //裁剪的图片路径
@@ -140,7 +140,8 @@ public class UserDetailInfoActivity extends AppCompatActivity {
         remarksRb2 = (RadioButton) findViewById(R.id.remarks_rb2);
         hiddenTypeRoot = (LinearLayout) findViewById(R.id.hidden_type_root);
         hiddenReasonRoot = (LinearLayout) findViewById(R.id.hidden_reason_root);
-        saveBtn = (Button) findViewById(R.id.save_btn);
+        saveCardview = (CardView) findViewById(R.id.save_cardview);
+        saveTv = (TextView) findViewById(R.id.save_tv);
         rootLinearlayout = (LinearLayout) findViewById(R.id.root_linearlayout);
         rootRelative = (RelativeLayout) findViewById(R.id.root_relative);
         remarksRoot = (LinearLayout) findViewById(R.id.remarks_root);
@@ -177,7 +178,7 @@ public class UserDetailInfoActivity extends AppCompatActivity {
         caseCardview.setOnClickListener(onClickListener);
         typeCardview.setOnClickListener(onClickListener);
         reasonCardview.setOnClickListener(onClickListener);
-        saveBtn.setOnClickListener(onClickListener);
+        saveCardview.setOnClickListener(onClickListener);
         userAddress.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -317,7 +318,7 @@ public class UserDetailInfoActivity extends AppCompatActivity {
                         Toast.makeText(UserDetailInfoActivity.this, "请您先选择隐患类型！", Toast.LENGTH_LONG).show();
                     }
                     break;
-                case R.id.save_btn:  //保存
+                case R.id.save_cardview:  //保存
                     if (!userAddress.getText().toString().trim().equals("")) {
                         if (securityCaseTv.getText().toString().equals("合格") || securityCaseTv.getText().toString().equals("复检合格")) {
                             createSaveWindow();
@@ -377,8 +378,8 @@ public class UserDetailInfoActivity extends AppCompatActivity {
         if(!flag){
             if ("已上传".equals(ifUpload)) {
                 //createNoOperate();
-                saveBtn.setEnabled(false);
-                saveBtn.setText("已上传，不可更改");
+                saveCardview.setEnabled(false);
+                saveTv.setText("已上传，不可更改");
             }
             flag = true;
         }
