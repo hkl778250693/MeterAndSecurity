@@ -16,6 +16,7 @@
 
 package com.example.administrator.thinker_soft.meter_code.zxing.android;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
@@ -23,11 +24,8 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
 import android.util.Log;
-
 import com.example.administrator.thinker_soft.R;
-
 import java.io.Closeable;
 import java.io.IOException;
 
@@ -43,29 +41,29 @@ public final class BeepManager implements MediaPlayer.OnCompletionListener,
 	private static final float BEEP_VOLUME = 0.10f;
 	private static final long VIBRATE_DURATION = 200L;
 
-	private final Fragment fragment;
+	private final Activity activity;
 	private MediaPlayer mediaPlayer;
 	private boolean playBeep;
 	private boolean vibrate;
 
-	public BeepManager(Fragment fragment) {
-		this.fragment = fragment;
+	public BeepManager(Activity activity) {
+		this.activity = activity;
 		this.mediaPlayer = null;
 		updatePrefs();
 	}
 
 	public synchronized void updatePrefs() {
 		SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(fragment.getActivity());
-		playBeep = shouldBeep(prefs, fragment.getActivity());
+				.getDefaultSharedPreferences(activity);
+		playBeep = shouldBeep(prefs, activity);
 		vibrate = prefs.getBoolean(PreferencesActivity.KEY_VIBRATE, false);
 		if (playBeep && mediaPlayer == null) {
 			// The volume on STREAM_SYSTEM is not adjustable, and users found it
 			// too loud,
 			// so we now play on the music stream.
 			// 设置activity音量控制键控制的音频流
-			fragment.getActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);
-			mediaPlayer = buildMediaPlayer(fragment.getActivity());
+			activity.setVolumeControlStream(AudioManager.STREAM_MUSIC);
+			mediaPlayer = buildMediaPlayer(activity);
 		}
 	}
 
@@ -77,7 +75,7 @@ public final class BeepManager implements MediaPlayer.OnCompletionListener,
 			mediaPlayer.start();
 		}
 		if (vibrate) {
-			Vibrator vibrator = (Vibrator) fragment.getActivity()
+			Vibrator vibrator = (Vibrator) activity
 					.getSystemService(Context.VIBRATOR_SERVICE);
 			vibrator.vibrate(VIBRATE_DURATION);
 		}
@@ -148,7 +146,7 @@ public final class BeepManager implements MediaPlayer.OnCompletionListener,
 		if (what == MediaPlayer.MEDIA_ERROR_SERVER_DIED) {
 			// we are finished, so put up an appropriate error toast if required
 			// and finish
-			fragment.getActivity().finish();
+			activity.finish();
 		} else {
 			// possibly media player error, so release and recreate
 			mp.release();

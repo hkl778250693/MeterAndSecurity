@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/root_linearlayout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:id="@+id/root_linearlayout"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
     <!-- 标题 -->
     <RelativeLayout
         android:layout_width="match_parent"
@@ -31,22 +32,30 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/gray_thin">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="@color/gray_thin">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/gray_thin"
+                android:layout_marginTop="10dp"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:background="@android:color/white">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@mipmap/files_small_icon"
-                    android:padding="10dp"/>
+                    android:padding="14dp"/>
 
                 <TextView
                     android:layout_width="0dp"
@@ -67,17 +76,25 @@
                     android:layout_marginRight="10dp"/>
             </LinearLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/gray_thin"
+                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:background="@android:color/white">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@mipmap/meter_book_small_icon"
-                    android:padding="10dp"/>
+                    android:padding="14dp"/>
 
                 <TextView
                     android:layout_width="0dp"
@@ -97,19 +114,30 @@
                     android:layout_marginEnd="10dp"
                     android:layout_marginRight="10dp"/>
             </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/gray_thin"
+                android:layout_marginBottom="10dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/gray_thin"/>
 
             <!-- 户数 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:background="@android:color/white">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@mipmap/meter_user"
-                    android:padding="10dp"/>
+                    android:padding="14dp"/>
 
                 <TextView
                     android:layout_width="0dp"
@@ -117,8 +145,7 @@
                     android:layout_height="wrap_content"
                     android:text="总户数："
                     android:textColor="@color/text_black"
-                    android:textSize="14sp"
-                    android:layout_marginLeft="5dp"/>
+                    android:textSize="14sp"/>
 
 
                 <TextView
@@ -140,18 +167,24 @@
                     android:layout_marginEnd="10dp"
                     android:layout_marginRight="10dp" />
             </LinearLayout>
-            <!-- 已抄 字段（CSSZ抄表标志） -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/gray_thin"
+                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:background="@android:color/white">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@mipmap/meter_done"
-                    android:padding="10dp"/>
+                    android:padding="14dp"/>
 
                 <TextView
                     android:layout_width="0dp"
@@ -159,8 +192,7 @@
                     android:layout_height="wrap_content"
                     android:text="已抄表："
                     android:textColor="@color/text_black"
-                    android:textSize="14sp"
-                    android:layout_marginLeft="5dp"/>
+                    android:textSize="14sp"/>
 
 
                 <TextView
@@ -182,19 +214,26 @@
                     android:layout_marginEnd="10dp"
                     android:layout_marginRight="10dp" />
             </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/gray_thin"
+                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"/>
 
             <!-- 未抄 (用户数减已抄) -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:background="@android:color/white">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@mipmap/meter_undone"
-                    android:padding="10dp"/>
+                    android:padding="14dp"/>
 
                 <TextView
                     android:layout_width="0dp"
@@ -202,8 +241,7 @@
                     android:layout_height="wrap_content"
                     android:text="未抄表："
                     android:textColor="@color/text_black"
-                    android:textSize="14sp"
-                    android:layout_marginLeft="5dp"/>
+                    android:textSize="14sp"/>
 
                 <TextView
                     android:id="@+id/undone_number"
@@ -225,18 +263,26 @@
                     android:layout_marginRight="10dp" />
             </LinearLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/gray_thin"
+                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"/>
+
             <!-- 抄表量-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:background="@android:color/white">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@mipmap/dosage_icon"
-                    android:padding="10dp"/>
+                    android:padding="14dp"/>
 
                 <TextView
                     android:layout_width="0dp"
@@ -244,8 +290,7 @@
                     android:layout_height="wrap_content"
                     android:text="抄表量："
                     android:textColor="@color/text_black"
-                    android:textSize="14sp"
-                    android:layout_marginLeft="5dp"/>
+                    android:textSize="14sp"/>
 
 
                 <TextView
@@ -268,18 +313,26 @@
                     android:layout_marginRight="10dp" />
             </LinearLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/gray_thin"
+                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"/>
+
             <!-- 完成率 (已抄表除以用户数) -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:background="@android:color/white">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@mipmap/meter_finish_rate"
-                    android:padding="10dp"/>
+                    android:padding="14dp"/>
 
                 <TextView
                     android:layout_width="0dp"
@@ -287,8 +340,7 @@
                     android:layout_height="wrap_content"
                     android:text="完成率："
                     android:textColor="@color/text_black"
-                    android:textSize="14sp"
-                    android:layout_marginLeft="5dp"/>
+                    android:textSize="14sp"/>
 
 
                 <TextView
@@ -311,30 +363,54 @@
                     android:layout_marginRight="10dp" />
             </LinearLayout>
 
-            <Button
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/gray_thin"/>
+
+            <android.support.v7.widget.CardView
                 android:id="@+id/all_user_statistics"
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:background="@drawable/user_detail_save_btn_selector"
-                android:text="统计所有用户"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
-                android:textColor="@android:color/white"
-                android:textSize="18sp" />
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:foreground="?android:attr/selectableItemBackground"
+                app:cardBackgroundColor="@color/theme_colors"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="5dp"
+                app:contentPadding="12dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="统计所有用户"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/white"/>
+            </android.support.v7.widget.CardView>
 
-            <Button
+            <android.support.v7.widget.CardView
                 android:id="@+id/single_statistics"
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:background="@drawable/user_detail_save_btn_selector"
-                android:text="按抄表本统计"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
                 android:layout_marginBottom="20dp"
-                android:textColor="@android:color/white"
-                android:textSize="18sp" />
+                android:foreground="?android:attr/selectableItemBackground"
+                app:cardBackgroundColor="@color/theme_colors"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="5dp"
+                app:contentPadding="12dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="按抄表本统计"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/white"/>
+            </android.support.v7.widget.CardView>
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

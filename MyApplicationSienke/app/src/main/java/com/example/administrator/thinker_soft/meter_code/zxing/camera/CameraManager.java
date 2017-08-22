@@ -36,7 +36,9 @@ import java.io.IOException;
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class CameraManager {
+
 	private static final String TAG = CameraManager.class.getSimpleName();
+
 	private static final int MIN_FRAME_WIDTH = 240;
 	private static final int MIN_FRAME_HEIGHT = 240;
 	private static final int MAX_FRAME_WIDTH = 1200; // = 5/8 * 1920
@@ -59,7 +61,6 @@ public final class CameraManager {
 	 * message.
 	 */
 	private final PreviewCallback previewCallback;
-	private final AutoFocusCallback autoFocusCallback;
 
 	/**
 	 * Initializes this static object with the Context of the calling Activity.
@@ -86,7 +87,6 @@ public final class CameraManager {
 		this.context = context;
 		this.configManager = new CameraConfigurationManager(context);
 		previewCallback = new PreviewCallback(configManager);
-		autoFocusCallback = new AutoFocusCallback();
 	}
 
 	/**
@@ -198,22 +198,6 @@ public final class CameraManager {
 			camera.stopPreview();
 			previewCallback.setHandler(null, 0);
 			previewing = false;
-		}
-	}
-
-	/**
-	 * Asks the camera hardware to perform an autofocus.
-	 *
-	 * @param handler
-	 *            The Handler to notify when the autofocus completes.
-	 * @param message
-	 *            The message to deliver.
-	 */
-	public void requestAutoFocus(Handler handler, int message) {
-		if (camera != null && previewing) {
-			autoFocusCallback.setHandler(handler, message);
-			// Log.d(TAG, "Requesting auto-focus callback");
-			camera.autoFocus(autoFocusCallback);
 		}
 	}
 

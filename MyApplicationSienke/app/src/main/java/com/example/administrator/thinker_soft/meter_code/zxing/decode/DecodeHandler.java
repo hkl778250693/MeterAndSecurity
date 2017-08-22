@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.administrator.thinker_soft.meter_code.zxing.decoding;
+package com.example.administrator.thinker_soft.meter_code.zxing.decode;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -24,7 +24,7 @@ import android.os.Message;
 import android.util.Log;
 
 import com.example.administrator.thinker_soft.R;
-import com.example.administrator.thinker_soft.meter_code.zxing.camera.CameraManager;
+import com.example.administrator.thinker_soft.meter_code.zxing.android.CaptureActivity;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.MultiFormatReader;
@@ -34,19 +34,20 @@ import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
 
 import java.io.ByteArrayOutputStream;
-import java.util.Hashtable;
+import java.util.Map;
 
-final class DecodeHandler extends Handler {
+public final class DecodeHandler extends Handler {
+
 	private static final String TAG = DecodeHandler.class.getSimpleName();
-	private final DecodeHandlerInterface handlerInterface;
+
+	private final CaptureActivity activity;
 	private final MultiFormatReader multiFormatReader;
 	private boolean running = true;
 
-	DecodeHandler(DecodeHandlerInterface handlerInterface,
-			Hashtable<DecodeHintType, Object> hints) {
+	DecodeHandler(CaptureActivity activity, Map<DecodeHintType, Object> hints) {
 		multiFormatReader = new MultiFormatReader();
 		multiFormatReader.setHints(hints);
-		this.handlerInterface = handlerInterface;
+		this.activity = activity;
 	}
 
 	@Override
@@ -56,7 +57,6 @@ final class DecodeHandler extends Handler {
 		}
 		switch (message.what) {
 		case R.id.decode:
-			// Log.d(TAG, "Got decode message");
 			decode((byte[]) message.obj, message.arg1, message.arg2);
 			break;
 		case R.id.quit:
@@ -82,17 +82,20 @@ final class DecodeHandler extends Handler {
 		long start = System.currentTimeMillis();
 		Result rawResult = null;
 
-		// modify here
-		byte[] rotatedData = new byte[data.length];
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++)
-				rotatedData[x * height + height - y - 1] = data[x + y * width];
-		}
-		int tmp = width; // Here we are swapping, that's the difference to #11
-		width = height;
-		height = tmp;
-
-		PlanarYUVLuminanceSource source = CameraManager.get().buildLuminanceSource(rotatedData, width, height);
+		/***************竖屏更改3**********************/
+		byte[] rotatedData = new byte[data.length];   
+		 for (int y = 0; y < height; y++) {   
+		 for (int x = 0; x < width; x++)   
+		 rotatedData[x * height + height - y - 1] = data[x + y * width];   
+		 }   
+		 int tmp = width; // Here we are swapping, that's the difference to #11   
+		 width = height;   
+		 height = tmp;   
+		 data = rotatedData;  
+		/*************************************/
+		
+		PlanarYUVLuminanceSource source = activity.getCameraManager()
+				.buildLuminanceSource(data, width, height);
 		if (source != null) {
 			BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
 			try {
@@ -103,28 +106,30 @@ final class DecodeHandler extends Handler {
 				multiFormatReader.reset();
 			}
 		}
+
+		Handler handler = activity.getHandler();
 		if (rawResult != null) {
+			// Don't log the barcode contents for security.
 			long end = System.currentTimeMillis();
-			Log.d(TAG, "Found barcode (" + (end - start) + " ms):\n"
-					+ rawResult.toString());
-			Message message = Message.obtain(handlerInterface.getHandler(),
-					R.id.decode_succeeded, rawResult);
-			Bundle bundle = new Bundle();
-			bundleThumbnail(source, bundle);
-			/*bundle.putParcelable(DecodeThread.BARCODE_BITMAP,
-					source.renderCroppedGreyscaleBitmap());*/
-			message.setData(bundle);
-			// Log.d(TAG, "Sending decode succeeded message...");
-			message.sendToTarget();
+			Log.d(TAG, "Found barcode in " + (end - start) + " ms");
+			if (handler != null) {
+				Message message = Message.obtain(handler,
+						R.id.decode_succeeded, rawResult);
+				Bundle bundle = new Bundle();
+				bundleThumbnail(source, bundle);
+				message.setData(bundle);
+				message.sendToTarget();
+			}
 		} else {
-			Message message = Message.obtain(handlerInterface.getHandler(),
-					R.id.decode_failed);
-			message.sendToTarget();
+			if (handler != null) {
+				Message message = Message.obtain(handler, R.id.decode_failed);
+				message.sendToTarget();
+			}
 		}
 	}
 
 	private static void bundleThumbnail(PlanarYUVLuminanceSource source,
-										Bundle bundle) {
+			Bundle bundle) {
 		int[] pixels = source.renderThumbnail();
 		int width = source.getThumbnailWidth();
 		int height = source.getThumbnailHeight();

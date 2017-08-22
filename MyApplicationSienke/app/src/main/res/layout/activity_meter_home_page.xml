@@ -99,8 +99,8 @@
                 android:id="@+id/radio_button1"
                 style="@style/main_tab_bottom"
                 android:drawablePadding="5dp"
-                android:drawableTop="@drawable/select_icon_2"
-                android:text="@string/page_two"
+                android:drawableTop="@drawable/select_icon_3"
+                android:text="@string/page_three"
                 android:textColor="@drawable/radiogroup_text_selector"
                 android:textSize="12sp"/>
 
@@ -108,8 +108,8 @@
                 android:id="@+id/radio_button2"
                 style="@style/main_tab_bottom"
                 android:drawablePadding="5dp"
-                android:drawableTop="@drawable/select_icon_3"
-                android:text="@string/page_three"
+                android:drawableTop="@drawable/select_icon_4"
+                android:text="@string/page_four"
                 android:textColor="@drawable/radiogroup_text_selector"
                 android:textSize="12sp"/>
 
@@ -117,8 +117,8 @@
                 android:id="@+id/radio_button3"
                 style="@style/main_tab_bottom"
                 android:drawablePadding="5dp"
-                android:drawableTop="@drawable/select_icon_4"
-                android:text="@string/page_four"
+                android:drawableTop="@drawable/select_icon_2"
+                android:text="@string/page_two"
                 android:textColor="@drawable/radiogroup_text_selector"
                 android:textSize="12sp"/>
 

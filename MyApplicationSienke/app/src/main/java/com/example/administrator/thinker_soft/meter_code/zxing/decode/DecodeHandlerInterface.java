@@ -1,4 +1,4 @@
-package com.example.administrator.thinker_soft.meter_code.zxing.decoding;
+package com.example.administrator.thinker_soft.meter_code.zxing.decode;
 
 import android.content.Intent;
 import android.graphics.Bitmap;

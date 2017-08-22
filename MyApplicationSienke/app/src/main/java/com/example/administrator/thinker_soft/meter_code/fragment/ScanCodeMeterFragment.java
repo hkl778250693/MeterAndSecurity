@@ -1,6 +1,7 @@
 package com.example.administrator.thinker_soft.meter_code.fragment;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,6 +10,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -301,13 +303,13 @@ public class ScanCodeMeterFragment extends Fragment {
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
-        /*if (requestCode == REQUEST_CODE_SCAN && resultCode == Activity.RESULT_OK) {
+        if (requestCode == REQUEST_CODE_SCAN && resultCode == Activity.RESULT_OK) {
             if (data != null) {
-                String result = data.getStringExtra(DECODED_CONTENT_KEY);
+                String result1 = data.getStringExtra(DECODED_CONTENT_KEY);
                 Bitmap bitmap = data.getParcelableExtra(DECODED_BITMAP_KEY);
-                resultTv.setText("扫码结果为：" + result);
-                queryMeterUserInfo(result);
+                resultTv.setText("扫码结果为：" + result1);
+                queryMeterUserInfo(result1);
             }
-        }*/
+        }
     }
 }

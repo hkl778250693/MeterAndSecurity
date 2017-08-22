@@ -15,7 +15,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -26,7 +25,6 @@ import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.administrator.thinker_soft.R;
 import com.example.administrator.thinker_soft.Security_check.adapter.SecurityCheckViewPagerAdapter;
@@ -48,15 +46,13 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Administrator on 2017/3/14.
  */
 public class SecurityChooseActivity extends FragmentActivity {
-    private RadioButton file, settings, quite; //文件管理 系统设置 退出应用
+    private RadioButton settings, quite; //文件管理 系统设置 退出应用
     private boolean isFirst;   //是否第一次近日app
     private LayoutInflater inflater; //转换器
     private View popupwindowView,quiteView;
@@ -64,20 +60,15 @@ public class SecurityChooseActivity extends FragmentActivity {
     private LinearLayout rootLinearlayout;
     private RelativeLayout rootRelative;
     private PopupWindow popupWindow,quitePopup;
-    private ImageView security_check_go;
+    private ImageView back,security_check_go;
     private RadioButton optionRbt;  //选项按钮
     private TextView name, userName,tips;
     private RadioButton dataTransferRbt;  //数据传输按钮
     private List<Fragment> fragmentList;
     private ViewPager viewPager;
     private SecurityCheckViewPagerAdapter adapter;
-    private long exitTime = 0;//退出程序
     private SharedPreferences sharedPreferences,sharedPreferences_login,public_sharedPreferences;
     private SharedPreferences.Editor editor;
-    private Bundle params;
-    private Set<String> stringSet = new HashSet<>();//保存字符串参数
-    private int task_total_numb;
-    private ArrayList<String> stringList = new ArrayList<>();//得到的字符串集合
     private SQLiteDatabase db;  //数据库
     private MySqliteHelper helper; //数据库帮助类
     private String ip, port;  //接口ip地址   端口
@@ -155,6 +146,7 @@ public class SecurityChooseActivity extends FragmentActivity {
 
     //绑定控件
     private void bindView() {
+        back = (ImageView) findViewById(R.id.back);
         security_check_go = (ImageView) findViewById(R.id.security_check_go);
         optionRbt = (RadioButton) findViewById(R.id.option_rbt);
         dataTransferRbt = (RadioButton) findViewById(R.id.data_transfer_rbt);
@@ -167,6 +159,7 @@ public class SecurityChooseActivity extends FragmentActivity {
 
     //点击事件
     public void setViewClickListener() {
+        back.setOnClickListener(onClickListener);
         security_check_go.setOnClickListener(onClickListener);
         optionRbt.setOnClickListener(onClickListener);
         dataTransferRbt.setOnClickListener(onClickListener);
@@ -203,6 +196,9 @@ public class SecurityChooseActivity extends FragmentActivity {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
+                case R.id.back:
+                    SecurityChooseActivity.this.finish();
+                    break;
                 case R.id.security_check_go:
                     createPopupwindow();
                     break;
@@ -213,6 +209,8 @@ public class SecurityChooseActivity extends FragmentActivity {
                 case R.id.data_transfer_rbt:
                     viewPager.setCurrentItem(1);
                     name.setText("数据传输");
+                    break;
+                default:
                     break;
             }
         }
@@ -410,42 +408,6 @@ public class SecurityChooseActivity extends FragmentActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
     }
-
-    /**
-     * 捕捉返回事件按钮
-     * 因为此 Activity继承 TabActivity,用 onKeyDown无响应，
-     * 所以改用 dispatchKeyEvent
-     * <p/>
-     * 一般的 Activity 用 onKeyDown就可以了
-     */
-    @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
-            if (event.getAction() == KeyEvent.ACTION_DOWN && event.getRepeatCount() == 0) {
-                this.exitApp();
-            }
-            return true;
-        }
-        return super.dispatchKeyEvent(event);
-    }
-
-
-    /**
-     * 退出程序
-     */
-    private void exitApp() {
-        // 判断2次点击事件时间
-        if ((System.currentTimeMillis() - exitTime) > 2000) {
-            Log.i("exitTime==========>", System.currentTimeMillis() - exitTime + "");
-            //-------------Activity.this的context 返回当前activity的上下文，属于activity，activity 摧毁他就摧毁
-            //-------------getApplicationContext() 返回应用的上下文，生命周期是整个应用，应用摧毁它才摧毁
-            Toast.makeText(getApplicationContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
-            exitTime = System.currentTimeMillis();
-        } else {
-            finish();
-        }
-    }
-
 
     //请求安检状态网络数据
     private void requireSecurityState(final String method) {

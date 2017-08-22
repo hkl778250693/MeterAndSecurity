@@ -47,10 +47,10 @@
     <string name="contentdescription"></string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
-    <string name="page_one">抄表选项</string>
-    <string name="page_two">扫码抄表</string>
-    <string name="page_three">自定义查询</string>
-    <string name="page_four">数据传输</string>
+    <string name="page_one">首页</string>
+    <string name="page_two">我</string>
+    <string name="page_three">查询</string>
+    <string name="page_four">传输</string>
     <string name="title_activity_dialog_by_user_met">自定义查询</string>
     <string name="title_activity_dialog_by_met_num">自定义查询</string>
     <string name="title_activity_dialog_by_user_name">自定义查询</string>

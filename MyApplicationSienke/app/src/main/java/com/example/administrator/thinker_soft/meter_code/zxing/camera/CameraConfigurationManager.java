@@ -25,7 +25,9 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
+
 import com.example.administrator.thinker_soft.meter_code.zxing.android.PreferencesActivity;
+
 import java.lang.reflect.Method;
 
 /**

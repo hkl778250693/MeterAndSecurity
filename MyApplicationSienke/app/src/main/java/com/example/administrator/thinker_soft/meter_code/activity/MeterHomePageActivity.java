@@ -4,7 +4,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
@@ -33,9 +35,13 @@ import com.example.administrator.thinker_soft.meter_code.adapter.MeterHomePageVi
 import com.example.administrator.thinker_soft.meter_code.fragment.CustomQueryFragment;
 import com.example.administrator.thinker_soft.meter_code.fragment.MeterDataTransferFragment;
 import com.example.administrator.thinker_soft.meter_code.fragment.MeterHomePageFragment;
-import com.example.administrator.thinker_soft.meter_code.fragment.ScanCodeMeterFragment;
+import com.example.administrator.thinker_soft.meter_code.fragment.MyInfoFragment;
+import com.example.administrator.thinker_soft.meter_code.model.MeterUserListviewItem;
+import com.example.administrator.thinker_soft.meter_code.zxing.android.CaptureActivity;
 import com.example.administrator.thinker_soft.mode.MySqliteHelper;
 import com.example.administrator.thinker_soft.mode.TempDataTools;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +66,8 @@ public class MeterHomePageActivity extends FragmentActivity {
     private AnimationDrawable animationDrawable;
     private boolean flag = true;
     private boolean isFirst = true;
+    private static final int REQUEST_CODE_SCAN = 0x0000;
+    private ArrayList<MeterUserListviewItem> userLists = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,7 +160,7 @@ public class MeterHomePageActivity extends FragmentActivity {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        handler.sendEmptyMessage(0);
+                        handler.sendEmptyMessage(2);
                     }
                 }.start();
                 flag = false;
@@ -210,33 +218,14 @@ public class MeterHomePageActivity extends FragmentActivity {
         MeterHomePageActivity.this.getWindow().setAttributes(lp);
     }
 
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case 0:
-                    title.setVisibility(View.VISIBLE);
-                    frameAnimation.setVisibility(View.GONE);
-                    line.setVisibility(View.VISIBLE);
-                    ensure.setVisibility(View.VISIBLE);
-                    tips.setVisibility(View.GONE);
-                    title.setText("数据初始化完成，请您体验！做的不好之处，请您反馈，谢谢！");
-                    break;
-                default:
-                    break;
-            }
-            super.handleMessage(msg);
-        }
-    };
-
     //设置viewPager
     private void setViewPager() {
         fragmentList = new ArrayList<>();
         //添加fragment到list
         fragmentList.add(new MeterHomePageFragment());
-        fragmentList.add(new ScanCodeMeterFragment());
         fragmentList.add(new CustomQueryFragment());
         fragmentList.add(new MeterDataTransferFragment());
+        fragmentList.add(new MyInfoFragment());
         //避免报空指针
         if (fragmentList != null) {
             adapter = new MeterHomePageViewPagerAdapter(getSupportFragmentManager(), fragmentList);
@@ -262,28 +251,28 @@ public class MeterHomePageActivity extends FragmentActivity {
             public void onPageSelected(int position) {
                 switch (position) {
                     case 0:
-                        titleName.setText("移动抄表");
+                        titleName.setText("首页");
                         radio_button0.setChecked(true);
                         radio_button1.setChecked(false);
                         radio_button2.setChecked(false);
                         radio_button3.setChecked(false);
                         break;
                     case 1:
-                        titleName.setText("扫码抄表");
+                        titleName.setText("查询");
                         radio_button0.setChecked(false);
                         radio_button1.setChecked(true);
                         radio_button2.setChecked(false);
                         radio_button3.setChecked(false);
                         break;
                     case 2:
-                        titleName.setText("自定义查询");
+                        titleName.setText("传输");
                         radio_button0.setChecked(false);
                         radio_button1.setChecked(false);
                         radio_button2.setChecked(true);
                         radio_button3.setChecked(false);
                         break;
                     case 3:
-                        titleName.setText("数据传输");
+                        titleName.setText("我");
                         radio_button0.setChecked(false);
                         radio_button1.setChecked(false);
                         radio_button2.setChecked(false);
@@ -310,19 +299,19 @@ public class MeterHomePageActivity extends FragmentActivity {
                     showMoreWindow();
                     break;
                 case R.id.radio_button0:
-                    titleName.setText("移动抄表");
+                    titleName.setText("首页");
                     viewPager.setCurrentItem(0);
                     break;
                 case R.id.radio_button1:
-                    titleName.setText("扫码抄表");
+                    titleName.setText("查询");
                     viewPager.setCurrentItem(1);
                     break;
                 case R.id.radio_button2:
-                    titleName.setText("自定义查询");
+                    titleName.setText("传输");
                     viewPager.setCurrentItem(2);
                     break;
                 case R.id.radio_button3:
-                    titleName.setText("数据传输");
+                    titleName.setText("我");
                     viewPager.setCurrentItem(3);
                     break;
                 default:
@@ -337,9 +326,10 @@ public class MeterHomePageActivity extends FragmentActivity {
         mapInfo = (TextView) contentView.findViewById(R.id.map_info);
         TextView tesseractOcr = (TextView) contentView.findViewById(R.id.tesseract_ocr);
         TextView mapMeter = (TextView) contentView.findViewById(R.id.map_meter);
-        TextView coordinateManage = (TextView) contentView.findViewById(R.id.coordinate_manage);
+        //TextView coordinateManage = (TextView) contentView.findViewById(R.id.coordinate_manage);
         TextView systemSettings = (TextView) contentView.findViewById(R.id.system_settings);
-        TextView tasks = (TextView) contentView.findViewById(R.id.popwindow_content_actualtask);
+       // TextView tasks = (TextView) contentView.findViewById(R.id.popwindow_content_actualtask);
+        TextView scanCode = (TextView) contentView.findViewById(R.id.scan_code);
         /*// 注册 SDK 广播监听者
         IntentFilter iFilter = new IntentFilter();
         iFilter.addAction(SDKInitializer.SDK_BROADTCAST_ACTION_STRING_PERMISSION_CHECK_OK);
@@ -360,7 +350,7 @@ public class MeterHomePageActivity extends FragmentActivity {
                 startActivity(intent);
             }
         });
-        coordinateManage.setOnClickListener(new OnClickListener() {
+       /* coordinateManage.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 popupWindow.dismiss();
@@ -383,6 +373,19 @@ public class MeterHomePageActivity extends FragmentActivity {
                     Toast.makeText(MeterHomePageActivity.this, "请先完成文件选择！", Toast.LENGTH_SHORT).show();
                 }
             }
+        });*/
+        scanCode.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+                try {
+                    Thread.sleep(300);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Intent intent = new Intent(MeterHomePageActivity.this, CaptureActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_SCAN);
+            }
         });
         systemSettings.setOnClickListener(new OnClickListener() {
             @Override
@@ -397,12 +400,6 @@ public class MeterHomePageActivity extends FragmentActivity {
                 startActivityForResult(intent, 1);
             }
         });
-        tasks.setOnClickListener(new OnClickListener() {// ��������
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
         tesseractOcr.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -414,7 +411,6 @@ public class MeterHomePageActivity extends FragmentActivity {
                 }
                 Intent intent = new Intent(MeterHomePageActivity.this, TesseractOcrActivity.class);
                 startActivity(intent);
-
             }
         });
         popupWindow.setFocusable(true);
@@ -430,6 +426,95 @@ public class MeterHomePageActivity extends FragmentActivity {
             }
         });
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // 扫描二维码/条码回传
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null) {
+            if (result.getContents() == null) {
+                Toast.makeText(MeterHomePageActivity.this, "扫码取消！", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(MeterHomePageActivity.this, "扫描成功，条码值: " + result.getContents(), Toast.LENGTH_LONG).show();
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+        if (requestCode == REQUEST_CODE_SCAN && resultCode == RESULT_OK) {
+            if (data != null) {
+                String codeResult = data.getStringExtra("codedContent");
+                Bitmap bitmap = data.getParcelableExtra("codedBitmap");
+                Log.i("MeterHomePageActivity", "codeResult = " + codeResult);
+                queryMeterUserInfo(codeResult);
+            }
+        }
+    }
+
+    /**
+     * 查询抄表用户信息
+     * @param userID
+     */
+    public void queryMeterUserInfo(String userID) {
+        userLists.clear();
+        Cursor cursor = db.rawQuery("select * from MeterUser where login_user_id=? and file_name=? and user_id=?", new String[]{sharedPreferences_login.getString("userId", ""),sharedPreferences.getString("currentFileName",""),userID});//查询并获得游标
+        //如果游标为空，则显示没有数据图片
+        if (cursor.getCount() == 0) {
+            handler.sendEmptyMessage(0);
+            return;
+        }
+        while (cursor.moveToNext()) {
+            MeterUserListviewItem item = new MeterUserListviewItem();
+            item.setMeterID(cursor.getString(cursor.getColumnIndex("meter_order_number")));
+            item.setUserName(cursor.getString(cursor.getColumnIndex("user_name")));
+            item.setUserID(cursor.getString(cursor.getColumnIndex("user_id")));
+            if(!cursor.getString(cursor.getColumnIndex("meter_number")).equals("null")){
+                item.setMeterNumber(cursor.getString(cursor.getColumnIndex("meter_number")));
+            }else {
+                item.setMeterNumber("无");
+            }
+            item.setLastMonth(cursor.getString(cursor.getColumnIndex("last_month_dosage")));
+            item.setThisMonth(cursor.getString(cursor.getColumnIndex("this_month_dosage")));
+            item.setAddress(cursor.getString(cursor.getColumnIndex("user_address")));
+            if(cursor.getString(cursor.getColumnIndex("meterState")).equals("false")){
+                item.setMeterState("未抄");
+                item.setIfEdit(R.mipmap.meter_false);
+            }else {
+                item.setMeterState("已抄");
+                item.setIfEdit(R.mipmap.meter_true);
+            }
+            userLists.add(item);
+        }
+        handler.sendEmptyMessage(1);
+        cursor.close();
+    }
+
+    Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case 0:
+                    Toast.makeText(MeterHomePageActivity.this,"未查到用户信息，请您核对编号是否正确！",Toast.LENGTH_SHORT).show();
+                    break;
+                case 1:
+                    Intent intent = new Intent(MeterHomePageActivity.this,MeterUserQueryResultActivity.class);
+                    intent.putParcelableArrayListExtra("meter_user_info",userLists);
+                    startActivity(intent);
+                    break;
+                case 2:
+                    title.setVisibility(View.VISIBLE);
+                    frameAnimation.setVisibility(View.GONE);
+                    line.setVisibility(View.VISIBLE);
+                    ensure.setVisibility(View.VISIBLE);
+                    tips.setVisibility(View.GONE);
+                    title.setText("数据初始化完成，请您体验！做的不好之处，请您反馈，谢谢！");
+                    break;
+                default:
+                    break;
+            }
+            super.handleMessage(msg);
+        }
+    };
 
     @Override
     protected void onResume() {

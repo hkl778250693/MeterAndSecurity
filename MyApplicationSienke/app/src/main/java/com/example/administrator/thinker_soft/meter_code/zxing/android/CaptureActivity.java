@@ -1,246 +1,237 @@
 package com.example.administrator.thinker_soft.meter_code.zxing.android;
 
+
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.res.AssetFileDescriptor;
 import android.graphics.Bitmap;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnCompletionListener;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Vibrator;
+import android.util.Log;
 import android.view.SurfaceHolder;
-import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.Toast;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.ImageButton;
 
 import com.example.administrator.thinker_soft.R;
 import com.example.administrator.thinker_soft.meter_code.zxing.camera.CameraManager;
-import com.example.administrator.thinker_soft.meter_code.zxing.decoding.CaptureActivityHandler;
-import com.example.administrator.thinker_soft.meter_code.zxing.decoding.DecodeHandlerInterface;
-import com.example.administrator.thinker_soft.meter_code.zxing.decoding.InactivityTimer;
 import com.example.administrator.thinker_soft.meter_code.zxing.view.ViewfinderView;
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.DecodeHintType;
 import com.google.zxing.Result;
 
 import java.io.IOException;
-import java.util.Vector;
+import java.util.Collection;
+import java.util.Map;
 
 /**
- * Initial the camera
- * 
- * @author Ryan.Tang
+ * 这个activity打开相机，在后台线程做常规的扫描；它绘制了一个结果view来帮助正确地显示条形码，在扫描的时候显示反馈信息，
+ * 然后在扫描成功的时候覆盖扫描结果
  */
-public class CaptureActivity extends Activity implements Callback, DecodeHandlerInterface {
-	private CaptureActivityHandler handler;
-	private ViewfinderView viewfinderView;
-	private boolean hasSurface;
-	private Vector<BarcodeFormat> decodeFormats;
-	private String characterSet;
-	private InactivityTimer inactivityTimer;
-	private MediaPlayer mediaPlayer;
-	private boolean playBeep;
-	private static final float BEEP_VOLUME = 0.10f;
-	private boolean vibrate;
-	private Button cancelScanButton;
+public final class CaptureActivity extends Activity implements
+        SurfaceHolder.Callback {
 
-	/** Called when the activity is first created. */
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_scan_code_camera);
-		// ViewUtil.addTopView(getApplicationContext(), this,
-		// R.string.scan_card);
-		CameraManager.init(getApplication());
-		viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
-		cancelScanButton = (Button) this.findViewById(R.id.btn_cancel_scan);
-		hasSurface = false;
-		inactivityTimer = new InactivityTimer(this);
-	}
+    private static final String TAG = CaptureActivity.class.getSimpleName();
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		SurfaceView surfaceView = (SurfaceView) findViewById(R.id.preview_view);
-		SurfaceHolder surfaceHolder = surfaceView.getHolder();
-		if (hasSurface) {
-			initCamera(surfaceHolder);
-		} else {
-			surfaceHolder.addCallback(this);
-			surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-		}
-		decodeFormats = null;
-		characterSet = null;
+    // 相机控制
+    private CameraManager cameraManager;
+    private CaptureActivityHandler handler;
+    private ViewfinderView viewfinderView;
+    private boolean hasSurface;
+    private IntentSource source;
+    private Collection<BarcodeFormat> decodeFormats;
+    private Map<DecodeHintType, ?> decodeHints;
+    private String characterSet;
+    // 电量控制
+    private InactivityTimer inactivityTimer;
+    // 声音、震动控制
+    private BeepManager beepManager;
 
-		playBeep = true;
-		AudioManager audioService = (AudioManager) getSystemService(AUDIO_SERVICE);
-		if (audioService.getRingerMode() != AudioManager.RINGER_MODE_NORMAL) {
-			playBeep = false;
-		}
-		initBeepSound();
-		vibrate = true;
+    private ImageButton imageButton_back;
 
-		// quit the scan view
-		cancelScanButton.setOnClickListener(new OnClickListener() {
+    public ViewfinderView getViewfinderView() {
+        return viewfinderView;
+    }
 
-			@Override
-			public void onClick(View v) {
-				CaptureActivity.this.finish();
-			}
-		});
-	}
+    public Handler getHandler() {
+        return handler;
+    }
 
-	@Override
-	protected void onPause() {
-		super.onPause();
-		if (handler != null) {
-			handler.quitSynchronously();
-			handler = null;
-		}
-		CameraManager.get().closeDriver();
-	}
+    public CameraManager getCameraManager() {
+        return cameraManager;
+    }
 
-	@Override
-	protected void onDestroy() {
-		inactivityTimer.shutdown();
-		super.onDestroy();
-	}
+    public void drawViewfinder() {
+        viewfinderView.drawViewfinder();
+    }
 
-	/**
-	 * Handler scan result
-	 * 
-	 * @param result
-	 * @param barcode
-	 */
-	public void handleDecode(Result result, Bitmap barcode) {
-		inactivityTimer.onActivity();
-		playBeepSoundAndVibrate();
-		String resultString = result.getText();
-		// FIXME
-		if (resultString.equals("")) {
-			Toast.makeText(CaptureActivity.this, "Scan failed!",
-					Toast.LENGTH_SHORT).show();
-		} else {
-			// System.out.println("Result:"+resultString);
-			Intent resultIntent = new Intent();
-			Bundle bundle = new Bundle();
-			bundle.putString("result", resultString);
-			resultIntent.putExtras(bundle);
-			this.setResult(RESULT_OK, resultIntent);
-		}
-		CaptureActivity.this.finish();
-	}
+    /**
+     * OnCreate中初始化一些辅助类，如InactivityTimer（休眠）、Beep（声音）以及AmbientLight（闪光灯）
+     */
+    @Override
+    public void onCreate(Bundle icicle) {
+        super.onCreate(icicle);
+        // 保持Activity处于唤醒状态
+        Window window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        setContentView(R.layout.capture);
 
-	private void initCamera(SurfaceHolder surfaceHolder) {
-		try {
-			CameraManager.get().openDriver(surfaceHolder);
-		} catch (IOException ioe) {
-			return;
-		} catch (RuntimeException e) {
-			return;
-		}
-		if (handler == null) {
-			handler = new CaptureActivityHandler(this, decodeFormats,
-					characterSet);
-		}
-	}
+        hasSurface = false;
 
-	@Override
-	public void surfaceChanged(SurfaceHolder holder, int format, int width,
-			int height) {
+        inactivityTimer = new InactivityTimer(this);
+        beepManager = new BeepManager(this);
 
-	}
+        imageButton_back = (ImageButton) findViewById(R.id.capture_imageview_back);
+        imageButton_back.setOnClickListener(new View.OnClickListener() {
 
-	@Override
-	public void surfaceCreated(SurfaceHolder holder) {
-		if (!hasSurface) {
-			hasSurface = true;
-			initCamera(holder);
-		}
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+    }
 
-	}
+    @Override
+    protected void onResume() {
+        super.onResume();
 
-	@Override
-	public void surfaceDestroyed(SurfaceHolder holder) {
-		hasSurface = false;
+        // CameraManager必须在这里初始化，而不是在onCreate()中。
+        // 这是必须的，因为当我们第一次进入时需要显示帮助页，我们并不想打开Camera,测量屏幕大小
+        // 当扫描框的尺寸不正确时会出现bug
+        cameraManager = new CameraManager(getApplication());
 
-	}
+        viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
+        viewfinderView.setCameraManager(cameraManager);
 
-	public ViewfinderView getViewfinderView() {
-		return viewfinderView;
-	}
+        handler = null;
 
-	public Handler getHandler() {
-		return handler;
-	}
+        SurfaceView surfaceView = (SurfaceView) findViewById(R.id.preview_view);
+        SurfaceHolder surfaceHolder = surfaceView.getHolder();
+        if (hasSurface) {
+            // activity在paused时但不会stopped,因此surface仍旧存在；
+            // surfaceCreated()不会调用，因此在这里初始化camera
+            initCamera(surfaceHolder);
+        } else {
+            // 重置callback，等待surfaceCreated()来初始化camera
+            surfaceHolder.addCallback(this);
+        }
 
-	public void drawViewfinder() {
-		viewfinderView.drawViewfinder();
+        beepManager.updatePrefs();
+        inactivityTimer.onResume();
 
-	}
+        source = IntentSource.NONE;
+        decodeFormats = null;
+        characterSet = null;
+    }
 
-	private void initBeepSound() {
-		if (playBeep && mediaPlayer == null) {
-			// The volume on STREAM_SYSTEM is not adjustable, and users found it
-			// too loud,
-			// so we now play on the music stream.
-			setVolumeControlStream(AudioManager.STREAM_MUSIC);
-			mediaPlayer = new MediaPlayer();
-			mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-			mediaPlayer.setOnCompletionListener(beepListener);
+    @Override
+    protected void onPause() {
+        if (handler != null) {
+            handler.quitSynchronously();
+            handler = null;
+        }
+        inactivityTimer.onPause();
+        beepManager.close();
+        cameraManager.closeDriver();
+        if (!hasSurface) {
+            SurfaceView surfaceView = (SurfaceView) findViewById(R.id.preview_view);
+            SurfaceHolder surfaceHolder = surfaceView.getHolder();
+            surfaceHolder.removeCallback(this);
+        }
+        super.onPause();
+    }
 
-			AssetFileDescriptor file = getResources().openRawResourceFd(
-					R.raw.beep);
-			try {
-				mediaPlayer.setDataSource(file.getFileDescriptor(),
-						file.getStartOffset(), file.getLength());
-				file.close();
-				mediaPlayer.setVolume(BEEP_VOLUME, BEEP_VOLUME);
-				mediaPlayer.prepare();
-			} catch (IOException e) {
-				mediaPlayer = null;
-			}
-		}
-	}
+    @Override
+    protected void onDestroy() {
+        inactivityTimer.shutdown();
+        super.onDestroy();
+    }
 
-	private static final long VIBRATE_DURATION = 200L;
+    @Override
+    public void surfaceCreated(SurfaceHolder holder) {
+        if (!hasSurface) {
+            hasSurface = true;
+            initCamera(holder);
+        }
+    }
 
-	private void playBeepSoundAndVibrate() {
-		if (playBeep && mediaPlayer != null) {
-			mediaPlayer.start();
-		}
-		if (vibrate) {
-			Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-			vibrator.vibrate(VIBRATE_DURATION);
-		}
-	}
+    @Override
+    public void surfaceDestroyed(SurfaceHolder holder) {
+        hasSurface = false;
+    }
 
-	/**
-	 * When the beep has finished playing, rewind to queue up another one.
-	 */
-	private final OnCompletionListener beepListener = new OnCompletionListener() {
-		public void onCompletion(MediaPlayer mediaPlayer) {
-			mediaPlayer.seekTo(0);
-		}
-	};
+    @Override
+    public void surfaceChanged(SurfaceHolder holder, int format, int width,
+                               int height) {
 
-	@Override
-	public void resturnScanResult(int resultCode, Intent data) {
+    }
 
-		setResult(resultCode, data);
-		finish();
-	}
+    /**
+     * 扫描成功，处理反馈信息
+     *
+     * @param rawResult
+     * @param barcode
+     * @param scaleFactor
+     */
+    public void handleDecode(Result rawResult, Bitmap barcode, float scaleFactor) {
+        inactivityTimer.onActivity();
 
-	@Override
-	public void launchProductQuary(String url) {
+        boolean fromLiveScan = barcode != null;
+        //这里处理解码完成后的结果，此处将参数回传到Activity处理
+        if (fromLiveScan) {
+            beepManager.playBeepSoundAndVibrate();
 
-		Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-		startActivity(intent);
-	}
+            //Toast.makeText(this, "扫描成功", Toast.LENGTH_SHORT).show();
+
+            Intent intent = getIntent();
+            intent.putExtra("codedContent", rawResult.getText());
+            intent.putExtra("codedBitmap", barcode);
+            setResult(RESULT_OK, intent);
+            finish();
+        }
+
+    }
+
+    /**
+     * 初始化Camera
+     *
+     * @param surfaceHolder
+     */
+    private void initCamera(SurfaceHolder surfaceHolder) {
+        if (surfaceHolder == null) {
+            throw new IllegalStateException("No SurfaceHolder provided");
+        }
+        if (cameraManager.isOpen()) {
+            return;
+        }
+        try {
+            // 打开Camera硬件设备
+            cameraManager.openDriver(surfaceHolder);
+            // 创建一个handler来打开预览，并抛出一个运行时异常
+            if (handler == null) {
+                handler = new CaptureActivityHandler(this, decodeFormats, decodeHints, characterSet, cameraManager);
+            }
+        } catch (IOException ioe) {
+            Log.w(TAG, ioe);
+            displayFrameworkBugMessageAndExit();
+        } catch (RuntimeException e) {
+            Log.w(TAG, "Unexpected error initializing camera", e);
+            displayFrameworkBugMessageAndExit();
+        }
+    }
+
+    /**
+     * 显示底层错误信息并退出应用
+     */
+    private void displayFrameworkBugMessageAndExit() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.app_name));
+        builder.setMessage(getString(R.string.msg_camera_framework_bug));
+        builder.setPositiveButton(R.string.button_ok, new FinishListener(this));
+        builder.setOnCancelListener(new FinishListener(this));
+        builder.show();
+    }
+
 }

@@ -9,7 +9,7 @@
 
     <LinearLayout
         android:layout_width="110dp"
-        android:layout_height="wrap_content"
+        android:layout_height="120dp"
         android:orientation="vertical"
         android:background="@mipmap/window_bg"
         android:paddingTop="4dp">
@@ -73,7 +73,9 @@
             android:padding="8dp"
             android:text="坐标管理"
             android:textColor="@color/text_black"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:visibility="gone"/>
+
 
         <View
             android:layout_width="110dp"
@@ -82,15 +84,15 @@
 
 
         <TextView
-            android:id="@+id/popwindow_content_actualtask"
+            android:id="@+id/scan_code"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableLeft="@mipmap/task_manager"
-            android:drawableStart="@mipmap/task_manager"
+            android:drawableLeft="@mipmap/scan_code"
+            android:drawableStart="@mipmap/scan_code"
             android:drawablePadding="8dp"
             android:background="@drawable/meter_settings_layout_selector"
             android:gravity="center"
-            android:text="任务管理"
+            android:text="扫码抄表"
             android:textColor="@color/text_black"
             android:textSize="12sp"
             android:padding="8dp"/>
@@ -111,7 +113,8 @@
             android:padding="8dp"
             android:text="系统设置"
             android:textColor="@color/text_black"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:visibility="gone"/>
     </LinearLayout>
 
 </LinearLayout>

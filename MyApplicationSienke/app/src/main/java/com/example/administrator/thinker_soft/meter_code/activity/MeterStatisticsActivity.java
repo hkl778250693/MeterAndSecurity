@@ -8,13 +8,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -37,7 +37,7 @@ public class MeterStatisticsActivity extends Activity {
     private TextView allUserNumberTv, doneNumberTv, undoneNumberTv, meterCountTv, finishRateTv, fileName,bookName;
     private int allUserNumber = 0, doneNumber = 0, undoneNumber = 0, meterCount = 0;
     private String finishRate;
-    private Button allUserStatistics, singleStatistics;
+    private CardView allUserStatistics, singleStatistics;
     private SQLiteDatabase db;  //数据库
     private Cursor bookAllCursor, bookSingleCursor;
     private SharedPreferences sharedPreferences_login, sharedPreferences;
@@ -69,8 +69,8 @@ public class MeterStatisticsActivity extends Activity {
         undoneNumberTv = (TextView) findViewById(R.id.undone_number);
         meterCountTv = (TextView) findViewById(R.id.meter_number);
         finishRateTv = (TextView) findViewById(R.id.finish_rate);
-        allUserStatistics = (Button) findViewById(R.id.all_user_statistics);
-        singleStatistics = (Button) findViewById(R.id.single_statistics);
+        allUserStatistics = (CardView) findViewById(R.id.all_user_statistics);
+        singleStatistics = (CardView) findViewById(R.id.single_statistics);
         rootLinearlayout = (LinearLayout) findViewById(R.id.root_linearlayout);
     }
 

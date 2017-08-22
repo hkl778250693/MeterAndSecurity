@@ -23,7 +23,9 @@ import android.hardware.Camera;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
+
 import com.example.administrator.thinker_soft.meter_code.zxing.android.PreferencesActivity;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.RejectedExecutionException;

@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -17,7 +17,7 @@ import com.example.administrator.thinker_soft.mode.Tools;
 public class MeterPageCountSettingsActivity extends Activity {
 	private ImageView back;
 	private EditText pageCountEdit;
-	private Button save;
+	private CardView save;
 	private SharedPreferences sharedPreferences_login,sharedPreferences;
 	private LinearLayout rootLinearLayout;
 
@@ -36,7 +36,7 @@ public class MeterPageCountSettingsActivity extends Activity {
 		back = (ImageView) findViewById(R.id.back);
 		rootLinearLayout = (LinearLayout) findViewById(R.id.root_linearlayout);
 		pageCountEdit = (EditText) findViewById(R.id.page_count_edit);
-		save = (Button) findViewById(R.id.save);
+		save = (CardView) findViewById(R.id.save);
 	}
 
 	//初始化设置
