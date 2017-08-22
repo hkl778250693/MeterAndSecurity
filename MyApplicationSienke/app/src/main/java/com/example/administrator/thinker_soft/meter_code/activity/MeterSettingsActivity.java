@@ -29,7 +29,6 @@ public class MeterSettingsActivity extends Activity {
         bluetooth = (CardView) findViewById(R.id.bluetooth);
         fileDelete = (CardView) findViewById(R.id.file_delete);
         setPageCount = (CardView) findViewById(R.id.set_page_count);
-        /*mapDonload = (CardView) findViewById(R.id.map_donload);*/
         printNote = (CardView) findViewById(R.id.print_note);
     }
 
@@ -68,10 +67,6 @@ public class MeterSettingsActivity extends Activity {
                     intent = new Intent(MeterSettingsActivity.this, MeterPageCountSettingsActivity.class);
                     startActivity(intent);
                     break;
-               /* case R.id.map_donload:
-                    intent = new Intent(MeterSettingsActivity.this, MeterMapDownloadActivity.class);
-                    startActivity(intent);
-                    break;*/
                 case R.id.print_note:
                     intent = new Intent(MeterSettingsActivity.this, MeterPrintNoteActivity.class);
                     startActivity(intent);

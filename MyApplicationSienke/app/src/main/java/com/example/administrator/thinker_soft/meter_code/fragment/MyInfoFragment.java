@@ -13,6 +13,7 @@ import com.example.administrator.thinker_soft.R;
 import com.example.administrator.thinker_soft.meter_code.activity.MeterDeleteFileActivity;
 import com.example.administrator.thinker_soft.meter_code.activity.MeterMapDownloadActivity;
 import com.example.administrator.thinker_soft.meter_code.activity.MeterSettingsActivity;
+import com.example.administrator.thinker_soft.meter_code.activity.MeterTrackActivity;
 import com.example.administrator.thinker_soft.meter_code.zxing.android.CaptureActivity;
 
 /**
@@ -20,7 +21,7 @@ import com.example.administrator.thinker_soft.meter_code.zxing.android.CaptureAc
  */
 public class MyInfoFragment extends Fragment{
     private View view;
-    private CardView scanCode,fileManage,mapManage,meterSettings;
+    private CardView scanCode,fileManage,mapManage,meterTrack,meterSettings;
 
     @Nullable
     @Override
@@ -38,6 +39,7 @@ public class MyInfoFragment extends Fragment{
         scanCode = (CardView) view.findViewById(R.id.scan_code);
         fileManage = (CardView) view.findViewById(R.id.file_manage);
         mapManage = (CardView) view.findViewById(R.id.map_manage);
+        meterTrack = (CardView) view.findViewById(R.id.meter_track);
         meterSettings = (CardView) view.findViewById(R.id.meter_settings);
     }
 
@@ -51,6 +53,7 @@ public class MyInfoFragment extends Fragment{
         scanCode.setOnClickListener(clickListener);
         fileManage.setOnClickListener(clickListener);
         mapManage.setOnClickListener(clickListener);
+        meterTrack.setOnClickListener(clickListener);
         meterSettings.setOnClickListener(clickListener);
     }
 
@@ -69,6 +72,10 @@ public class MyInfoFragment extends Fragment{
                     break;
                 case R.id.map_manage:
                     intent = new Intent(getActivity(), MeterMapDownloadActivity.class);
+                    startActivity(intent);
+                    break;
+                case R.id.meter_track:
+                    intent = new Intent(getActivity(), MeterTrackActivity.class);
                     startActivity(intent);
                     break;
                 case R.id.meter_settings:

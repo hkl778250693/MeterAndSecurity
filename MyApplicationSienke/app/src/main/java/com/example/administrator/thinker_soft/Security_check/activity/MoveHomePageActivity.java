@@ -56,7 +56,7 @@ public class MoveHomePageActivity extends Activity {
     private LinearLayout rootLinearlayout;
     private SharedPreferences sharedPreferences_login;
     protected static final int PERMISSION_REQUEST_CODE = 1;  //6.0之后需要动态申请权限，   请求码
-    private String[] permissions = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}; //权限数组
+    private String[] permissions = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.ACCESS_COARSE_LOCATION}; //权限数组
     private List<String> permissionList = new ArrayList<>();  //权限集合
 
     @Override
