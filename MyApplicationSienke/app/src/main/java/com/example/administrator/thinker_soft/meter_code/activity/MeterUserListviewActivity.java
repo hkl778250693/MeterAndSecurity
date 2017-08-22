@@ -1,6 +1,5 @@
 package com.example.administrator.thinker_soft.meter_code.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -37,7 +37,7 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MeterUserListviewActivity extends Activity {
+public class MeterUserListviewActivity extends AppCompatActivity {
     private ImageView back,pageTurning;
     private LinearLayout selectPage;
     private RelativeLayout title;
