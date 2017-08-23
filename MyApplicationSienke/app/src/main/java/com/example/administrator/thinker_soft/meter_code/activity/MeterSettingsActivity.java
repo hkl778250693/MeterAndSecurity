@@ -11,7 +11,7 @@ import com.example.administrator.thinker_soft.R;
 
 public class MeterSettingsActivity extends Activity {
     private ImageView back;
-    private CardView bluetooth,fileDelete,setPageCount,mapDonload,printNote;
+    private CardView bluetooth,fileDelete,setPageCount,printNote,pattern;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +30,7 @@ public class MeterSettingsActivity extends Activity {
         fileDelete = (CardView) findViewById(R.id.file_delete);
         setPageCount = (CardView) findViewById(R.id.set_page_count);
         printNote = (CardView) findViewById(R.id.print_note);
+        pattern = (CardView) findViewById(R.id.pattern);
     }
 
     //初始化设置
@@ -43,8 +44,8 @@ public class MeterSettingsActivity extends Activity {
         bluetooth.setOnClickListener(onClickListener);
         fileDelete.setOnClickListener(onClickListener);
         setPageCount.setOnClickListener(onClickListener);
-        /*mapDonload.setOnClickListener(onClickListener);*/
         printNote.setOnClickListener(onClickListener);
+        pattern.setOnClickListener(onClickListener);
     }
 
     View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -69,6 +70,10 @@ public class MeterSettingsActivity extends Activity {
                     break;
                 case R.id.print_note:
                     intent = new Intent(MeterSettingsActivity.this, MeterPrintNoteActivity.class);
+                    startActivity(intent);
+                    break;
+                case R.id.pattern:
+                    intent = new Intent(MeterSettingsActivity.this,MeterPatternActivity.class);
                     startActivity(intent);
                     break;
                 default:
