@@ -36,25 +36,6 @@
             android:orientation="horizontal">
 
             <RadioButton
-                android:id="@+id/cancel_rb"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/popupwindow_user_detail_info_cancle_selector"
-                android:button="@null"
-                android:gravity="center_horizontal"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp"
-                android:text="取消"
-                android:textColor="@color/text_blue"
-                android:textSize="16sp" />
-
-            <View
-                android:layout_width="0.5dp"
-                android:layout_height="match_parent"
-                android:background="@color/gray_little_thin" />
-
-            <RadioButton
                 android:id="@+id/save_rb"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -68,6 +49,26 @@
                 android:textStyle="bold"
                 android:textColor="@color/text_blue"
                 android:textSize="16sp" />
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:background="@color/gray_little_thin" />
+            <RadioButton
+                android:id="@+id/cancel_rb"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/popupwindow_user_detail_info_cancle_selector"
+                android:button="@null"
+                android:gravity="center_horizontal"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:text="取消"
+                android:textColor="@color/text_blue"
+                android:textSize="16sp" />
+
+
         </RadioGroup>
     </LinearLayout>
 

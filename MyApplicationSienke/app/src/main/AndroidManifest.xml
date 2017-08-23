@@ -364,6 +364,8 @@
         <activity
             android:name=".meter_code.activity.MeterPageCountSettingsActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".meter_code.activity.MeterPatternActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".meter_code.activity.MapMeterActivity"
             android:screenOrientation="portrait"/>
