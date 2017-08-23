@@ -302,6 +302,7 @@ public class UserListActivity extends Activity {
             }
             userListviewItemList.add(userListviewItem);
         }
+        handler.sendEmptyMessage(0);
     }
 
     //更新用户表是否安检状态

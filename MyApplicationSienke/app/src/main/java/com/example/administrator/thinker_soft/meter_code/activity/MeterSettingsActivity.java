@@ -43,7 +43,6 @@ public class MeterSettingsActivity extends Activity {
         bluetooth.setOnClickListener(onClickListener);
         fileDelete.setOnClickListener(onClickListener);
         setPageCount.setOnClickListener(onClickListener);
-        /*mapDonload.setOnClickListener(onClickListener);*/
         printNote.setOnClickListener(onClickListener);
     }
 

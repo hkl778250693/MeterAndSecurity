@@ -46,8 +46,16 @@ public class SystemSettingActivity extends Activity {
     private void defaultSetting() {
         sharedPreferences_login = this.getSharedPreferences("login_info", Context.MODE_PRIVATE);
         sharedPreferences = this.getSharedPreferences(sharedPreferences_login.getString("userId","")+"data", Context.MODE_PRIVATE);
-        if(!sharedPreferences_login.getBoolean("have_logined",false)){
+        if(sharedPreferences_login.getBoolean("have_logined",false)){
+            tempdata_cardview.setVisibility(View.GONE);
+            show_tempdata.setChecked(false);
+        }else {
             tempdata_cardview.setVisibility(View.VISIBLE);
+            if (sharedPreferences.getBoolean("show_temp_data", false)) {
+                show_tempdata.setChecked(true);
+            }else {
+                show_tempdata.setChecked(false);
+            }
         }
     }
 

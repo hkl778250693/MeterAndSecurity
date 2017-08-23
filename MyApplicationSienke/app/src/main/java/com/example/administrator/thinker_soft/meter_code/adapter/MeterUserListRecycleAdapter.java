@@ -48,7 +48,8 @@ public class MeterUserListRecycleAdapter extends RecyclerView.Adapter<MeterUserL
         holder.userName.setText(item.getUserName());
         holder.userId.setText(item.getUserID());
         holder.meterNumber.setText(item.getMeterNumber());
-        holder.lastMonth.setText(item.getLastMonth());
+        holder.lastMonthDegree.setText(item.getLastMonthDegree());
+        holder.lastMonthDosage.setText(item.getLastMonthDosage());
         holder.thisMonth.setText(item.getThisMonth());
         holder.address.setText(item.getAddress());
         holder.uploadState.setText(item.getUploadState());
@@ -67,7 +68,8 @@ public class MeterUserListRecycleAdapter extends RecyclerView.Adapter<MeterUserL
         TextView userName;
         TextView userId;
         TextView meterNumber;
-        TextView lastMonth;
+        TextView lastMonthDegree;
+        TextView lastMonthDosage;
         TextView thisMonth;
         TextView address;
         TextView uploadState;
@@ -80,7 +82,8 @@ public class MeterUserListRecycleAdapter extends RecyclerView.Adapter<MeterUserL
             userName = (TextView) itemView.findViewById(R.id.user_name);
             userId = (TextView) itemView.findViewById(R.id.user_id);
             meterNumber = (TextView) itemView.findViewById(R.id.meter_number);
-            lastMonth = (TextView) itemView.findViewById(R.id.last_month);
+            lastMonthDegree = (TextView) itemView.findViewById(R.id.last_month_degree);
+            lastMonthDosage = (TextView) itemView.findViewById(R.id.last_month_dosage);
             thisMonth = (TextView) itemView.findViewById(R.id.this_month);
             address = (TextView) itemView.findViewById(R.id.address);
             uploadState = (TextView) itemView.findViewById(R.id.upload_state);

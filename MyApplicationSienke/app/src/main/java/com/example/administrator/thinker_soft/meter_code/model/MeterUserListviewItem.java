@@ -11,7 +11,8 @@ public class MeterUserListviewItem implements Parcelable{
     private String userID;
     private String userName;
     private String meterNumber;
-    private String lastMonth;
+    private String lastMonthDegree;
+    private String lastMonthDosage;
     private String thisMonth;
     private String address;
     private String uploadState;   //上传状态
@@ -50,12 +51,20 @@ public class MeterUserListviewItem implements Parcelable{
         this.meterNumber = meterNumber;
     }
 
-    public String getLastMonth() {
-        return lastMonth;
+    public String getLastMonthDegree() {
+        return lastMonthDegree;
     }
 
-    public void setLastMonth(String lastMonth) {
-        this.lastMonth = lastMonth;
+    public void setLastMonthDegree(String lastMonthDegree) {
+        this.lastMonthDegree = lastMonthDegree;
+    }
+
+    public String getLastMonthDosage() {
+        return lastMonthDosage;
+    }
+
+    public void setLastMonthDosage(String lastMonthDosage) {
+        this.lastMonthDosage = lastMonthDosage;
     }
 
     public String getThisMonth() {
@@ -109,7 +118,8 @@ public class MeterUserListviewItem implements Parcelable{
         parcel.writeString(userID);
         parcel.writeString(userName);
         parcel.writeString(meterNumber);
-        parcel.writeString(lastMonth);
+        parcel.writeString(lastMonthDegree);
+        parcel.writeString(lastMonthDosage);
         parcel.writeString(thisMonth);
         parcel.writeString(address);
         parcel.writeString(uploadState);
@@ -124,7 +134,8 @@ public class MeterUserListviewItem implements Parcelable{
             item.userID = parcel.readString();
             item.userName = parcel.readString();
             item.meterNumber = parcel.readString();
-            item.lastMonth = parcel.readString();
+            item.lastMonthDegree = parcel.readString();
+            item.lastMonthDosage = parcel.readString();
             item.thisMonth = parcel.readString();
             item.address = parcel.readString();
             item.uploadState = parcel.readString();

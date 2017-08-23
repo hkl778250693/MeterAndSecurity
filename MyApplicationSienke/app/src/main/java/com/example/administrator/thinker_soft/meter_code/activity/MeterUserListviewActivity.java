@@ -13,10 +13,15 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +32,7 @@ import com.example.administrator.thinker_soft.meter_code.model.MeterTypeListview
 import com.example.administrator.thinker_soft.meter_code.model.MeterUserListviewItem;
 import com.example.administrator.thinker_soft.mode.MyAnimationUtils;
 import com.example.administrator.thinker_soft.mode.MySqliteHelper;
+import com.example.administrator.thinker_soft.mode.Tools;
 import com.scwang.smartrefresh.header.WaterDropHeader;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
@@ -38,8 +44,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MeterUserListviewActivity extends AppCompatActivity {
-    private ImageView back,pageTurning;
-    private LinearLayout selectPage;
+    private ImageView back, pageTurning;
+    private LinearLayout selectPage, rootLinearlayout;
     private RelativeLayout title;
     private TextView noData, lastPage, nextPage, currentPageTv, totalPageTv, bookName;
     private ArrayList<MeterUserListviewItem> userLists = new ArrayList<>();
@@ -55,6 +61,10 @@ public class MeterUserListviewActivity extends AppCompatActivity {
     private List<MeterTypeListviewItem> bookItemList = new ArrayList<>();
     private List<String> bookIDList = new ArrayList<>();  //存放表册ID的集合
     private String bookID, book_name, fileName;
+    private LayoutInflater layoutInflater;
+    private PopupWindow fastMeterWindow;
+    private View fastMeterview;
+    private MeterUserListRecycleAdapter.ViewHolder viewHolder;
     /**
      * 下拉刷新，上拉加载
      */
@@ -78,6 +88,7 @@ public class MeterUserListviewActivity extends AppCompatActivity {
 
     //绑定控件
     private void bindView() {
+        rootLinearlayout = (LinearLayout) findViewById(R.id.root_linearlayout);
         title = (RelativeLayout) findViewById(R.id.title);
         pageTurning = (ImageView) findViewById(R.id.page_turning);
         back = (ImageView) findViewById(R.id.back);
@@ -236,14 +247,18 @@ public class MeterUserListviewActivity extends AppCompatActivity {
                         @Override
                         public void onItemClick(View v, int position) {
                             currentPosition = position;
-                            Log.i("MeterUserListviewAc","RecycleView的点击事件进来了！");
-                            if (null != mRecyclerView.getChildViewHolder(v)){
-                                RecyclerView.ViewHolder viewHolder = mRecyclerView.getChildViewHolder(v);
+                            Log.i("MeterUserListviewAc", "RecycleView的点击事件进来了！");
+                            if (null != mRecyclerView.getChildViewHolder(v)) {
+                                viewHolder = (MeterUserListRecycleAdapter.ViewHolder) mRecyclerView.getChildViewHolder(v);
                                 item = (MeterUserListviewItem) viewHolder.itemView.getTag();
-                                Intent intent = new Intent(MeterUserListviewActivity.this, MeterUserDetailActivity.class);
-                                intent.putExtra("user_id", item.getUserID());
-                                intent.putExtra("upload_state",item.getUploadState());
-                                startActivityForResult(intent, currentPosition);
+                                if (sharedPreferences.getBoolean("detail_meter", true)) {
+                                    Intent intent = new Intent(MeterUserListviewActivity.this, MeterUserDetailActivity.class);
+                                    intent.putExtra("user_id", item.getUserID());
+                                    intent.putExtra("upload_state", item.getUploadState());
+                                    startActivityForResult(intent, currentPosition);
+                                } else {
+                                    showFastMeterWindow(item.getLastMonthDegree());   //弹出快捷抄表框
+                                }
                             }
                         }
                     }, new MeterUserListRecycleAdapter.onRecyclerViewItemLongClick() {
@@ -256,7 +271,7 @@ public class MeterUserListviewActivity extends AppCompatActivity {
                     mRecyclerView.setLayoutManager(mLayoutManager);
                     // 设置adapter
                     mRecyclerView.setAdapter(mAdapter);
-                    MyAnimationUtils.viewGroupOutAlphaAnimation(MeterUserListviewActivity.this,mRecyclerView,0.1F);
+                    MyAnimationUtils.viewGroupOutAlphaAnimation(MeterUserListviewActivity.this, mRecyclerView, 0.1F);
                     //设置增加或删除条目的动画
                     mRecyclerView.setItemAnimator(new DefaultItemAnimator());
                     currentPageTv.setText(String.valueOf(currentPage));
@@ -277,13 +292,13 @@ public class MeterUserListviewActivity extends AppCompatActivity {
                         @Override
                         public void onItemClick(View v, int position) {
                             currentPosition = position;
-                            Log.i("MeterUserListviewAc","RecycleView的点击事件进来了！");
-                            if (null != mRecyclerView.getChildViewHolder(v)){
+                            Log.i("MeterUserListviewAc", "RecycleView的点击事件进来了！");
+                            if (null != mRecyclerView.getChildViewHolder(v)) {
                                 RecyclerView.ViewHolder viewHolder = mRecyclerView.getChildViewHolder(v);
                                 item = (MeterUserListviewItem) viewHolder.itemView.getTag();
                                 Intent intent = new Intent(MeterUserListviewActivity.this, MeterUserDetailActivity.class);
                                 intent.putExtra("user_id", item.getUserID());
-                                intent.putExtra("upload_state",item.getUploadState());
+                                intent.putExtra("upload_state", item.getUploadState());
                                 startActivityForResult(intent, currentPosition);
                             }
                         }
@@ -298,7 +313,7 @@ public class MeterUserListviewActivity extends AppCompatActivity {
                     mRecyclerView.setLayoutManager(mLayoutManager);
                     // 设置adapter
                     mRecyclerView.setAdapter(mAdapter);
-                    MyAnimationUtils.viewGroupOutAlphaAnimation(MeterUserListviewActivity.this,mRecyclerView,0.1F);
+                    MyAnimationUtils.viewGroupOutAlphaAnimation(MeterUserListviewActivity.this, mRecyclerView, 0.1F);
                     //设置增加或删除条目的动画
                     mRecyclerView.setItemAnimator(new DefaultItemAnimator());
                     currentPageTv.setText(String.valueOf(Integer.parseInt(currentPageTv.getText().toString()) + 1));
@@ -309,13 +324,13 @@ public class MeterUserListviewActivity extends AppCompatActivity {
                         @Override
                         public void onItemClick(View v, int position) {
                             currentPosition = position;
-                            Log.i("MeterUserListviewAc","RecycleView的点击事件进来了！");
-                            if (null != mRecyclerView.getChildViewHolder(v)){
+                            Log.i("MeterUserListviewAc", "RecycleView的点击事件进来了！");
+                            if (null != mRecyclerView.getChildViewHolder(v)) {
                                 RecyclerView.ViewHolder viewHolder = mRecyclerView.getChildViewHolder(v);
                                 item = (MeterUserListviewItem) viewHolder.itemView.getTag();
                                 Intent intent = new Intent(MeterUserListviewActivity.this, MeterUserDetailActivity.class);
                                 intent.putExtra("user_id", item.getUserID());
-                                intent.putExtra("upload_state",item.getUploadState());
+                                intent.putExtra("upload_state", item.getUploadState());
                                 startActivityForResult(intent, currentPosition);
                             }
                         }
@@ -330,7 +345,7 @@ public class MeterUserListviewActivity extends AppCompatActivity {
                     mRecyclerView.setLayoutManager(mLayoutManager);
                     // 设置adapter
                     mRecyclerView.setAdapter(mAdapter);
-                    MyAnimationUtils.viewGroupOutAlphaAnimation(MeterUserListviewActivity.this,mRecyclerView,0.1F);
+                    MyAnimationUtils.viewGroupOutAlphaAnimation(MeterUserListviewActivity.this, mRecyclerView, 0.1F);
                     //设置增加或删除条目的动画
                     mRecyclerView.setItemAnimator(new DefaultItemAnimator());
                     currentPageTv.setText(String.valueOf(Integer.parseInt(currentPageTv.getText().toString()) - 1));
@@ -348,6 +363,64 @@ public class MeterUserListviewActivity extends AppCompatActivity {
         }
     };
 
+    /**
+     * 弹出快捷抄表窗口
+     */
+    public void showFastMeterWindow(final String lastMonthDegree) {
+        layoutInflater = LayoutInflater.from(MeterUserListviewActivity.this);
+        fastMeterview = layoutInflater.inflate(R.layout.popupwindow_fast_meter, null);
+        fastMeterWindow = new PopupWindow(fastMeterview, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        //绑定控件ID
+        RadioButton cancel = (RadioButton) fastMeterview.findViewById(R.id.cancel_rb);
+        final EditText meterEdit = (EditText) fastMeterview.findViewById(R.id.meter_edit);
+        RadioButton save = (RadioButton) fastMeterview.findViewById(R.id.save_rb);
+        //设置点击事件
+        meterEdit.requestFocus();
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fastMeterWindow.dismiss();
+            }
+        });
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!"".equals(meterEdit.getText().toString())) {
+                    if (Integer.parseInt(meterEdit.getText().toString()) > Integer.parseInt(lastMonthDegree)) {
+                        fastMeterWindow.dismiss();
+                        String thisMonthDegree = meterEdit.getText().toString();
+                        int thisMonthDosage = Integer.parseInt(meterEdit.getText().toString()) - Integer.parseInt(lastMonthDegree);
+                        item.setThisMonth(thisMonthDegree + "/" + String.valueOf(thisMonthDosage));
+                        item.setIfEdit(R.mipmap.meter_true);
+                        item.setMeterState("已抄");
+                        mAdapter.notifyDataSetChanged();
+                        Tools.moveToPosition((LinearLayoutManager) mLayoutManager, mRecyclerView, currentPosition + 1);
+                        currentPosition = ((LinearLayoutManager) mLayoutManager).findFirstVisibleItemPosition();
+                        mLayoutManager.getChildAt(currentPosition);
+                    } else {
+                        Toast.makeText(MeterUserListviewActivity.this, "本月读数不能小于上月读数哦！", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(MeterUserListviewActivity.this, "请您输入本月读数！", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        fastMeterWindow.update();
+        fastMeterWindow.setFocusable(true);
+        fastMeterWindow.setTouchable(true);
+        fastMeterWindow.setOutsideTouchable(true);
+        fastMeterWindow.setBackgroundDrawable(getResources().getDrawable(R.color.white_transparent));
+        fastMeterWindow.setAnimationStyle(R.style.mypopwindow_anim_style);
+        backgroundAlpha(0.6F);   //背景变暗
+        fastMeterWindow.showAtLocation(rootLinearlayout, Gravity.CENTER, 0, 0);
+        fastMeterWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                backgroundAlpha(1.0F);
+            }
+        });
+    }
+
     //设置背景透明度
     public void backgroundAlpha(float bgAlpha) {
         WindowManager.LayoutParams lp = MeterUserListviewActivity.this.getWindow().getAttributes();
@@ -364,7 +437,7 @@ public class MeterUserListviewActivity extends AppCompatActivity {
     public void getTotalUserCount() {
         if (sharedPreferences.getBoolean("show_temp_data", false)) {
             totalCountCursor = db.rawQuery("select * from MeterUser where login_user_id=? and file_name=? and book_id=?", new String[]{"0", fileName, bookID});//查询并获得游标
-        }else {
+        } else {
             totalCountCursor = db.rawQuery("select * from MeterUser where login_user_id=? and file_name=? and book_id=?", new String[]{sharedPreferences_login.getString("userId", ""), fileName, bookID});//查询并获得游标
         }
         //如果游标为空，则显示没有数据图片
@@ -378,25 +451,6 @@ public class MeterUserListviewActivity extends AppCompatActivity {
         totalCountCursor.close();
     }
 
-    //查询所有表册ID
-    public void getBookInfo(String areaID) {
-        bookIDList.clear();
-        bookItemList.clear();
-        Cursor cursor = db.rawQuery("select * from MeterBook where login_user_id=? and areaId=? order by bookId", new String[]{sharedPreferences_login.getString("userId", ""), areaID});//查询并获得游标
-        Log.i("MeterStatisticsActivity", "所有表册ID个数为：" + cursor.getCount());
-        //如果游标为空，则显示没有数据图片
-        if (cursor.getCount() == 0) {
-            return;
-        }
-        while (cursor.moveToNext()) {
-            bookIDList.add(cursor.getString(cursor.getColumnIndex("bookId")));
-            MeterTypeListviewItem item = new MeterTypeListviewItem();
-            item.setName(cursor.getString(cursor.getColumnIndex("bookName")));
-            item.setId(cursor.getString(cursor.getColumnIndex("bookId")));
-            bookItemList.add(item);
-        }
-        cursor.close();
-    }
 
     //读取本地的抄表分区用户数据
     public void getMeterUserData(String fileName, String bookID, int dataStartCount) {
@@ -404,7 +458,7 @@ public class MeterUserListviewActivity extends AppCompatActivity {
         if (!"".equals(sharedPreferences.getString("page_count", ""))) {
             if (sharedPreferences.getBoolean("show_temp_data", false)) {   //显示演示数据
                 userLimitCursor = db.rawQuery("select * from MeterUser where login_user_id=? and file_name=? and book_id=? limit " + dataStartCount + "," + Integer.parseInt(sharedPreferences.getString("page_count", "")), new String[]{"0", fileName, bookID});//查询并获得游标
-            }else {
+            } else {
                 userLimitCursor = db.rawQuery("select * from MeterUser where login_user_id=? and file_name=? and book_id=? limit " + dataStartCount + "," + Integer.parseInt(sharedPreferences.getString("page_count", "")), new String[]{sharedPreferences_login.getString("userId", ""), fileName, bookID});//查询并获得游标
             }
         } else {
@@ -434,17 +488,18 @@ public class MeterUserListviewActivity extends AppCompatActivity {
             } else {
                 item.setMeterNumber("无");
             }
-            item.setLastMonth(userLimitCursor.getString(userLimitCursor.getColumnIndex("meter_degrees")) + "/" + userLimitCursor.getString(userLimitCursor.getColumnIndex("last_month_dosage")));
+            item.setLastMonthDegree(userLimitCursor.getString(userLimitCursor.getColumnIndex("meter_degrees")));
+            item.setLastMonthDosage(userLimitCursor.getString(userLimitCursor.getColumnIndex("last_month_dosage")));
             item.setAddress(userLimitCursor.getString(userLimitCursor.getColumnIndex("user_address")));
-            if(userLimitCursor.getString(userLimitCursor.getColumnIndex("uploadState")).equals("false")){
+            if (userLimitCursor.getString(userLimitCursor.getColumnIndex("uploadState")).equals("false")) {
                 item.setUploadState("");
-            }else {
+            } else {
                 item.setUploadState("已上传");
             }
             if (userLimitCursor.getString(userLimitCursor.getColumnIndex("meterState")).equals("false")) {
                 item.setMeterState("未抄");
                 item.setIfEdit(R.mipmap.meter_false);
-                item.setThisMonth( "无记录");
+                item.setThisMonth("无记录");
             } else {
                 item.setMeterState("已抄");
                 item.setIfEdit(R.mipmap.meter_true);

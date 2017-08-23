@@ -417,8 +417,8 @@ public class MeterUserDetailActivity extends Activity{
         values.put("this_month_dosage", "" + monthDosage);
         values.put("meter_date", meterDate);
         values.put("meterState", "true");
-        //db.update("MeterUser", values, "login_user_id=? and user_id=?", new String[]{sharedPreferences_login.getString("userId", ""), userID});
-        db.update("MeterUser", values, "login_user_id=?", new String[]{"0"});
+        db.update("MeterUser", values, "login_user_id=? and user_id=?", new String[]{sharedPreferences_login.getString("userId", ""), userID});
+        //db.update("MeterUser", values, "login_user_id=?", new String[]{"0"});
     }
 
     Handler handler = new Handler() {

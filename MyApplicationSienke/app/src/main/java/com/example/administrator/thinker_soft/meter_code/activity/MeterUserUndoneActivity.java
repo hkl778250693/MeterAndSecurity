@@ -408,7 +408,8 @@ public class MeterUserUndoneActivity extends Activity {
             } else {
                 item.setMeterNumber("无");
             }
-            item.setLastMonth(userLimitCursor.getString(userLimitCursor.getColumnIndex("meter_degrees")) + "/" + userLimitCursor.getString(userLimitCursor.getColumnIndex("last_month_dosage")));
+            item.setLastMonthDegree(userLimitCursor.getString(userLimitCursor.getColumnIndex("meter_degrees")));
+            item.setLastMonthDosage(userLimitCursor.getString(userLimitCursor.getColumnIndex("last_month_dosage")));
             item.setAddress(userLimitCursor.getString(userLimitCursor.getColumnIndex("user_address")));
             if (userLimitCursor.getString(userLimitCursor.getColumnIndex("meterState")).equals("false")) {
                 item.setMeterState("未抄");
