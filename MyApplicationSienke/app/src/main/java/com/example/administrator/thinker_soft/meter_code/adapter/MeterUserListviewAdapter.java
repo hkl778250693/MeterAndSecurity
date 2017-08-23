@@ -62,8 +62,10 @@ public class MeterUserListviewAdapter extends BaseAdapter {
             viewHolder.userName = (TextView) convertView.findViewById(R.id.user_name);
             viewHolder.userId = (TextView) convertView.findViewById(R.id.user_id);
             viewHolder.meterNumber = (TextView) convertView.findViewById(R.id.meter_number);
-            viewHolder.lastMonth = (TextView) convertView.findViewById(R.id.last_month);
-            viewHolder.thisMonth = (TextView) convertView.findViewById(R.id.this_month);
+            viewHolder.lastMonthDegree = (TextView) convertView.findViewById(R.id.last_month_degree);
+            viewHolder.lastMonthDosage = (TextView) convertView.findViewById(R.id.last_month_dosage);
+            viewHolder.thisMonthDegree = (TextView) convertView.findViewById(R.id.this_month_degree);
+            viewHolder.thisMonthDosage = (TextView) convertView.findViewById(R.id.this_month_dosage);
             viewHolder.address = (TextView) convertView.findViewById(R.id.address);
             viewHolder.meterState = (TextView) convertView.findViewById(R.id.meter_state);
             viewHolder.ifEdit = (ImageView) convertView.findViewById(R.id.if_edit);
@@ -76,8 +78,10 @@ public class MeterUserListviewAdapter extends BaseAdapter {
         viewHolder.userName.setText(item.getUserName());
         viewHolder.userId.setText(item.getUserID());
         viewHolder.meterNumber.setText(item.getMeterNumber());
-        viewHolder.lastMonth.setText(item.getLastMonth());
-        viewHolder.thisMonth.setText(item.getThisMonth());
+        viewHolder.lastMonthDegree.setText(item.getLastMonthDegree());
+        viewHolder.lastMonthDosage.setText(item.getLastMonthDosage());
+        viewHolder.thisMonthDegree.setText(item.getThisMonthDegree());
+        viewHolder.thisMonthDosage.setText(item.getThisMonthDosage());
         viewHolder.address.setText(item.getAddress());
         viewHolder.meterState.setText(item.getMeterState());
         viewHolder.ifEdit.setImageResource(item.getIfEdit());
@@ -89,8 +93,10 @@ public class MeterUserListviewAdapter extends BaseAdapter {
         TextView userName;
         TextView userId;
         TextView meterNumber;
-        TextView lastMonth;
-        TextView thisMonth;
+        TextView lastMonthDegree;
+        TextView lastMonthDosage;
+        TextView thisMonthDegree;
+        TextView thisMonthDosage;
         TextView address;
         TextView meterState;
         ImageView ifEdit;

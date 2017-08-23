@@ -698,8 +698,8 @@ public class MeterDataDownloadActivity extends Activity {
         values.put("file_name", fileNameEdit.getText().toString());                            //本地文件名
         values.put("uploadState","false");                                                     //上传状态
         //下面这些个字段抄表完成后需上传
-        values.put("this_month_dosage", "暂无");                                               //本月用量
-        values.put("this_month_end_degree", "");                                               //本月止度
+        values.put("this_month_dosage", "无");                                               //本月用量
+        values.put("this_month_end_degree", "无");                                               //本月止度
         values.put("n_jw_x", "未获取");                                                        //纬度
         values.put("n_jw_y", "未获取");                                                        //经度
         values.put("d_jw_time", "未获取");                                                     //抄表时间

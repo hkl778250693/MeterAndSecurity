@@ -40,8 +40,10 @@ import com.scwang.smartrefresh.layout.footer.BallPulseFooter;
 import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class MeterUserListviewActivity extends AppCompatActivity {
     private ImageView back, pageTurning;
@@ -65,6 +67,9 @@ public class MeterUserListviewActivity extends AppCompatActivity {
     private PopupWindow fastMeterWindow;
     private View fastMeterview;
     private MeterUserListRecycleAdapter.ViewHolder viewHolder;
+    private String meterDate;
+    private SimpleDateFormat dateFormat;
+    private RelativeLayout layout;
     /**
      * 下拉刷新，上拉加载
      */
@@ -109,6 +114,7 @@ public class MeterUserListviewActivity extends AppCompatActivity {
         db = helper.getWritableDatabase();
         sharedPreferences_login = this.getSharedPreferences("login_info", Context.MODE_PRIVATE);
         sharedPreferences = MeterUserListviewActivity.this.getSharedPreferences(sharedPreferences_login.getString("login_name", "") + "data", Context.MODE_PRIVATE);
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         /**
          * 设置 下拉刷新 Header 和 footer 风格样式
          */
@@ -257,6 +263,8 @@ public class MeterUserListviewActivity extends AppCompatActivity {
                                     intent.putExtra("upload_state", item.getUploadState());
                                     startActivityForResult(intent, currentPosition);
                                 } else {
+                                    layout = (RelativeLayout) mLayoutManager.findViewByPosition(currentPosition);
+                                    layout.findViewById(R.id.red_stroke).setVisibility(View.VISIBLE);
                                     showFastMeterWindow(item.getLastMonthDegree());   //弹出快捷抄表框
                                 }
                             }
@@ -380,6 +388,7 @@ public class MeterUserListviewActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 fastMeterWindow.dismiss();
+                layout.findViewById(R.id.red_stroke).setVisibility(View.GONE);
             }
         });
         save.setOnClickListener(new View.OnClickListener() {
@@ -390,11 +399,13 @@ public class MeterUserListviewActivity extends AppCompatActivity {
                         fastMeterWindow.dismiss();
                         String thisMonthDegree = meterEdit.getText().toString();
                         int thisMonthDosage = Integer.parseInt(meterEdit.getText().toString()) - Integer.parseInt(lastMonthDegree);
-                        item.setThisMonth(thisMonthDegree + "/" + String.valueOf(thisMonthDosage));
+                        item.setThisMonthDegree(thisMonthDegree);
+                        item.setThisMonthDosage(String.valueOf(thisMonthDosage));
                         item.setIfEdit(R.mipmap.meter_true);
                         item.setMeterState("已抄");
                         mAdapter.notifyDataSetChanged();
                         Tools.moveToPosition((LinearLayoutManager) mLayoutManager, mRecyclerView, currentPosition + 1);
+                        //updateMeterUserInfo();
                         currentPosition = ((LinearLayoutManager) mLayoutManager).findFirstVisibleItemPosition();
                         mLayoutManager.getChildAt(currentPosition);
                     } else {
@@ -420,6 +431,21 @@ public class MeterUserListviewActivity extends AppCompatActivity {
             }
         });
     }
+
+    /**
+     * 保存抄表信息到本地数据库
+     */
+    /*private void updateMeterUserInfo() {
+        ContentValues values = new ContentValues();
+        values.put("n_jw_x", latitudeTv.getText().toString());
+        values.put("n_jw_y", longitudeTv.getText().toString());
+        values.put("locationAddress", addressTv.getText().toString());
+        values.put("this_month_end_degree", thisMonthEndDegreeEdit.getText().toString().trim());
+        values.put("this_month_dosage", "" + item.getThisMonth());
+        values.put("meter_date",dateFormat.format(new Date()));
+        values.put("meterState", "true");
+        db.update("MeterUser", values, "login_user_id=? and user_id=?", new String[]{sharedPreferences_login.getString("userId", ""), userID});
+    }*/
 
     //设置背景透明度
     public void backgroundAlpha(float bgAlpha) {
@@ -499,11 +525,13 @@ public class MeterUserListviewActivity extends AppCompatActivity {
             if (userLimitCursor.getString(userLimitCursor.getColumnIndex("meterState")).equals("false")) {
                 item.setMeterState("未抄");
                 item.setIfEdit(R.mipmap.meter_false);
-                item.setThisMonth("无记录");
+                item.setThisMonthDegree("无");
+                item.setThisMonthDosage("无");
             } else {
                 item.setMeterState("已抄");
                 item.setIfEdit(R.mipmap.meter_true);
-                item.setThisMonth(userLimitCursor.getString(userLimitCursor.getColumnIndex("this_month_end_degree")) + "/" + userLimitCursor.getString(userLimitCursor.getColumnIndex("this_month_dosage")));
+                item.setThisMonthDegree(userLimitCursor.getString(userLimitCursor.getColumnIndex("this_month_end_degree")));
+                item.setThisMonthDosage(userLimitCursor.getString(userLimitCursor.getColumnIndex("this_month_dosage")));
             }
             userLists.add(item);
         }
@@ -516,7 +544,8 @@ public class MeterUserListviewActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             if (requestCode == currentPosition) {
                 if (data != null) {
-                    item.setThisMonth(data.getStringExtra("this_month_end_degree") + "/" + data.getStringExtra("this_month_dosage"));
+                    item.setThisMonthDegree(data.getStringExtra("this_month_end_degree"));
+                    item.setThisMonthDosage(data.getStringExtra("this_month_dosage"));
                     item.setIfEdit(R.mipmap.meter_true);
                     item.setMeterState("已抄");
                     mAdapter.notifyDataSetChanged();

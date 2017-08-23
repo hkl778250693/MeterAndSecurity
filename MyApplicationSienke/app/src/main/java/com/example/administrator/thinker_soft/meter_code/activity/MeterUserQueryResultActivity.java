@@ -87,7 +87,8 @@ public class MeterUserQueryResultActivity extends Activity {
         if(resultCode == RESULT_OK){
             if(requestCode == currentPosition){
                 if(data != null){
-                    item.setThisMonth(data.getStringExtra("this_month_dosage"));
+                    item.setThisMonthDegree(data.getStringExtra("this_month_end_degree"));
+                    item.setThisMonthDosage(data.getStringExtra("this_month_dosage"));
                     item.setIfEdit(R.mipmap.meter_true);
                     item.setMeterState("已抄");
                     adapter.notifyDataSetChanged();

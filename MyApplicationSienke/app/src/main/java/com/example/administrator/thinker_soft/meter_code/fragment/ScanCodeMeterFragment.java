@@ -256,15 +256,24 @@ public class ScanCodeMeterFragment extends Fragment {
             }else {
                 item.setMeterNumber("无");
             }
-            item.setLastMonth(cursor.getString(cursor.getColumnIndex("last_month_dosage")));
-            item.setThisMonth(cursor.getString(cursor.getColumnIndex("this_month_dosage")));
+            item.setLastMonthDegree(cursor.getString(cursor.getColumnIndex("meter_degrees")));
+            item.setLastMonthDosage(cursor.getString(cursor.getColumnIndex("last_month_dosage")));
             item.setAddress(cursor.getString(cursor.getColumnIndex("user_address")));
-            if(cursor.getString(cursor.getColumnIndex("meterState")).equals("false")){
+            if (cursor.getString(cursor.getColumnIndex("uploadState")).equals("false")) {
+                item.setUploadState("");
+            } else {
+                item.setUploadState("已上传");
+            }
+            if (cursor.getString(cursor.getColumnIndex("meterState")).equals("false")) {
                 item.setMeterState("未抄");
                 item.setIfEdit(R.mipmap.meter_false);
-            }else {
+                item.setThisMonthDegree("无");
+                item.setThisMonthDosage("无");
+            } else {
                 item.setMeterState("已抄");
                 item.setIfEdit(R.mipmap.meter_true);
+                item.setThisMonthDegree(cursor.getString(cursor.getColumnIndex("this_month_end_degree")));
+                item.setThisMonthDosage(cursor.getString(cursor.getColumnIndex("this_month_dosage")));
             }
             userLists.add(item);
         }

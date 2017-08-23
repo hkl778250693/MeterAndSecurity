@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.administrator.thinker_soft.R;
@@ -50,7 +51,8 @@ public class MeterUserListRecycleAdapter extends RecyclerView.Adapter<MeterUserL
         holder.meterNumber.setText(item.getMeterNumber());
         holder.lastMonthDegree.setText(item.getLastMonthDegree());
         holder.lastMonthDosage.setText(item.getLastMonthDosage());
-        holder.thisMonth.setText(item.getThisMonth());
+        holder.thisMonthDegree.setText(item.getThisMonthDegree());
+        holder.thisMonthDosage.setText(item.getThisMonthDosage());
         holder.address.setText(item.getAddress());
         holder.uploadState.setText(item.getUploadState());
         holder.meterState.setText(item.getMeterState());
@@ -70,11 +72,13 @@ public class MeterUserListRecycleAdapter extends RecyclerView.Adapter<MeterUserL
         TextView meterNumber;
         TextView lastMonthDegree;
         TextView lastMonthDosage;
-        TextView thisMonth;
+        TextView thisMonthDegree;
+        TextView thisMonthDosage;
         TextView address;
         TextView uploadState;
         TextView meterState;
         ImageView ifEdit;
+        LinearLayout redStroke;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -84,11 +88,13 @@ public class MeterUserListRecycleAdapter extends RecyclerView.Adapter<MeterUserL
             meterNumber = (TextView) itemView.findViewById(R.id.meter_number);
             lastMonthDegree = (TextView) itemView.findViewById(R.id.last_month_degree);
             lastMonthDosage = (TextView) itemView.findViewById(R.id.last_month_dosage);
-            thisMonth = (TextView) itemView.findViewById(R.id.this_month);
+            thisMonthDegree = (TextView) itemView.findViewById(R.id.this_month_degree);
+            thisMonthDosage = (TextView) itemView.findViewById(R.id.this_month_dosage);
             address = (TextView) itemView.findViewById(R.id.address);
             uploadState = (TextView) itemView.findViewById(R.id.upload_state);
             meterState = (TextView) itemView.findViewById(R.id.meter_state);
             ifEdit = (ImageView) itemView.findViewById(R.id.if_edit);
+            redStroke = (LinearLayout) itemView.findViewById(R.id.red_stroke);
             itemView.setOnClickListener(this);
         }
 

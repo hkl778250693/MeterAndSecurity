@@ -414,11 +414,13 @@ public class MeterUserUndoneActivity extends Activity {
             if (userLimitCursor.getString(userLimitCursor.getColumnIndex("meterState")).equals("false")) {
                 item.setMeterState("未抄");
                 item.setIfEdit(R.mipmap.meter_false);
-                item.setThisMonth("无记录");
+                item.setThisMonthDegree("无");
+                item.setThisMonthDosage("无");
             } else {
                 item.setMeterState("已抄");
                 item.setIfEdit(R.mipmap.meter_true);
-                item.setThisMonth(userLimitCursor.getString(userLimitCursor.getColumnIndex("this_month_end_degree")) + "/" + userLimitCursor.getString(userLimitCursor.getColumnIndex("this_month_dosage")));
+                item.setThisMonthDegree(userLimitCursor.getString(userLimitCursor.getColumnIndex("this_month_end_degree")));
+                item.setThisMonthDosage(userLimitCursor.getString(userLimitCursor.getColumnIndex("this_month_dosage")));
             }
             userLists.add(item);
         }
@@ -430,7 +432,8 @@ public class MeterUserUndoneActivity extends Activity {
         if (resultCode == RESULT_OK) {
             if (requestCode == currentPosition) {
                 if (data != null) {
-                    item.setThisMonth(data.getStringExtra("this_month_end_degree") + "/" + data.getStringExtra("this_month_dosage"));
+                    item.setThisMonthDegree(data.getStringExtra("this_month_end_degree"));
+                    item.setThisMonthDosage(data.getStringExtra("this_month_dosage"));
                     item.setIfEdit(R.mipmap.meter_true);
                     item.setMeterState("已抄");
                     mAdapter.notifyDataSetChanged();

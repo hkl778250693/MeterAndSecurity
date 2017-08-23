@@ -13,7 +13,8 @@ public class MeterUserListviewItem implements Parcelable{
     private String meterNumber;
     private String lastMonthDegree;
     private String lastMonthDosage;
-    private String thisMonth;
+    private String thisMonthDegree;
+    private String thisMonthDosage;
     private String address;
     private String uploadState;   //上传状态
     private String meterState;  //抄表状态（文字）
@@ -67,12 +68,20 @@ public class MeterUserListviewItem implements Parcelable{
         this.lastMonthDosage = lastMonthDosage;
     }
 
-    public String getThisMonth() {
-        return thisMonth;
+    public String getThisMonthDegree() {
+        return thisMonthDegree;
     }
 
-    public void setThisMonth(String thisMonth) {
-        this.thisMonth = thisMonth;
+    public void setThisMonthDegree(String thisMonthDegree) {
+        this.thisMonthDegree = thisMonthDegree;
+    }
+
+    public String getThisMonthDosage() {
+        return thisMonthDosage;
+    }
+
+    public void setThisMonthDosage(String thisMonthDosage) {
+        this.thisMonthDosage = thisMonthDosage;
     }
 
     public String getAddress() {
@@ -120,7 +129,8 @@ public class MeterUserListviewItem implements Parcelable{
         parcel.writeString(meterNumber);
         parcel.writeString(lastMonthDegree);
         parcel.writeString(lastMonthDosage);
-        parcel.writeString(thisMonth);
+        parcel.writeString(thisMonthDegree);
+        parcel.writeString(thisMonthDosage);
         parcel.writeString(address);
         parcel.writeString(uploadState);
         parcel.writeString(meterState);
@@ -136,7 +146,8 @@ public class MeterUserListviewItem implements Parcelable{
             item.meterNumber = parcel.readString();
             item.lastMonthDegree = parcel.readString();
             item.lastMonthDosage = parcel.readString();
-            item.thisMonth = parcel.readString();
+            item.thisMonthDegree = parcel.readString();
+            item.thisMonthDosage = parcel.readString();
             item.address = parcel.readString();
             item.uploadState = parcel.readString();
             item.meterState = parcel.readString();

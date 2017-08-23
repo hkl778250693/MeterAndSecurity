@@ -375,22 +375,35 @@ public class MeterAllUserListActivity extends Activity {
         while (userLimitCursor.moveToNext()) {
             MeterUserListviewItem item = new MeterUserListviewItem();
             item.setMeterID(userLimitCursor.getString(userLimitCursor.getColumnIndex("meter_order_number")));
-            item.setUserName(userLimitCursor.getString(userLimitCursor.getColumnIndex("user_name")));
+            if (!userLimitCursor.getString(userLimitCursor.getColumnIndex("user_name")).equals("null")) {
+                item.setUserName(userLimitCursor.getString(userLimitCursor.getColumnIndex("user_name")));
+            } else {
+                item.setUserName("无");
+            }
             item.setUserID(userLimitCursor.getString(userLimitCursor.getColumnIndex("user_id")));
             if (!userLimitCursor.getString(userLimitCursor.getColumnIndex("meter_number")).equals("null")) {
                 item.setMeterNumber(userLimitCursor.getString(userLimitCursor.getColumnIndex("meter_number")));
             } else {
                 item.setMeterNumber("无");
             }
-            item.setLastMonth(userLimitCursor.getString(userLimitCursor.getColumnIndex("last_month_dosage")));
-            item.setThisMonth(userLimitCursor.getString(userLimitCursor.getColumnIndex("this_month_dosage")));
+            item.setLastMonthDegree(userLimitCursor.getString(userLimitCursor.getColumnIndex("meter_degrees")));
+            item.setLastMonthDosage(userLimitCursor.getString(userLimitCursor.getColumnIndex("last_month_dosage")));
             item.setAddress(userLimitCursor.getString(userLimitCursor.getColumnIndex("user_address")));
+            if (userLimitCursor.getString(userLimitCursor.getColumnIndex("uploadState")).equals("false")) {
+                item.setUploadState("");
+            } else {
+                item.setUploadState("已上传");
+            }
             if (userLimitCursor.getString(userLimitCursor.getColumnIndex("meterState")).equals("false")) {
                 item.setMeterState("未抄");
                 item.setIfEdit(R.mipmap.meter_false);
+                item.setThisMonthDegree("无");
+                item.setThisMonthDosage("无");
             } else {
                 item.setMeterState("已抄");
                 item.setIfEdit(R.mipmap.meter_true);
+                item.setThisMonthDegree(userLimitCursor.getString(userLimitCursor.getColumnIndex("this_month_end_degree")));
+                item.setThisMonthDosage(userLimitCursor.getString(userLimitCursor.getColumnIndex("this_month_dosage")));
             }
             userLists.add(item);
         }
@@ -402,7 +415,8 @@ public class MeterAllUserListActivity extends Activity {
         if (resultCode == RESULT_OK) {
             if (requestCode == currentPosition) {
                 if (data != null) {
-                    item.setThisMonth(data.getStringExtra("this_month_end_degree") + "/" + data.getStringExtra("this_month_dosage"));
+                    item.setThisMonthDegree(data.getStringExtra("this_month_end_degree"));
+                    item.setThisMonthDosage(data.getStringExtra("this_month_dosage"));
                     item.setIfEdit(R.mipmap.meter_true);
                     item.setMeterState("已抄");
                     mAdapter.notifyDataSetChanged();
