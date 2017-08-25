@@ -74,7 +74,6 @@ public class MeterUserUndoneActivity extends Activity {
     //绑定控件
     private void bindView() {
         back = (ImageView) findViewById(R.id.back);
-        pageTurning = (ImageView) findViewById(R.id.page_turning);
         bookName = (TextView) findViewById(R.id.book_name);
         noData = (TextView) findViewById(R.id.no_data);
         selectPage = (LinearLayout) findViewById(R.id.select_page);
@@ -195,21 +194,6 @@ public class MeterUserUndoneActivity extends Activity {
                 case R.id.back:
                     MeterUserUndoneActivity.this.finish();
                     break;
-                case R.id.page_turning:
-                    if (selectPage.getVisibility() == View.GONE) {
-                        selectPage.setVisibility(View.VISIBLE);
-                        MyAnimationUtils.viewGroupBottomInAnimation(MeterUserUndoneActivity.this, selectPage, 0.3F);
-                    } else {
-                        MyAnimationUtils.viewGroupBottomOutAnimation(MeterUserUndoneActivity.this, selectPage, 0.3F);
-                        selectPage.setVisibility(View.GONE);
-                    }
-                    break;
-                case R.id.last_page:
-                    mRefreshLayout.autoRefresh();
-                    break;
-                case R.id.next_page:
-                    mRefreshLayout.autoLoadmore();
-                    break;
                 default:
                     break;
             }
@@ -251,17 +235,6 @@ public class MeterUserUndoneActivity extends Activity {
                     MyAnimationUtils.viewGroupOutAlphaAnimation(MeterUserUndoneActivity.this, mRecyclerView, 0.1F);
                     //设置增加或删除条目的动画
                     mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-                    currentPageTv.setText(String.valueOf(currentPage));
-                    if (totalCountCursor.getCount() % 50 != 0) {
-                        totalPage = totalCountCursor.getCount() / 50 + 1;
-                    } else {
-                        if (totalCountCursor.getCount() <= 50) {
-                            totalPage = 1;
-                        } else {
-                            totalPage = totalCountCursor.getCount() / 50;
-                        }
-                    }
-                    totalPageTv.setText(String.valueOf(totalPage));
                     break;
                 case 1:
                     mLayoutManager = new LinearLayoutManager(MeterUserUndoneActivity.this, LinearLayoutManager.VERTICAL, false);

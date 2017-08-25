@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.administrator.thinker_soft.R;
@@ -78,7 +77,6 @@ public class MeterUserListRecycleAdapter extends RecyclerView.Adapter<MeterUserL
         TextView uploadState;
         TextView meterState;
         ImageView ifEdit;
-        LinearLayout redStroke;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -94,7 +92,6 @@ public class MeterUserListRecycleAdapter extends RecyclerView.Adapter<MeterUserL
             uploadState = (TextView) itemView.findViewById(R.id.upload_state);
             meterState = (TextView) itemView.findViewById(R.id.meter_state);
             ifEdit = (ImageView) itemView.findViewById(R.id.if_edit);
-            redStroke = (LinearLayout) itemView.findViewById(R.id.red_stroke);
             itemView.setOnClickListener(this);
         }
 

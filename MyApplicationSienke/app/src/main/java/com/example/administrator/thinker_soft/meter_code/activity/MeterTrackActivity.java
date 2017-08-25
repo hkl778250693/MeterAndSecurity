@@ -84,7 +84,7 @@ public class MeterTrackActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if(latLngList.size() != 0){
+                        if(latLngList.size() == 0){
                             Log.i("MeterTrackActivity","抄表轨迹进来了");
                             MapStatus mMapStatus = new MapStatus.Builder()
                                     .target(latLngList.get(0))

@@ -56,7 +56,8 @@ import java.util.List;
  * Created by Administrator on 2017/6/12 0012.
  */
 public class MeterDataTransferActivity extends Activity {
-    private View view, fileSelectView, uploadView, loadingView, line;
+    private ImageView back;
+    private View fileSelectView, uploadView, loadingView, line;
     private CardView upload, download;
     private LayoutInflater layoutInflater;
     private PopupWindow fileWindow, uploadWindow, loadingWindow;
@@ -85,7 +86,7 @@ public class MeterDataTransferActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_data_transfer);
+        setContentView(R.layout.activity_data_transfer);
 
         bindView();
         defaultSetting();
@@ -95,9 +96,10 @@ public class MeterDataTransferActivity extends Activity {
 
     //绑定控件
     private void bindView() {
-        upload = (CardView) view.findViewById(R.id.upload);
-        download = (CardView) view.findViewById(R.id.download);
-        rootLinearlayout = (LinearLayout) view.findViewById(R.id.root_linearlayout);
+        back = (ImageView) findViewById(R.id.back);
+        upload = (CardView) findViewById(R.id.upload);
+        download = (CardView) findViewById(R.id.download);
+        rootLinearlayout = (LinearLayout) findViewById(R.id.root_linearlayout);
     }
 
     //初始化设置
@@ -110,6 +112,7 @@ public class MeterDataTransferActivity extends Activity {
 
     //点击事件
     public void setViewClickListener() {
+        back.setOnClickListener(clickListener);
         upload.setOnClickListener(clickListener);
         download.setOnClickListener(clickListener);
     }
@@ -118,6 +121,9 @@ public class MeterDataTransferActivity extends Activity {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
+                case R.id.back:
+                    MeterDataTransferActivity.this.finish();
+                    break;
                 case R.id.upload:
                     showFileSelectWindow();
                     new Thread() {

@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.util.Log;
@@ -22,14 +24,12 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.administrator.thinker_soft.R;
 import com.example.administrator.thinker_soft.meter_code.activity.CustomQueryActivity;
 import com.example.administrator.thinker_soft.meter_code.activity.MapMeterActivity;
 import com.example.administrator.thinker_soft.meter_code.activity.MeterDataTransferActivity;
 import com.example.administrator.thinker_soft.meter_code.activity.MeterStatisticsActivity;
-import com.example.administrator.thinker_soft.meter_code.activity.MeterUserContinueActivity;
 import com.example.administrator.thinker_soft.meter_code.activity.MeterUserListviewActivity;
 import com.example.administrator.thinker_soft.meter_code.activity.MeterUserUndoneActivity;
 import com.example.administrator.thinker_soft.meter_code.adapter.MeterFileSelectListAdapter;
@@ -46,7 +46,8 @@ import java.util.List;
 public class MeterHomePageFragment extends Fragment {
     private View view;
     private CardView meterReading, meterFile, query, map, statistics, transfer;
-    private LinearLayout rootLinearlayout, noData;
+    private CoordinatorLayout coordinatorLayout;
+    private LinearLayout noData;
     private LayoutInflater layoutInflater;
     private PopupWindow fileWindow, bookWindow, undoneWindow;
     private View fileSelectView, bookView, undoneView;
@@ -85,7 +86,7 @@ public class MeterHomePageFragment extends Fragment {
         map = (CardView) view.findViewById(R.id.map);
         statistics = (CardView) view.findViewById(R.id.statistics);
         transfer = (CardView) view.findViewById(R.id.transfer);
-        rootLinearlayout = (LinearLayout) view.findViewById(R.id.root_linearlayout);
+        coordinatorLayout = (CoordinatorLayout) view.findViewById(R.id.coordinator_layout);
     }
 
     //初始化设置
@@ -93,7 +94,6 @@ public class MeterHomePageFragment extends Fragment {
         MySqliteHelper helper = new MySqliteHelper(getActivity(), 1);
         db = helper.getWritableDatabase();
         sharedPreferences_login = getActivity().getSharedPreferences("login_info", Context.MODE_PRIVATE);
-        sharedPreferences = getActivity().getSharedPreferences(sharedPreferences_login.getString("login_name", "") + "data", Context.MODE_PRIVATE);
         sharedPreferences = getActivity().getSharedPreferences(sharedPreferences_login.getString("userId","")+"data", Context.MODE_PRIVATE);
     }
 
@@ -114,17 +114,17 @@ public class MeterHomePageFragment extends Fragment {
             switch (v.getId()) {
                 case R.id.meter_reading:
                     if (!"".equals(sharedPreferences.getString("currentFileName", ""))) {
-                        if (!"".equals(sharedPreferences.getString("currentBookName", ""))) {
-                            intent = new Intent(getActivity(), MeterUserContinueActivity.class);
-                            intent.putExtra("fileName", sharedPreferences.getString("currentFileName", ""));
-                            intent.putExtra("bookName", sharedPreferences.getString("currentBookName", ""));
-                            intent.putExtra("bookID", sharedPreferences.getString("currentBookID", ""));
-                            startActivity(intent);
-                        } else {
-                            Toast.makeText(getActivity(), "请先选择抄表本！", Toast.LENGTH_SHORT).show();
-                        }
+                        showBookSelectWindow();
+                        new Thread() {
+                            @Override
+                            public void run() {
+                                super.run();
+                                getBookInfo();
+                            }
+                        }.start();
                     } else {
-                        Toast.makeText(getActivity(), "请先完成文件选择！", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getActivity(), "请先完成文件选择！", Toast.LENGTH_SHORT).show();
+                        Snackbar.make(coordinatorLayout,"请您先选择抄表本！",Snackbar.LENGTH_INDEFINITE).show();
                     }
                     break;
                 case R.id.meter_file:
@@ -186,19 +186,17 @@ public class MeterHomePageFragment extends Fragment {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                Intent intent = null;
-                if (bookMeterState) {
+                Intent intent = new Intent(getActivity(), MeterUserListviewActivity.class);
+                intent.putExtra("bookName", bookItem.getName());
+                intent.putExtra("bookID", bookItem.getID());
+                intent.putExtra("fileName", sharedPreferences.getString("currentFileName", ""));
+                startActivity(intent);
+               /* if (bookMeterState) {
                     intent = new Intent(getActivity(), MeterUserListviewActivity.class);
                 } else if (undoneMeterState) {
                     intent = new Intent(getActivity(), MeterUserUndoneActivity.class);
                     intent.putExtra("type", "单个");
-                }
-                if (intent != null) {
-                    intent.putExtra("bookName", bookItem.getName());
-                    intent.putExtra("bookID", bookItem.getID());
-                    intent.putExtra("fileName", sharedPreferences.getString("currentFileName", ""));
-                    startActivity(intent);
-                }
+                }*/
             }
         });
         back.setOnClickListener(new View.OnClickListener() {
@@ -214,7 +212,7 @@ public class MeterHomePageFragment extends Fragment {
         bookWindow.setBackgroundDrawable(getResources().getDrawable(R.color.white_transparent));
         bookWindow.setAnimationStyle(R.style.mypopwindow_anim_style);
         backgroundAlpha(0.6F);   //背景变暗
-        bookWindow.showAtLocation(rootLinearlayout, Gravity.CENTER, 0, 0);
+        bookWindow.showAtLocation(coordinatorLayout, Gravity.CENTER, 0, 0);
         bookWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
@@ -281,7 +279,7 @@ public class MeterHomePageFragment extends Fragment {
         undoneWindow.setBackgroundDrawable(getResources().getDrawable(R.color.white_transparent));
         undoneWindow.setAnimationStyle(R.style.mypopwindow_anim_style);
         backgroundAlpha(0.6F);   //背景变暗
-        undoneWindow.showAtLocation(rootLinearlayout, Gravity.CENTER, 0, 0);
+        undoneWindow.showAtLocation(coordinatorLayout, Gravity.CENTER, 0, 0);
         undoneWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
@@ -327,7 +325,7 @@ public class MeterHomePageFragment extends Fragment {
         fileWindow.setBackgroundDrawable(getResources().getDrawable(R.color.white_transparent));
         fileWindow.setAnimationStyle(R.style.mypopwindow_anim_style);
         backgroundAlpha(0.6F);   //背景变暗
-        fileWindow.showAtLocation(rootLinearlayout, Gravity.CENTER, 0, 0);
+        fileWindow.showAtLocation(coordinatorLayout, Gravity.CENTER, 0, 0);
         fileWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {

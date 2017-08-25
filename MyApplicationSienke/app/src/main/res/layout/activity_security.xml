@@ -66,7 +66,7 @@
     <RadioGroup
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:background="@color/gray_thin"
+        android:background="@android:color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -84,22 +84,9 @@
             android:textColor="@drawable/radiogroup_text_selector"
             android:textSize="12sp" />
 
-        <RadioButton
-            android:id="@+id/data_transfer_rbt"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:button="@null"
-            android:drawablePadding="5dp"
-            android:drawableTop="@drawable/radiogroup_data_transfer_selector"
-            android:gravity="center"
-            android:text="传输"
-            android:textColor="@drawable/radiogroup_text_selector"
-            android:textSize="12sp" />
 
         <RadioButton
-            android:id="@+id/radio_button3"
+            android:id="@+id/mime"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"

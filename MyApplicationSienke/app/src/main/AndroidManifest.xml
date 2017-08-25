@@ -166,6 +166,8 @@
         <activity
             android:name=".Security_check.activity.SecurityGuideActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".Security_check.activity.DataTransferActivity"
+            android:screenOrientation="portrait"/>
 
         //掌上办公
         <activity

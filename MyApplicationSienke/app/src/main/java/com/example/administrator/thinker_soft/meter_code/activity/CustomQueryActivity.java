@@ -1,12 +1,13 @@
 package com.example.administrator.thinker_soft.meter_code.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.administrator.thinker_soft.R;
@@ -14,14 +15,15 @@ import com.example.administrator.thinker_soft.R;
 /**
  * Created by Administrator on 2017/6/12 0012.
  */
-public class CustomQueryActivity extends Activity {
+public class CustomQueryActivity extends AppCompatActivity {
+    private ImageView back;
     private CardView bookCardView, userNameCardview, userIdCardview, meterNumberCardview;
     private SharedPreferences sharedPreferences_login, sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_meter_query);
+        setContentView(R.layout.activity_meter_query);
 
         bindView();
         defaultSetting();
@@ -31,6 +33,7 @@ public class CustomQueryActivity extends Activity {
 
     //绑定控件
     private void bindView() {
+        back = (ImageView) findViewById(R.id.back);
         bookCardView = (CardView) findViewById(R.id.book_cardview);
         userNameCardview = (CardView) findViewById(R.id.user_name_cardview);
         userIdCardview = (CardView) findViewById(R.id.user_id_cardview);
@@ -45,6 +48,7 @@ public class CustomQueryActivity extends Activity {
 
     //点击事件
     public void setViewClickListener() {
+        back.setOnClickListener(onClickListener);
         bookCardView.setOnClickListener(onClickListener);
         userNameCardview.setOnClickListener(onClickListener);
         userIdCardview.setOnClickListener(onClickListener);
@@ -56,6 +60,9 @@ public class CustomQueryActivity extends Activity {
         public void onClick(View v) {
             Intent intent;
             switch (v.getId()) {
+                case R.id.back:
+                    CustomQueryActivity.this.finish();
+                    break;
                 case R.id.book_cardview:
                     if (!"".equals(sharedPreferences.getString("currentFileName", ""))) {
                         intent = new Intent(CustomQueryActivity.this, MeterBookQueryActivity.class);

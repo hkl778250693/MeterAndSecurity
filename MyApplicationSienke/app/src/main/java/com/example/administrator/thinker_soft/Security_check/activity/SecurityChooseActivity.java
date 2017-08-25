@@ -28,7 +28,6 @@ import android.widget.TextView;
 
 import com.example.administrator.thinker_soft.R;
 import com.example.administrator.thinker_soft.Security_check.adapter.SecurityCheckViewPagerAdapter;
-import com.example.administrator.thinker_soft.Security_check.fragment.DataTransferFragment;
 import com.example.administrator.thinker_soft.Security_check.fragment.MyInfoFragment;
 import com.example.administrator.thinker_soft.Security_check.fragment.SecurityChooseFragment;
 import com.example.administrator.thinker_soft.mode.MySqliteHelper;
@@ -64,7 +63,7 @@ public class SecurityChooseActivity extends FragmentActivity {
     private ImageView back, security_check_go;
     private RadioButton optionRbt;  //选项按钮
     private TextView name, userName, tips;
-    private RadioButton dataTransferRbt, radioButton3;  //数据传输按钮
+    private RadioButton dataTransferRbt, mime;  //数据传输按钮
     private List<Fragment> fragmentList;
     private ViewPager viewPager;
     private SecurityCheckViewPagerAdapter adapter;
@@ -150,8 +149,7 @@ public class SecurityChooseActivity extends FragmentActivity {
         back = (ImageView) findViewById(R.id.back);
         security_check_go = (ImageView) findViewById(R.id.security_check_go);
         optionRbt = (RadioButton) findViewById(R.id.option_rbt);
-        dataTransferRbt = (RadioButton) findViewById(R.id.data_transfer_rbt);
-        radioButton3 = (RadioButton) findViewById(R.id.radio_button3);
+        mime = (RadioButton) findViewById(R.id.mime);
         viewPager = (ViewPager) findViewById(R.id.security_viewpager);
         name = (TextView) findViewById(R.id.name);
         userName = (TextView) findViewById(R.id.user_name);
@@ -164,8 +162,7 @@ public class SecurityChooseActivity extends FragmentActivity {
         back.setOnClickListener(onClickListener);
         security_check_go.setOnClickListener(onClickListener);
         optionRbt.setOnClickListener(onClickListener);
-        dataTransferRbt.setOnClickListener(onClickListener);
-        radioButton3.setOnClickListener(onClickListener);
+        mime.setOnClickListener(onClickListener);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -177,20 +174,12 @@ public class SecurityChooseActivity extends FragmentActivity {
                 switch (position) {
                     case 0:
                         optionRbt.setChecked(true);
-                        dataTransferRbt.setChecked(false);
-                        radioButton3.setChecked(false);
+                        mime.setChecked(false);
                         name.setText("首页");
                         break;
                     case 1:
                         optionRbt.setChecked(false);
-                        dataTransferRbt.setChecked(true);
-                        radioButton3.setChecked(false);
-                        name.setText("传输");
-                        break;
-                    case 2:
-                        optionRbt.setChecked(false);
-                        dataTransferRbt.setChecked(false);
-                        radioButton3.setChecked(true);
+                        mime.setChecked(true);
                         name.setText("我");
                         break;
                 }
@@ -217,12 +206,8 @@ public class SecurityChooseActivity extends FragmentActivity {
                     viewPager.setCurrentItem(0);
                     name.setText("首页");
                     break;
-                case R.id.data_transfer_rbt:
+                case R.id.mime:
                     viewPager.setCurrentItem(1);
-                    name.setText("传输");
-                    break;
-                case R.id.radio_button3:
-                    viewPager.setCurrentItem(2);
                     name.setText("我");
                     break;
                 default:
@@ -411,7 +396,6 @@ public class SecurityChooseActivity extends FragmentActivity {
         fragmentList = new ArrayList<>();
         //添加fragment到list
         fragmentList.add(new SecurityChooseFragment());
-        fragmentList.add(new DataTransferFragment());
         fragmentList.add(new MyInfoFragment());
         //避免报空指针
         if (fragmentList != null) {

@@ -4,27 +4,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:id="@+id/red_stroke"
-        android:layout_width="match_parent"
-        android:layout_height="115dp"
-        android:layout_margin="5dp"
-        android:background="@drawable/red_stroke_shape"
-        android:orientation="vertical"
-        android:padding="5dp"
-        android:visibility="gone">
-    </LinearLayout>
-
     <android.support.v7.widget.CardView
         android:id="@+id/cardview"
         android:layout_width="match_parent"
-        android:layout_height="105dp"
-        android:layout_margin="10dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
         android:foreground="?android:attr/selectableItemBackground"
         app:cardBackgroundColor="@android:color/white"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="5dp"
-        app:contentPadding="4dp">
+        app:cardCornerRadius="4dp"
+        app:cardElevation="1dp"
+        app:contentPadding="6dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -37,10 +26,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:paddingBottom="5dp"
-                android:gravity="center_vertical"
-                android:paddingLeft="5dp"
-                android:paddingTop="5dp">
+                android:gravity="center_vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -75,12 +61,12 @@
                         android:layout_marginRight="10dp"
                         android:background="@mipmap/green_tip"
                         android:gravity="right"
-                        android:paddingBottom="3dp"
+                        android:paddingBottom="1dp"
                         android:paddingEnd="5dp"
                         android:paddingLeft="25dp"
                         android:paddingRight="5dp"
                         android:paddingStart="25dp"
-                        android:paddingTop="3dp"
+                        android:paddingTop="1dp"
                         android:text="37221226"
                         android:textColor="@android:color/white"
                         android:textSize="14sp"/>

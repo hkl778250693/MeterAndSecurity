@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.view.Gravity;
@@ -23,13 +24,12 @@ import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.example.administrator.thinker_soft.R;
-import com.example.administrator.thinker_soft.Security_check.activity.ContinueCheckUserActivity;
-import com.example.administrator.thinker_soft.Security_check.activity.NoCheckUserListActivity;
+import com.example.administrator.thinker_soft.Security_check.activity.DataTransferActivity;
+import com.example.administrator.thinker_soft.Security_check.activity.NewTaskActivity;
 import com.example.administrator.thinker_soft.Security_check.activity.SecurityStatisticsActivity;
 import com.example.administrator.thinker_soft.Security_check.activity.UserListActivity;
 import com.example.administrator.thinker_soft.Security_check.adapter.TaskChooseAdapter;
 import com.example.administrator.thinker_soft.Security_check.model.TaskChoose;
-import com.example.administrator.thinker_soft.Security_check.activity.NewTaskActivity;
 import com.example.administrator.thinker_soft.mode.MySqliteHelper;
 import com.example.administrator.thinker_soft.mode.Tools;
 
@@ -42,13 +42,14 @@ import java.util.List;
 public class SecurityChooseFragment extends Fragment {
     private View view;
     //继续安检  //用户列表 //未检用户 //新建任务   //安检统计     //任务选择
-    private CardView continueCardview, userListCardview, uncheckUserCardview, newTaskCardview, statisticsCardview, taskChooseCardview;
+    private CardView userListCardview, taskCardview, newTaskCardview, statisticsCardview, transfer;
     private SharedPreferences sharedPreferences,sharedPreferences_login;
     private LayoutInflater inflater;  //转换器
     private View taskView;
     private PopupWindow popupWindow;
     private ListView listView;
-    private LinearLayout rootLinearlayout,noData;
+    private CoordinatorLayout coordinatorLayout;
+    private LinearLayout noData;
     private TaskChooseAdapter adapter;   //适配器
     private SQLiteDatabase db;  //数据库
     private MySqliteHelper helper; //数据库帮助类
@@ -67,13 +68,12 @@ public class SecurityChooseFragment extends Fragment {
 
     //绑定控件
     public void bindView() {
-        rootLinearlayout = (LinearLayout) view.findViewById(R.id.root_linearlayout);
-        continueCardview = (CardView) view.findViewById(R.id.continue_cardview);
+        coordinatorLayout = (CoordinatorLayout) view.findViewById(R.id.coordinator_layout);
         userListCardview = (CardView) view.findViewById(R.id.user_list_cardview);
-        uncheckUserCardview = (CardView) view.findViewById(R.id.uncheck_user_cardview);
+        taskCardview = (CardView) view.findViewById(R.id.task_cardview);
         newTaskCardview = (CardView) view.findViewById(R.id.new_task_cardview);
         statisticsCardview = (CardView) view.findViewById(R.id.statistics_cardview);
-        taskChooseCardview = (CardView) view.findViewById(R.id.task_choose_cardview);
+        transfer = (CardView) view.findViewById(R.id.transfer);
     }
 
     //初始化设置
@@ -86,46 +86,23 @@ public class SecurityChooseFragment extends Fragment {
 
     //点击事件
     private void setViewClickListener() {
-        continueCardview.setOnClickListener(clickListener);
         userListCardview.setOnClickListener(clickListener);
-        uncheckUserCardview.setOnClickListener(clickListener);
+        taskCardview.setOnClickListener(clickListener);
         newTaskCardview.setOnClickListener(clickListener);
         statisticsCardview.setOnClickListener(clickListener);
-        taskChooseCardview.setOnClickListener(clickListener);
+        transfer.setOnClickListener(clickListener);
     }
 
     View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            Intent intent;
             switch (v.getId()) {
-                case R.id.continue_cardview:    //继续安检
-                    Intent intent = new Intent(getActivity(), ContinueCheckUserActivity.class);
+                case R.id.user_list_cardview:
+                    intent = new Intent(getActivity(), UserListActivity.class);
                     startActivity(intent);
                     break;
-                case R.id.user_list_cardview:
-                    Intent intent1 = new Intent(getActivity(), UserListActivity.class);
-                    startActivity(intent1);
-                    break;
-                case R.id.uncheck_user_cardview:
-                    Intent intent2 = new Intent(getActivity(), NoCheckUserListActivity.class);
-                    startActivity(intent2);
-                    break;
-                case R.id.new_task_cardview:
-                    if (Tools.NetIsAvilable(getActivity())) {
-                        Intent intent3 = new Intent(getActivity(), NewTaskActivity.class);
-                        startActivity(intent3);
-                    } else {
-                        Toast.makeText(getActivity(), "网络未连接，请打开网络！", Toast.LENGTH_SHORT).show();
-                    }
-                    break;
-                case R.id.statistics_cardview:
-                    Intent intent4 = new Intent(getActivity(), SecurityStatisticsActivity.class);
-                    startActivity(intent4);
-                    /*Uri uri = Uri.parse("http://88.88.88.231:8080/yewu");
-                    Intent intent6 = new Intent(Intent.ACTION_VIEW,uri);
-                    startActivity(intent6);*/
-                    break;
-                case R.id.task_choose_cardview:
+                case R.id.task_cardview:
                     taskChooseWindow();
                     new Thread(){
                         @Override
@@ -134,6 +111,22 @@ public class SecurityChooseFragment extends Fragment {
                             getTaskData(sharedPreferences_login.getString("userId", ""));//读取下载到本地的任务数据
                         }
                     }.start();
+                    break;
+                case R.id.new_task_cardview:
+                    if (Tools.NetIsAvilable(getActivity())) {
+                        intent = new Intent(getActivity(), NewTaskActivity.class);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(getActivity(), "网络未连接，请打开网络！", Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+                case R.id.statistics_cardview:
+                    Intent intent4 = new Intent(getActivity(), SecurityStatisticsActivity.class);
+                    startActivity(intent4);
+                    break;
+                case R.id.transfer:
+                    intent = new Intent(getActivity(), DataTransferActivity.class);
+                    startActivity(intent);
                     break;
             }
         }
@@ -221,7 +214,7 @@ public class SecurityChooseFragment extends Fragment {
         popupWindow.update();
         popupWindow.setBackgroundDrawable(getResources().getDrawable(R.color.white_transparent));
         popupWindow.setAnimationStyle(R.style.mypopwindow_anim_style);
-        popupWindow.showAtLocation(rootLinearlayout, Gravity.CENTER, 0, 0);
+        popupWindow.showAtLocation(coordinatorLayout, Gravity.CENTER, 0, 0);
         backgroundAlpha(0.6F);   //背景变暗
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override

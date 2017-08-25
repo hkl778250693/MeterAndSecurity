@@ -1,4 +1,4 @@
-package com.example.administrator.thinker_soft.Security_check.fragment;
+package com.example.administrator.thinker_soft.Security_check.activity;
 
 import android.app.DatePickerDialog;
 import android.content.ContentValues;
@@ -14,13 +14,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -36,14 +35,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.administrator.thinker_soft.R;
-import com.example.administrator.thinker_soft.Security_check.activity.UploadActivity;
 import com.example.administrator.thinker_soft.Security_check.adapter.GridviewTypeAdapter;
 import com.example.administrator.thinker_soft.Security_check.adapter.SelectTaskDownAdapter;
-import com.example.administrator.thinker_soft.mode.MySqliteHelper;
 import com.example.administrator.thinker_soft.Security_check.model.GridviewTypeItem;
 import com.example.administrator.thinker_soft.Security_check.model.GridviewTypeViewholder;
 import com.example.administrator.thinker_soft.Security_check.model.SelectTaskDownViewHolder;
 import com.example.administrator.thinker_soft.Security_check.model.SelectTaskItem;
+import com.example.administrator.thinker_soft.mode.MySqliteHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -67,8 +65,9 @@ import java.util.Locale;
 /**
  * Created by Administrator on 2017/3/16 0016.
  */
-public class DataTransferFragment extends Fragment {
-    private View view, filterPopup, popupwindowView, uploadView, selectTaskView,noTaskView;
+public class DataTransferActivity extends AppCompatActivity {
+    private ImageView back;
+    private View filterPopup, popupwindowView, uploadView, selectTaskView,noTaskView;
     private TextView progressName, progressPercent, tips,oneTips,taskTips;
     private CardView upload, download;
     private LinearLayout rootLinearlayout, linearlayoutDown;
@@ -116,26 +115,27 @@ public class DataTransferFragment extends Fragment {
     private ImageView frameAnimation;
     private AnimationDrawable animationDrawable;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_data_transfer, null);
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_data_transfer);
 
         bindView(); //绑定控件ID
         defaultSetting();//初始化设置
         setViewClickListener();//点击事件
-        return view;
     }
 
     //绑定控件
     public void bindView() {
-        upload = (CardView) view.findViewById(R.id.upload);
-        download = (CardView) view.findViewById(R.id.download);
-        rootLinearlayout = (LinearLayout) view.findViewById(R.id.root_linearlayout);
+        back = (ImageView) findViewById(R.id.back);
+        upload = (CardView) findViewById(R.id.upload);
+        download = (CardView) findViewById(R.id.download);
+        rootLinearlayout = (LinearLayout) findViewById(R.id.root_linearlayout);
     }
 
     //点击事件
     private void setViewClickListener() {
+        back.setOnClickListener(clickListener);
         upload.setOnClickListener(clickListener);
         download.setOnClickListener(clickListener);
     }
@@ -144,12 +144,15 @@ public class DataTransferFragment extends Fragment {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
+                case R.id.back:
+                    DataTransferActivity.this.finish();
+                    break;
                 case R.id.upload:
                     getTaskTotalData();
                     if (taskTotalCursor.getCount() != 0) {
                         createSavePopupwindow();
                     } else {
-                        Intent intent = new Intent(getActivity(), UploadActivity.class);
+                        Intent intent = new Intent(DataTransferActivity.this, UploadActivity.class);
                         startActivity(intent);
                     }
                     break;
@@ -168,11 +171,11 @@ public class DataTransferFragment extends Fragment {
 
     //初始化设置
     private void defaultSetting() {
-        sharedPreferences_login = getActivity().getSharedPreferences("login_info", Context.MODE_PRIVATE);
-        sharedPreferences = getActivity().getSharedPreferences(sharedPreferences_login.getString("userId", "") + "data", Context.MODE_PRIVATE);
-        public_sharedPreferences = getActivity().getSharedPreferences("data", Context.MODE_PRIVATE);
+        sharedPreferences_login = DataTransferActivity.this.getSharedPreferences("login_info", Context.MODE_PRIVATE);
+        sharedPreferences = DataTransferActivity.this.getSharedPreferences(sharedPreferences_login.getString("userId", "") + "data", Context.MODE_PRIVATE);
+        public_sharedPreferences = DataTransferActivity.this.getSharedPreferences("data", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
-        MySqliteHelper helper = new MySqliteHelper(getActivity(), 1);
+        MySqliteHelper helper = new MySqliteHelper(DataTransferActivity.this, 1);
         db = helper.getWritableDatabase();
     }
 
@@ -198,7 +201,7 @@ public class DataTransferFragment extends Fragment {
 
     //弹出上传前提示popupwindow
     public void createSavePopupwindow() {
-        layoutInflater = LayoutInflater.from(getActivity());
+        layoutInflater = LayoutInflater.from(DataTransferActivity.this);
         uploadView = layoutInflater.inflate(R.layout.popupwindow_user_detail_info_save, null);
         popupWindow = new PopupWindow(uploadView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         //绑定控件ID
@@ -218,7 +221,7 @@ public class DataTransferFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 popupWindow.dismiss();
-                Intent intent = new Intent(getActivity(), UploadActivity.class);
+                Intent intent = new Intent(DataTransferActivity.this, UploadActivity.class);
                 startActivity(intent);
             }
         });
@@ -240,7 +243,7 @@ public class DataTransferFragment extends Fragment {
 
     //没有任务下载的提示
     public void createNoTaskPopup() {
-        layoutInflater = LayoutInflater.from(getActivity());
+        layoutInflater = LayoutInflater.from(DataTransferActivity.this);
         noTaskView = layoutInflater.inflate(R.layout.popupwindow_no_task, null);
         popupWindow = new PopupWindow(noTaskView, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         //绑定控件ID
@@ -268,7 +271,7 @@ public class DataTransferFragment extends Fragment {
 
     //弹出下载前选择任务编号popupwindow
     public void showSelectTaskPoup() {
-        layoutInflater = LayoutInflater.from(getActivity());
+        layoutInflater = LayoutInflater.from(DataTransferActivity.this);
         selectTaskView = layoutInflater.inflate(R.layout.popupwindow_select_task_down, null);
         popupWindow = new PopupWindow(selectTaskView, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         //绑定控件ID
@@ -307,7 +310,7 @@ public class DataTransferFragment extends Fragment {
                             if (taskCursor.getCount() == 0) {   //如果本地不存在本任务信息则将此任务编号添加到下载任务的集合中
                                 stringTaskList.add(stringSelectTask.get(i));
                             } else {
-                                Toast.makeText(getActivity(), "编号为" + stringSelectTask.get(i) + "的任务本地已存在，不能重复下载哦", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(DataTransferActivity.this, "编号为" + stringSelectTask.get(i) + "的任务本地已存在，不能重复下载哦", Toast.LENGTH_SHORT).show();
                             }
                         }
                         Log.i("taskNumbList====>", "一共有" + stringTaskList.size() + "个任务");
@@ -318,7 +321,7 @@ public class DataTransferFragment extends Fragment {
                             startAsyncTask();//开启异步任务获取所有任务编号的用户数据
                         }
                     } else {
-                        Toast.makeText(getActivity(), "请选择任务编号哦！", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DataTransferActivity.this, "请选择任务编号哦！", Toast.LENGTH_SHORT).show();
                     }
                 }else {
                     popupWindow.dismiss();
@@ -348,7 +351,7 @@ public class DataTransferFragment extends Fragment {
 
     //下载前筛选窗口
     public void showFilterPopup() {
-        layoutInflater = LayoutInflater.from(getActivity());
+        layoutInflater = LayoutInflater.from(DataTransferActivity.this);
         filterPopup = layoutInflater.inflate(R.layout.popupwindow_download_detail, null);
         popupWindow = new PopupWindow(filterPopup, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         gridView = (GridView) filterPopup.findViewById(R.id.gridview);
@@ -369,7 +372,7 @@ public class DataTransferFragment extends Fragment {
             public void onClick(View v) {
                 startData.setEnabled(false);
                 //开始时间选择器
-                DatePickerDialog startDateDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog startDateDialog = new DatePickerDialog(DataTransferActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         startDateTv.setText(new StringBuilder().append(year).append("-").append((monthOfYear + 1) < 10 ? "0" + (monthOfYear + 1) : (monthOfYear + 1) + "")
@@ -392,7 +395,7 @@ public class DataTransferFragment extends Fragment {
             public void onClick(View v) {
                 endDate.setEnabled(false);
                 //结束时间选择器
-                DatePickerDialog endDateDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog endDateDialog = new DatePickerDialog(DataTransferActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         endDateTv.setText(new StringBuilder().append(year).append("-").append((monthOfYear + 1) < 10 ? "0" + (monthOfYear + 1) : (monthOfYear + 1) + "")
@@ -470,13 +473,13 @@ public class DataTransferFragment extends Fragment {
                                 }
                             }.start();
                         } else {
-                            Toast.makeText(getActivity(), "安检类型不能为空哦！", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(DataTransferActivity.this, "安检类型不能为空哦！", Toast.LENGTH_SHORT).show();
                         }
                     }else {
-                        Toast.makeText(getActivity(), "安检类型不能为空哦！", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DataTransferActivity.this, "安检类型不能为空哦！", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getActivity(), "开始时间不能大于结束时间哦！", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DataTransferActivity.this, "开始时间不能大于结束时间哦！", Toast.LENGTH_SHORT).show();
                 }
                 downFilter.setEnabled(true);
             }
@@ -513,11 +516,11 @@ public class DataTransferFragment extends Fragment {
         for (int i = 0; i < count; i++) {
             if (GridviewTypeAdapter.getIsCheck().get(i)) {
                 item = gridviewTypeItemList.get((int) adapter.getItemId(i));
-                Log.i("DataTransferFragment", "这次被勾选的安检类型编号是" + item.getTypeId());
+                Log.i("DataTransferActivity", "这次被勾选的安检类型编号是" + item.getTypeId());
                 stringList.add(item.getTypeId());
             }
         }
-        Log.i("DataTransferFragment", "安检类型集合长度为：" + stringList.size());
+        Log.i("DataTransferActivity", "安检类型集合长度为：" + stringList.size());
     }
 
     //保存选中的任务信息
@@ -528,16 +531,16 @@ public class DataTransferFragment extends Fragment {
         for (int i = 0; i < count; i++) {
             if (SelectTaskDownAdapter.getIsCheck().get(i)) {
                 taskItem = selectTaskItemList.get((int) adapter.getItemId(i));
-                Log.i("DataTransferFragment", "这次被勾选的任务是" + item.getTypeId());
+                Log.i("DataTransferActivity", "这次被勾选的任务是" + item.getTypeId());
                 stringSelectTask.add(taskItem.getTaskId());
             }
         }
-        Log.i("DataTransferFragment", "任务集合长度为：" + stringSelectTask.size());
+        Log.i("DataTransferActivity", "任务集合长度为：" + stringSelectTask.size());
     }
 
     //show下载popupwindow
     public void showPopupwindow() {
-        layoutInflater = LayoutInflater.from(getActivity());
+        layoutInflater = LayoutInflater.from(DataTransferActivity.this);
         popupwindowView = layoutInflater.inflate(R.layout.popupwindow_download_progressbar, null);
         popupWindow = new PopupWindow(popupwindowView, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         linearlayoutDown = (LinearLayout) popupwindowView.findViewById(R.id.linearlayout_down);
@@ -568,14 +571,14 @@ public class DataTransferFragment extends Fragment {
 
     //设置背景透明度
     public void backgroundAlpha(float bgAlpha) {
-        WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
+        WindowManager.LayoutParams lp = DataTransferActivity.this.getWindow().getAttributes();
         lp.alpha = bgAlpha; //0.0-1.0
         if (bgAlpha == 1) {
-            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);//不移除该Flag的话,在有视频的页面上的视频会出现黑屏的bug
+            DataTransferActivity.this.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);//不移除该Flag的话,在有视频的页面上的视频会出现黑屏的bug
         } else {
-            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);//此行代码主要是解决在华为手机上半透明效果无效的bug
+            DataTransferActivity.this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);//此行代码主要是解决在华为手机上半透明效果无效的bug
         }
-        getActivity().getWindow().setAttributes(lp);
+        DataTransferActivity.this.getWindow().setAttributes(lp);
     }
 
     //下载任务数据
@@ -946,7 +949,7 @@ public class DataTransferFragment extends Fragment {
                             listview.setVisibility(View.VISIBLE);
                             noTask.setVisibility(View.GONE);
                             frameAnimation.setVisibility(View.GONE);
-                            taskDownAdapter = new SelectTaskDownAdapter(getActivity(), selectTaskItemList);
+                            taskDownAdapter = new SelectTaskDownAdapter(DataTransferActivity.this, selectTaskItemList);
                             taskDownAdapter.notifyDataSetChanged();
                             listview.setAdapter(taskDownAdapter);
                         }else {
@@ -985,7 +988,7 @@ public class DataTransferFragment extends Fragment {
                     break;
                 case 6:
                     popupWindow.dismiss();
-                    Toast.makeText(getActivity(), "用户信息请求网络超时！", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DataTransferActivity.this, "用户信息请求网络超时！", Toast.LENGTH_SHORT).show();
                     break;
                 case 7:
                     progressPercent.setText(String.valueOf(msg.arg2));
@@ -1014,7 +1017,7 @@ public class DataTransferFragment extends Fragment {
                     }
                     break;
                 case 10:
-                    adapter = new GridviewTypeAdapter(getActivity(), gridviewTypeItemList);
+                    adapter = new GridviewTypeAdapter(DataTransferActivity.this, gridviewTypeItemList);
                     adapter.notifyDataSetChanged();
                     gridView.setAdapter(adapter);
                     break;

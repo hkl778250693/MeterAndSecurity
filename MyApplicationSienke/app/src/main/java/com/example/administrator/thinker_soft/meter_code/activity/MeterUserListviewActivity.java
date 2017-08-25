@@ -46,10 +46,10 @@ import java.util.List;
 import java.util.Locale;
 
 public class MeterUserListviewActivity extends AppCompatActivity {
-    private ImageView back, pageTurning;
-    private LinearLayout selectPage, rootLinearlayout;
+    private ImageView back, more;
+    private LinearLayout rootLinearlayout;
     private RelativeLayout title;
-    private TextView noData, lastPage, nextPage, currentPageTv, totalPageTv, bookName;
+    private TextView noData, currentPageTv, totalPageTv, bookName;
     private ArrayList<MeterUserListviewItem> userLists = new ArrayList<>();
     private SQLiteDatabase db;  //数据库
     private Cursor totalCountCursor, userLimitCursor;
@@ -95,13 +95,10 @@ public class MeterUserListviewActivity extends AppCompatActivity {
     private void bindView() {
         rootLinearlayout = (LinearLayout) findViewById(R.id.root_linearlayout);
         title = (RelativeLayout) findViewById(R.id.title);
-        pageTurning = (ImageView) findViewById(R.id.page_turning);
+        more = (ImageView) findViewById(R.id.more);
         back = (ImageView) findViewById(R.id.back);
         bookName = (TextView) findViewById(R.id.book_name);
         noData = (TextView) findViewById(R.id.no_data);
-        selectPage = (LinearLayout) findViewById(R.id.select_page);
-        lastPage = (TextView) findViewById(R.id.last_page);
-        nextPage = (TextView) findViewById(R.id.next_page);
         currentPageTv = (TextView) findViewById(R.id.current_page_tv);
         totalPageTv = (TextView) findViewById(R.id.total_page_tv);
         mRefreshLayout = (RefreshLayout) findViewById(R.id.refreshLayout);
@@ -164,20 +161,18 @@ public class MeterUserListviewActivity extends AppCompatActivity {
     //点击事件
     public void setViewClickListener() {
         back.setOnClickListener(clickListener);
-        pageTurning.setOnClickListener(clickListener);
-        lastPage.setOnClickListener(clickListener);
-        nextPage.setOnClickListener(clickListener);
+        more.setOnClickListener(clickListener);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {   // 当不滚动或者滚动停止时
+                /*if (newState == RecyclerView.SCROLL_STATE_IDLE) {   // 当不滚动或者滚动停止时
                     currentPosition = ((LinearLayoutManager) mLayoutManager).findFirstCompletelyVisibleItemPosition();
                     layout = (RelativeLayout) mLayoutManager.findViewByPosition(currentPosition);
                     layout.findViewById(R.id.red_stroke).setVisibility(View.VISIBLE);
                     Log.i("MeterUserListview", "滚动后的位置是：" + currentPosition);
                     //mLayoutManager.getChildAt(currentPosition).findViewById(R.id.red_stroke).setVisibility(View.VISIBLE);
-                }
+                }*/
             }
 
             @Override
@@ -238,20 +233,8 @@ public class MeterUserListviewActivity extends AppCompatActivity {
                 case R.id.back:
                     MeterUserListviewActivity.this.finish();
                     break;
-                case R.id.page_turning:
-                    if (selectPage.getVisibility() == View.GONE) {
-                        selectPage.setVisibility(View.VISIBLE);
-                        MyAnimationUtils.viewGroupBottomInAnimation(MeterUserListviewActivity.this, selectPage, 0.3F);
-                    } else {
-                        MyAnimationUtils.viewGroupBottomOutAnimation(MeterUserListviewActivity.this, selectPage, 0.3F);
-                        selectPage.setVisibility(View.GONE);
-                    }
-                    break;
-                case R.id.last_page:
-                    mRefreshLayout.autoRefresh();
-                    break;
-                case R.id.next_page:
-                    mRefreshLayout.autoLoadmore();
+                case R.id.more:
+
                     break;
                 default:
                     break;
@@ -281,7 +264,7 @@ public class MeterUserListviewActivity extends AppCompatActivity {
                                     intent.putExtra("upload_state", item.getUploadState());
                                     startActivityForResult(intent, currentPosition);
                                 } else {
-                                    layout = (RelativeLayout) mLayoutManager.findViewByPosition(currentPosition);
+                                    //layout = (RelativeLayout) mLayoutManager.findViewByPosition(currentPosition);
                                     showFastMeterWindow(item.getLastMonthDegree());   //弹出快捷抄表框
                                 }
                             }
@@ -299,17 +282,6 @@ public class MeterUserListviewActivity extends AppCompatActivity {
                     MyAnimationUtils.viewGroupOutAlphaAnimation(MeterUserListviewActivity.this, mRecyclerView, 0.1F);
                     //设置增加或删除条目的动画
                     mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-                    currentPageTv.setText(String.valueOf(currentPage));
-                    if (totalCountCursor.getCount() % 50 != 0) {
-                        totalPage = totalCountCursor.getCount() / 50 + 1;
-                    } else {
-                        if (totalCountCursor.getCount() <= 50) {
-                            totalPage = 1;
-                        } else {
-                            totalPage = totalCountCursor.getCount() / 50;
-                        }
-                    }
-                    totalPageTv.setText(String.valueOf(totalPage));
                     break;
                 case 1:
                     mLayoutManager = new LinearLayoutManager(MeterUserListviewActivity.this, LinearLayoutManager.VERTICAL, false);
@@ -379,7 +351,7 @@ public class MeterUserListviewActivity extends AppCompatActivity {
                     if (noData.getVisibility() == View.GONE) {
                         noData.setVisibility(View.VISIBLE);
                     }
-                    pageTurning.setVisibility(View.GONE);
+                    more.setVisibility(View.GONE);
                     break;
                 default:
                     break;
@@ -405,7 +377,6 @@ public class MeterUserListviewActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 fastMeterWindow.dismiss();
-                layout.findViewById(R.id.red_stroke).setVisibility(View.GONE);
             }
         });
         save.setOnClickListener(new View.OnClickListener() {
@@ -423,7 +394,6 @@ public class MeterUserListviewActivity extends AppCompatActivity {
                         mAdapter.notifyDataSetChanged();
                         Tools.moveToPosition((LinearLayoutManager) mLayoutManager, mRecyclerView, currentPosition + 1);
                         //updateMeterUserInfo();
-                        layout.findViewById(R.id.red_stroke).setVisibility(View.GONE);
                     } else {
                         Toast.makeText(MeterUserListviewActivity.this, "本月读数不能小于上月读数哦！", Toast.LENGTH_SHORT).show();
                     }
@@ -440,12 +410,10 @@ public class MeterUserListviewActivity extends AppCompatActivity {
         fastMeterWindow.setAnimationStyle(R.style.mypopwindow_anim_style);
         backgroundAlpha(0.6F);   //背景变暗
         fastMeterWindow.showAtLocation(rootLinearlayout, Gravity.CENTER, 0, 0);
-        layout.findViewById(R.id.red_stroke).setVisibility(View.VISIBLE);   //显示红色线框
         fastMeterWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
                 backgroundAlpha(1.0F);
-                layout.findViewById(R.id.red_stroke).setVisibility(View.GONE);
             }
         });
     }

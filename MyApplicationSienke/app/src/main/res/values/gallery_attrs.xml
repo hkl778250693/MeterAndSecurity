@@ -11,7 +11,7 @@
         <flag name="bottom" value="0x50" />
         <!-- Push object to the left of its container, not changing its size. -->
         <flag name="left" value="0x03" />
-        <!-- Push object to the right of its container, not changing its size. -->
+        <!-- Push object to the thick_right_arrows of its container, not changing its size. -->
         <flag name="right" value="0x05" />
         <!-- Place object in the vertical center of its container, not changing its size. -->
         <flag name="center_vertical" value="0x10" />
@@ -30,10 +30,10 @@
              The clip will be based on the vertical gravity: a top gravity will clip the bottom
              edge, a bottom gravity will clip the top edge, and neither will clip both edges. -->
         <flag name="clip_vertical" value="0x80" />
-        <!-- Additional option that can be set to have the left and/or right edges of
+        <!-- Additional option that can be set to have the left and/or thick_right_arrows edges of
              the child clipped to its container's bounds.
-             The clip will be based on the horizontal gravity: a left gravity will clip the right
-             edge, a right gravity will clip the left edge, and neither will clip both edges. -->
+             The clip will be based on the horizontal gravity: a left gravity will clip the thick_right_arrows
+             edge, a thick_right_arrows gravity will clip the left edge, and neither will clip both edges. -->
         <flag name="clip_horizontal" value="0x08" />
     </attr>
 

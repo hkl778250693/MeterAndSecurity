@@ -134,7 +134,7 @@ public final class ViewfinderView extends View {
             // paint.setAlpha(SCANNER_ALPHA[scannerAlpha]);
             // scannerAlpha = (scannerAlpha + 1) % SCANNER_ALPHA.length;
             // int middle = frame.height() / 2 + frame.top;
-            // canvas.drawRect(frame.left + 2, middle - 1, frame.right - 1,
+            // canvas.drawRect(frame.left + 2, middle - 1, frame.thick_right_arrows - 1,
             // middle + 2, paint);
 
             drawScanLight(canvas, frame);
