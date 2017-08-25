@@ -113,8 +113,9 @@ public class MeterUserListviewActivity extends AppCompatActivity {
         MySqliteHelper helper = new MySqliteHelper(MeterUserListviewActivity.this, 1);
         db = helper.getWritableDatabase();
         sharedPreferences_login = this.getSharedPreferences("login_info", Context.MODE_PRIVATE);
-        sharedPreferences = MeterUserListviewActivity.this.getSharedPreferences(sharedPreferences_login.getString("login_name", "") + "data", Context.MODE_PRIVATE);
+        sharedPreferences = MeterUserListviewActivity.this.getSharedPreferences(sharedPreferences_login.getString("userId", "") + "data", Context.MODE_PRIVATE);
         dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        mLayoutManager = new LinearLayoutManager(MeterUserListviewActivity.this, LinearLayoutManager.VERTICAL, false);
         /**
          * 设置 下拉刷新 Header 和 footer 风格样式
          */
@@ -166,6 +167,24 @@ public class MeterUserListviewActivity extends AppCompatActivity {
         pageTurning.setOnClickListener(clickListener);
         lastPage.setOnClickListener(clickListener);
         nextPage.setOnClickListener(clickListener);
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {   // 当不滚动或者滚动停止时
+                    currentPosition = ((LinearLayoutManager) mLayoutManager).findFirstCompletelyVisibleItemPosition();
+                    layout = (RelativeLayout) mLayoutManager.findViewByPosition(currentPosition);
+                    layout.findViewById(R.id.red_stroke).setVisibility(View.VISIBLE);
+                    Log.i("MeterUserListview", "滚动后的位置是：" + currentPosition);
+                    //mLayoutManager.getChildAt(currentPosition).findViewById(R.id.red_stroke).setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
         /**
          * 下拉刷新监听
          */
@@ -248,7 +267,6 @@ public class MeterUserListviewActivity extends AppCompatActivity {
                     /**
                      * 使用 RecyclerView 控件
                      */
-                    mLayoutManager = new LinearLayoutManager(MeterUserListviewActivity.this, LinearLayoutManager.VERTICAL, false);
                     mAdapter = new MeterUserListRecycleAdapter(userLists, new MeterUserListRecycleAdapter.onRecyclerViewItemClick() {
                         @Override
                         public void onItemClick(View v, int position) {
@@ -264,7 +282,6 @@ public class MeterUserListviewActivity extends AppCompatActivity {
                                     startActivityForResult(intent, currentPosition);
                                 } else {
                                     layout = (RelativeLayout) mLayoutManager.findViewByPosition(currentPosition);
-                                    layout.findViewById(R.id.red_stroke).setVisibility(View.VISIBLE);
                                     showFastMeterWindow(item.getLastMonthDegree());   //弹出快捷抄表框
                                 }
                             }
@@ -406,8 +423,7 @@ public class MeterUserListviewActivity extends AppCompatActivity {
                         mAdapter.notifyDataSetChanged();
                         Tools.moveToPosition((LinearLayoutManager) mLayoutManager, mRecyclerView, currentPosition + 1);
                         //updateMeterUserInfo();
-                        currentPosition = ((LinearLayoutManager) mLayoutManager).findFirstVisibleItemPosition();
-                        mLayoutManager.getChildAt(currentPosition);
+                        layout.findViewById(R.id.red_stroke).setVisibility(View.GONE);
                     } else {
                         Toast.makeText(MeterUserListviewActivity.this, "本月读数不能小于上月读数哦！", Toast.LENGTH_SHORT).show();
                     }
@@ -424,10 +440,12 @@ public class MeterUserListviewActivity extends AppCompatActivity {
         fastMeterWindow.setAnimationStyle(R.style.mypopwindow_anim_style);
         backgroundAlpha(0.6F);   //背景变暗
         fastMeterWindow.showAtLocation(rootLinearlayout, Gravity.CENTER, 0, 0);
+        layout.findViewById(R.id.red_stroke).setVisibility(View.VISIBLE);   //显示红色线框
         fastMeterWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
                 backgroundAlpha(1.0F);
+                layout.findViewById(R.id.red_stroke).setVisibility(View.GONE);
             }
         });
     }

@@ -18,19 +18,18 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="120dp"
         android:orientation="horizontal">
 
         <android.support.v7.widget.CardView
             android:id="@+id/meter_reading"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"
             android:layout_weight="1"
             android:foreground="?android:attr/selectableItemBackground"
             app:cardBackgroundColor="@android:color/white"
-            app:cardCornerRadius="5dp"
-            app:cardElevation="2dp"
+            app:cardCornerRadius="0dp"
+            app:cardElevation="0dp"
             app:contentPadding="8dp"
             tools:targetApi="lollipop">
 
@@ -51,16 +50,20 @@
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"
+            android:background="@color/gray_little_thin"/>
+
         <android.support.v7.widget.CardView
-            android:id="@+id/meter"
+            android:id="@+id/meter_file"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"
             android:layout_weight="1"
             android:foreground="?android:attr/selectableItemBackground"
             app:cardBackgroundColor="@android:color/white"
-            app:cardCornerRadius="5dp"
-            app:cardElevation="2dp"
+            app:cardCornerRadius="0dp"
+            app:cardElevation="0dp"
             app:contentPadding="8dp"
             tools:targetApi="lollipop">
 
@@ -82,16 +85,20 @@
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"
+            android:background="@color/gray_little_thin"/>
+
         <android.support.v7.widget.CardView
             android:id="@+id/query"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"
             android:layout_weight="1"
             android:foreground="?android:attr/selectableItemBackground"
             app:cardBackgroundColor="@android:color/white"
-            app:cardCornerRadius="5dp"
-            app:cardElevation="2dp"
+            app:cardCornerRadius="0dp"
+            app:cardElevation="0dp"
             app:contentPadding="8dp"
             tools:targetApi="lollipop">
 
@@ -115,21 +122,25 @@
 
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/gray_little_thin"/>
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="120dp"
         android:orientation="horizontal">
 
         <android.support.v7.widget.CardView
             android:id="@+id/map"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"
             android:layout_weight="1"
             android:foreground="?android:attr/selectableItemBackground"
             app:cardBackgroundColor="@android:color/white"
-            app:cardCornerRadius="5dp"
-            app:cardElevation="2dp"
+            app:cardCornerRadius="0dp"
+            app:cardElevation="0dp"
             app:contentPadding="8dp"
             tools:targetApi="lollipop">
 
@@ -149,17 +160,20 @@
                     android:textColor="@color/text_black" />
             </LinearLayout>
         </android.support.v7.widget.CardView>
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"
+            android:background="@color/gray_little_thin"/>
 
         <android.support.v7.widget.CardView
             android:id="@+id/statistics"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"
             android:layout_weight="1"
             android:foreground="?android:attr/selectableItemBackground"
             app:cardBackgroundColor="@android:color/white"
-            app:cardCornerRadius="5dp"
-            app:cardElevation="2dp"
+            app:cardCornerRadius="0dp"
+            app:cardElevation="0dp"
             app:contentPadding="8dp"
             tools:targetApi="lollipop">
 
@@ -181,16 +195,20 @@
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"
+            android:background="@color/gray_little_thin"/>
+
         <android.support.v7.widget.CardView
             android:id="@+id/transfer"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"
             android:layout_weight="1"
             android:foreground="?android:attr/selectableItemBackground"
             app:cardBackgroundColor="@android:color/white"
-            app:cardCornerRadius="5dp"
-            app:cardElevation="2dp"
+            app:cardCornerRadius="0dp"
+            app:cardElevation="0dp"
             app:contentPadding="8dp"
             tools:targetApi="lollipop">
 
@@ -212,6 +230,11 @@
             </LinearLayout>
         </android.support.v7.widget.CardView>
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/gray_little_thin"/>
 
     <!--&lt;!&ndash; 中间部分 &ndash;&gt;
     <LinearLayout

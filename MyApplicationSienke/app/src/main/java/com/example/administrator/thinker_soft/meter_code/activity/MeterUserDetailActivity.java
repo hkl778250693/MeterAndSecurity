@@ -117,7 +117,7 @@ public class MeterUserDetailActivity extends Activity{
         MySqliteHelper helper = new MySqliteHelper(MeterUserDetailActivity.this, 1);
         db = helper.getWritableDatabase();
         sharedPreferences_login = getSharedPreferences("login_info", Context.MODE_PRIVATE);
-        sharedPreferences = MeterUserDetailActivity.this.getSharedPreferences(sharedPreferences_login.getString("login_name", "") + "data", Context.MODE_PRIVATE);
+        sharedPreferences = MeterUserDetailActivity.this.getSharedPreferences(sharedPreferences_login.getString("userId", "") + "data", Context.MODE_PRIVATE);
         dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         /**
          * 设置 下拉刷新 Header风格样式

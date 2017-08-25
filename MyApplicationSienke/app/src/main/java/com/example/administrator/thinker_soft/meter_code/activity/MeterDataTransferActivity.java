@@ -703,9 +703,11 @@ public class MeterDataTransferActivity extends Activity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (loadingWindow.isShowing()) {
-            loadingWindow.dismiss();
-            loadingWindow = null;
+        if(loadingWindow != null){
+            if (loadingWindow.isShowing()) {
+                loadingWindow.dismiss();
+                loadingWindow = null;
+            }
         }
     }
 }

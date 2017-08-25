@@ -22,12 +22,14 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.administrator.thinker_soft.R;
 import com.example.administrator.thinker_soft.meter_code.activity.CustomQueryActivity;
 import com.example.administrator.thinker_soft.meter_code.activity.MapMeterActivity;
 import com.example.administrator.thinker_soft.meter_code.activity.MeterDataTransferActivity;
 import com.example.administrator.thinker_soft.meter_code.activity.MeterStatisticsActivity;
+import com.example.administrator.thinker_soft.meter_code.activity.MeterUserContinueActivity;
 import com.example.administrator.thinker_soft.meter_code.activity.MeterUserListviewActivity;
 import com.example.administrator.thinker_soft.meter_code.activity.MeterUserUndoneActivity;
 import com.example.administrator.thinker_soft.meter_code.adapter.MeterFileSelectListAdapter;
@@ -43,7 +45,7 @@ import java.util.List;
  */
 public class MeterHomePageFragment extends Fragment {
     private View view;
-    private CardView meterReading, meter, query, map, statistics, transfer;
+    private CardView meterReading, meterFile, query, map, statistics, transfer;
     private LinearLayout rootLinearlayout, noData;
     private LayoutInflater layoutInflater;
     private PopupWindow fileWindow, bookWindow, undoneWindow;
@@ -78,7 +80,7 @@ public class MeterHomePageFragment extends Fragment {
     //绑定控件
     private void bindView() {
         meterReading = (CardView) view.findViewById(R.id.meter_reading);
-        meter = (CardView) view.findViewById(R.id.meter);
+        meterFile = (CardView) view.findViewById(R.id.meter_file);
         query = (CardView) view.findViewById(R.id.query);
         map = (CardView) view.findViewById(R.id.map);
         statistics = (CardView) view.findViewById(R.id.statistics);
@@ -92,12 +94,13 @@ public class MeterHomePageFragment extends Fragment {
         db = helper.getWritableDatabase();
         sharedPreferences_login = getActivity().getSharedPreferences("login_info", Context.MODE_PRIVATE);
         sharedPreferences = getActivity().getSharedPreferences(sharedPreferences_login.getString("login_name", "") + "data", Context.MODE_PRIVATE);
+        sharedPreferences = getActivity().getSharedPreferences(sharedPreferences_login.getString("userId","")+"data", Context.MODE_PRIVATE);
     }
 
     //点击事件
     public void setViewClickListener() {
         meterReading.setOnClickListener(clickListener);
-        meter.setOnClickListener(clickListener);
+        meterFile.setOnClickListener(clickListener);
         query.setOnClickListener(clickListener);
         map.setOnClickListener(clickListener);
         statistics.setOnClickListener(clickListener);
@@ -110,7 +113,7 @@ public class MeterHomePageFragment extends Fragment {
             Intent intent;
             switch (v.getId()) {
                 case R.id.meter_reading:
-                    /*if (!"".equals(sharedPreferences.getString("currentFileName", ""))) {
+                    if (!"".equals(sharedPreferences.getString("currentFileName", ""))) {
                         if (!"".equals(sharedPreferences.getString("currentBookName", ""))) {
                             intent = new Intent(getActivity(), MeterUserContinueActivity.class);
                             intent.putExtra("fileName", sharedPreferences.getString("currentFileName", ""));
@@ -122,9 +125,9 @@ public class MeterHomePageFragment extends Fragment {
                         }
                     } else {
                         Toast.makeText(getActivity(), "请先完成文件选择！", Toast.LENGTH_SHORT).show();
-                    }*/
+                    }
                     break;
-                case R.id.meter:
+                case R.id.meter_file:
                     showFileSelectWindow();
                     new Thread() {
                         @Override
@@ -374,6 +377,7 @@ public class MeterHomePageFragment extends Fragment {
         fileList.clear();
         Cursor cursor;
         if (sharedPreferences.getBoolean("show_temp_data", false)) {
+            Log.i("getFileInfo","演示数据进来了");
             cursor = db.rawQuery("select * from MeterFile where login_user_id=?", new String[]{"0"});//查询并获得游标
         } else {
             cursor = db.rawQuery("select * from MeterFile where login_user_id=?", new String[]{sharedPreferences_login.getString("userId", "")});//查询并获得游标
