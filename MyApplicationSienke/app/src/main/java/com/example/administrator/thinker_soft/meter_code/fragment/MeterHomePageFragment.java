@@ -22,12 +22,12 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.administrator.thinker_soft.R;
-import com.example.administrator.thinker_soft.meter_code.activity.MeterAllUserListActivity;
+import com.example.administrator.thinker_soft.meter_code.activity.CustomQueryActivity;
+import com.example.administrator.thinker_soft.meter_code.activity.MapMeterActivity;
+import com.example.administrator.thinker_soft.meter_code.activity.MeterDataTransferActivity;
 import com.example.administrator.thinker_soft.meter_code.activity.MeterStatisticsActivity;
-import com.example.administrator.thinker_soft.meter_code.activity.MeterUserContinueActivity;
 import com.example.administrator.thinker_soft.meter_code.activity.MeterUserListviewActivity;
 import com.example.administrator.thinker_soft.meter_code.activity.MeterUserUndoneActivity;
 import com.example.administrator.thinker_soft.meter_code.adapter.MeterFileSelectListAdapter;
@@ -43,19 +43,19 @@ import java.util.List;
  */
 public class MeterHomePageFragment extends Fragment {
     private View view;
-    private CardView firstCardview,secondCardview,thirdCardview,fourthCardview,fifthCardview,sixthCardview;
-    private LinearLayout rootLinearlayout,noData;
+    private CardView meterReading, meter, query, map, statistics, transfer;
+    private LinearLayout rootLinearlayout, noData;
     private LayoutInflater layoutInflater;
-    private PopupWindow fileWindow,bookWindow,undoneWindow;
-    private View fileSelectView,bookView,undoneView;
-    private ListView fileListView,bookListview;
-    private MeterSingleSelectItem fileItem,bookItem;
+    private PopupWindow fileWindow, bookWindow, undoneWindow;
+    private View fileSelectView, bookView, undoneView;
+    private ListView fileListView, bookListview;
+    private MeterSingleSelectItem fileItem, bookItem;
     private List<MeterSingleSelectItem> fileList = new ArrayList<>();
     private List<MeterSingleSelectItem> bookList = new ArrayList<>();
-    private MeterFileSelectListAdapter fileAdapter,bookAdapter;
+    private MeterFileSelectListAdapter fileAdapter, bookAdapter;
     private SQLiteDatabase db;  //数据库
-    private SharedPreferences sharedPreferences_login,sharedPreferences;
-    private boolean bookMeterState,undoneMeterState;
+    private SharedPreferences sharedPreferences_login, sharedPreferences;
+    private boolean bookMeterState, undoneMeterState;
 
     @Nullable
     @Override
@@ -77,12 +77,12 @@ public class MeterHomePageFragment extends Fragment {
 
     //绑定控件
     private void bindView() {
-        firstCardview  = (CardView) view.findViewById(R.id.first_cardview);
-        secondCardview = (CardView) view.findViewById(R.id.second_cardview);
-        thirdCardview  = (CardView) view.findViewById(R.id.third_cardview);
-        fourthCardview = (CardView) view.findViewById(R.id.fourth_cardview);
-        fifthCardview  = (CardView) view.findViewById(R.id.fifth_cardview);
-        sixthCardview = (CardView) view.findViewById(R.id.sixth_cardview);
+        meterReading = (CardView) view.findViewById(R.id.meter_reading);
+        meter = (CardView) view.findViewById(R.id.meter);
+        query = (CardView) view.findViewById(R.id.query);
+        map = (CardView) view.findViewById(R.id.map);
+        statistics = (CardView) view.findViewById(R.id.statistics);
+        transfer = (CardView) view.findViewById(R.id.transfer);
         rootLinearlayout = (LinearLayout) view.findViewById(R.id.root_linearlayout);
     }
 
@@ -91,90 +91,64 @@ public class MeterHomePageFragment extends Fragment {
         MySqliteHelper helper = new MySqliteHelper(getActivity(), 1);
         db = helper.getWritableDatabase();
         sharedPreferences_login = getActivity().getSharedPreferences("login_info", Context.MODE_PRIVATE);
-        sharedPreferences = getActivity().getSharedPreferences(sharedPreferences_login.getString("login_name","")+"data", Context.MODE_PRIVATE);
+        sharedPreferences = getActivity().getSharedPreferences(sharedPreferences_login.getString("login_name", "") + "data", Context.MODE_PRIVATE);
     }
 
     //点击事件
     public void setViewClickListener() {
-        firstCardview.setOnClickListener(clickListener);
-        secondCardview.setOnClickListener(clickListener);
-        thirdCardview.setOnClickListener(clickListener);
-        fourthCardview.setOnClickListener(clickListener);
-        fifthCardview.setOnClickListener(clickListener);
-        sixthCardview.setOnClickListener(clickListener);
+        meterReading.setOnClickListener(clickListener);
+        meter.setOnClickListener(clickListener);
+        query.setOnClickListener(clickListener);
+        map.setOnClickListener(clickListener);
+        statistics.setOnClickListener(clickListener);
+        transfer.setOnClickListener(clickListener);
     }
 
     View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             Intent intent;
-            switch (v.getId()){
-                case R.id.first_cardview:
-                    if(!"".equals(sharedPreferences.getString("currentFileName",""))){
-                        if(!"".equals(sharedPreferences.getString("currentBookName",""))){
+            switch (v.getId()) {
+                case R.id.meter_reading:
+                    /*if (!"".equals(sharedPreferences.getString("currentFileName", ""))) {
+                        if (!"".equals(sharedPreferences.getString("currentBookName", ""))) {
                             intent = new Intent(getActivity(), MeterUserContinueActivity.class);
-                            intent.putExtra("fileName",sharedPreferences.getString("currentFileName",""));
-                            intent.putExtra("bookName",sharedPreferences.getString("currentBookName",""));
-                            intent.putExtra("bookID",sharedPreferences.getString("currentBookID",""));
+                            intent.putExtra("fileName", sharedPreferences.getString("currentFileName", ""));
+                            intent.putExtra("bookName", sharedPreferences.getString("currentBookName", ""));
+                            intent.putExtra("bookID", sharedPreferences.getString("currentBookID", ""));
                             startActivity(intent);
-                        }else {
-                            Toast.makeText(getActivity(),"请先选择抄表本！",Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getActivity(), "请先选择抄表本！", Toast.LENGTH_SHORT).show();
                         }
-                    }else {
-                        Toast.makeText(getActivity(),"请先完成文件选择！",Toast.LENGTH_SHORT).show();
-                    }
+                    } else {
+                        Toast.makeText(getActivity(), "请先完成文件选择！", Toast.LENGTH_SHORT).show();
+                    }*/
                     break;
-                case R.id.second_cardview:
-                    if(!"".equals(sharedPreferences.getString("currentFileName",""))){
-                        bookMeterState = true;
-                        showBookSelectWindow();
-                        new Thread(){
-                            @Override
-                            public void run() {
-                                super.run();
-                                getBookInfo();
-                            }
-                        }.start();
-                    }else {
-                        Toast.makeText(getActivity(),"请先完成文件选择！",Toast.LENGTH_SHORT).show();
-                    }
-                    break;
-                case R.id.third_cardview:
-                    if(!"".equals(sharedPreferences.getString("currentFileName",""))){
-                        if(!"".equals(sharedPreferences.getString("currentBookName",""))){
-                            intent = new Intent(getActivity(), MeterAllUserListActivity.class);
-                            intent.putExtra("fileName",sharedPreferences.getString("currentFileName",""));
-                            intent.putExtra("bookName",sharedPreferences.getString("currentBookName",""));
-                            intent.putExtra("bookID",sharedPreferences.getString("currentBookID",""));
-                            startActivity(intent);
-                        }else {
-                            Toast.makeText(getActivity(),"请先选择抄表本！",Toast.LENGTH_SHORT).show();
-                        }
-                    }else {
-                        Toast.makeText(getActivity(),"请先完成文件选择！",Toast.LENGTH_SHORT).show();
-                    }
-                    break;
-                case R.id.fourth_cardview:
-                    if(!"".equals(sharedPreferences.getString("currentFileName",""))){
-                        undoneMeterState = true;
-                        meterUndoneWindow();
-                    }else {
-                        Toast.makeText(getActivity(),"请先完成文件选择！",Toast.LENGTH_SHORT).show();
-                    }
-                    break;
-                case R.id.fifth_cardview:
-                    intent = new Intent(getActivity(), MeterStatisticsActivity.class);
-                    startActivity(intent);
-                    break;
-                case R.id.sixth_cardview:
+                case R.id.meter:
                     showFileSelectWindow();
-                    new Thread(){
+                    new Thread() {
                         @Override
                         public void run() {
                             super.run();
                             getFileInfo();
                         }
                     }.start();
+                    break;
+                case R.id.query:
+                    intent = new Intent(getActivity(), CustomQueryActivity.class);
+                    startActivity(intent);
+                    break;
+                case R.id.map:
+                    intent = new Intent(getActivity(), MapMeterActivity.class);
+                    startActivity(intent);
+                    break;
+                case R.id.statistics:
+                    intent = new Intent(getActivity(), MeterStatisticsActivity.class);
+                    startActivity(intent);
+                    break;
+                case R.id.transfer:
+                    intent = new Intent(getActivity(), MeterDataTransferActivity.class);
+                    startActivity(intent);
                     break;
                 default:
                     break;
@@ -200,9 +174,9 @@ public class MeterHomePageFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //获取选中的参数
                 bookItem = (MeterSingleSelectItem) bookAdapter.getItem(position);
-                Log.i("meterHomePage","当前点击的item为："+bookItem.getName());
-                sharedPreferences.edit().putString("currentBookName",bookItem.getName()).apply();
-                sharedPreferences.edit().putString("currentBookID",bookItem.getID()).apply();
+                Log.i("meterHomePage", "当前点击的item为：" + bookItem.getName());
+                sharedPreferences.edit().putString("currentBookName", bookItem.getName()).apply();
+                sharedPreferences.edit().putString("currentBookID", bookItem.getID()).apply();
                 bookWindow.dismiss();
                 try {
                     Thread.sleep(300);
@@ -210,16 +184,16 @@ public class MeterHomePageFragment extends Fragment {
                     e.printStackTrace();
                 }
                 Intent intent = null;
-                if(bookMeterState){
+                if (bookMeterState) {
                     intent = new Intent(getActivity(), MeterUserListviewActivity.class);
-                }else if(undoneMeterState){
+                } else if (undoneMeterState) {
                     intent = new Intent(getActivity(), MeterUserUndoneActivity.class);
-                    intent.putExtra("type","单个");
+                    intent.putExtra("type", "单个");
                 }
                 if (intent != null) {
-                    intent.putExtra("bookName",bookItem.getName());
-                    intent.putExtra("bookID",bookItem.getID());
-                    intent.putExtra("fileName",sharedPreferences.getString("currentFileName",""));
+                    intent.putExtra("bookName", bookItem.getName());
+                    intent.putExtra("bookID", bookItem.getID());
+                    intent.putExtra("fileName", sharedPreferences.getString("currentFileName", ""));
                     startActivity(intent);
                 }
             }
@@ -261,13 +235,13 @@ public class MeterHomePageFragment extends Fragment {
         LinearLayout containerLayout = (LinearLayout) undoneView.findViewById(R.id.container_layout);
         //设置点击事件
         tips.setText("请选择方式");
-        MyAnimationUtils.viewGroupOutAnimation(getActivity(),containerLayout,0.1F);
+        MyAnimationUtils.viewGroupOutAnimation(getActivity(), containerLayout, 0.1F);
         singleBook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 undoneWindow.dismiss();
                 showBookSelectWindow();
-                new Thread(){
+                new Thread() {
                     @Override
                     public void run() {
                         super.run();
@@ -286,8 +260,8 @@ public class MeterHomePageFragment extends Fragment {
                     e.printStackTrace();
                 }
                 Intent intent = new Intent(getActivity(), MeterUserUndoneActivity.class);
-                intent.putExtra("type","所有");
-                intent.putExtra("fileName",sharedPreferences.getString("currentFileName",""));
+                intent.putExtra("type", "所有");
+                intent.putExtra("fileName", sharedPreferences.getString("currentFileName", ""));
                 startActivity(intent);
             }
         });
@@ -332,8 +306,8 @@ public class MeterHomePageFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //获取选中的参数
                 fileItem = (MeterSingleSelectItem) fileAdapter.getItem(position);
-                Log.i("meterHomePage","当前点击的item为："+fileItem.getName());
-                sharedPreferences.edit().putString("currentFileName",fileItem.getName()).apply();
+                Log.i("meterHomePage", "当前点击的item为：" + fileItem.getName());
+                sharedPreferences.edit().putString("currentFileName", fileItem.getName()).apply();
                 fileWindow.dismiss();
             }
         });
@@ -371,22 +345,22 @@ public class MeterHomePageFragment extends Fragment {
         getActivity().getWindow().setAttributes(lp);
     }
 
-    Handler handler = new Handler(){
+    Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what){
+            switch (msg.what) {
                 case 0:
-                    fileAdapter = new MeterFileSelectListAdapter(getActivity(),fileList,1);
+                    fileAdapter = new MeterFileSelectListAdapter(getActivity(), fileList, 1);
                     fileListView.setAdapter(fileAdapter);
-                    MyAnimationUtils.viewGroupOutAnimation(getActivity(),fileListView,0.1F);
+                    MyAnimationUtils.viewGroupOutAnimation(getActivity(), fileListView, 0.1F);
                     break;
                 case 1:
                     noData.setVisibility(View.VISIBLE);
                     break;
                 case 2:
-                    bookAdapter = new MeterFileSelectListAdapter(getActivity(),bookList,0);
+                    bookAdapter = new MeterFileSelectListAdapter(getActivity(), bookList, 0);
                     bookListview.setAdapter(bookAdapter);
-                    MyAnimationUtils.viewGroupOutAnimation(getActivity(),bookListview,0.1F);
+                    MyAnimationUtils.viewGroupOutAnimation(getActivity(), bookListview, 0.1F);
                     break;
                 default:
                     break;
@@ -401,7 +375,7 @@ public class MeterHomePageFragment extends Fragment {
         Cursor cursor;
         if (sharedPreferences.getBoolean("show_temp_data", false)) {
             cursor = db.rawQuery("select * from MeterFile where login_user_id=?", new String[]{"0"});//查询并获得游标
-        }else {
+        } else {
             cursor = db.rawQuery("select * from MeterFile where login_user_id=?", new String[]{sharedPreferences_login.getString("userId", "")});//查询并获得游标
         }
         Log.i("meterHomePage", "所有表册ID个数为：" + cursor.getCount());
@@ -424,9 +398,9 @@ public class MeterHomePageFragment extends Fragment {
         bookList.clear();
         Cursor cursor;
         if (sharedPreferences.getBoolean("show_temp_data", false)) {
-            cursor = db.rawQuery("select * from MeterBook where login_user_id=? and fileName=?", new String[]{"0",sharedPreferences.getString("currentFileName","")});//查询并获得游标
-        }else {
-            cursor = db.rawQuery("select * from MeterBook where login_user_id=? and fileName=?", new String[]{sharedPreferences_login.getString("userId", ""),sharedPreferences.getString("currentFileName","")});//查询并获得游标
+            cursor = db.rawQuery("select * from MeterBook where login_user_id=? and fileName=?", new String[]{"0", sharedPreferences.getString("currentFileName", "")});//查询并获得游标
+        } else {
+            cursor = db.rawQuery("select * from MeterBook where login_user_id=? and fileName=?", new String[]{sharedPreferences_login.getString("userId", ""), sharedPreferences.getString("currentFileName", "")});//查询并获得游标
         }
         Log.i("meterHomePage", "抄表本个数为：" + cursor.getCount());
         //如果游标为空，则显示没有数据图片
@@ -447,7 +421,7 @@ public class MeterHomePageFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         db.close();
-        if(bookWindow != null){
+        if (bookWindow != null) {
             bookWindow = null;
         }
     }

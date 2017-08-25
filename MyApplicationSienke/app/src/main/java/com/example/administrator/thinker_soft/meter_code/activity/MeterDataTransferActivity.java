@@ -1,5 +1,6 @@
-package com.example.administrator.thinker_soft.meter_code.fragment;
+package com.example.administrator.thinker_soft.meter_code.activity;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -10,14 +11,11 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -29,7 +27,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.administrator.thinker_soft.R;
-import com.example.administrator.thinker_soft.meter_code.activity.MeterDataDownloadActivity;
 import com.example.administrator.thinker_soft.meter_code.adapter.MeterFileSelectListAdapter;
 import com.example.administrator.thinker_soft.meter_code.adapter.MeterUploadResulrtListAdapter;
 import com.example.administrator.thinker_soft.meter_code.model.AreaInfo;
@@ -58,7 +55,7 @@ import java.util.List;
 /**
  * Created by Administrator on 2017/6/12 0012.
  */
-public class MeterDataTransferFragment extends Fragment {
+public class MeterDataTransferActivity extends Activity {
     private View view, fileSelectView, uploadView, loadingView, line;
     private CardView upload, download;
     private LayoutInflater layoutInflater;
@@ -85,16 +82,16 @@ public class MeterDataTransferFragment extends Fragment {
     private boolean isCompleted = false;
     private boolean isFirst;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_data_transfer, null);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_data_transfer);
 
         bindView();
         defaultSetting();
         setViewClickListener();
-        return view;
     }
+
 
     //绑定控件
     private void bindView() {
@@ -105,10 +102,10 @@ public class MeterDataTransferFragment extends Fragment {
 
     //初始化设置
     private void defaultSetting() {
-        MySqliteHelper helper = new MySqliteHelper(getActivity(), 1);
+        MySqliteHelper helper = new MySqliteHelper(MeterDataTransferActivity.this, 1);
         db = helper.getWritableDatabase();
-        public_sharedPreferences = getActivity().getSharedPreferences("data", Context.MODE_PRIVATE);
-        sharedPreferences_login = getActivity().getSharedPreferences("login_info", Context.MODE_PRIVATE);
+        public_sharedPreferences = MeterDataTransferActivity.this.getSharedPreferences("data", Context.MODE_PRIVATE);
+        sharedPreferences_login = MeterDataTransferActivity.this.getSharedPreferences("login_info", Context.MODE_PRIVATE);
     }
 
     //点击事件
@@ -156,7 +153,7 @@ public class MeterDataTransferFragment extends Fragment {
      * 文件选择窗口
      */
     public void showFileSelectWindow() {
-        layoutInflater = LayoutInflater.from(getActivity());
+        layoutInflater = LayoutInflater.from(MeterDataTransferActivity.this);
         fileSelectView = layoutInflater.inflate(R.layout.popupwindow_meter_single_select, null);
         fileWindow = new PopupWindow(fileSelectView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         //绑定控件ID
@@ -200,7 +197,7 @@ public class MeterDataTransferFragment extends Fragment {
 
     //弹出上传数据前提示窗口
     public void showUploadTipsWindow(final String fileName) {
-        layoutInflater = LayoutInflater.from(getActivity());
+        layoutInflater = LayoutInflater.from(MeterDataTransferActivity.this);
         uploadView = layoutInflater.inflate(R.layout.popupwindow_user_detail_info_save, null);
         uploadWindow = new PopupWindow(uploadView, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         //绑定控件ID
@@ -399,7 +396,7 @@ public class MeterDataTransferFragment extends Fragment {
 
     //show获取数据加载动画
     public void showPopupwindow() {
-        layoutInflater = LayoutInflater.from(getActivity());
+        layoutInflater = LayoutInflater.from(MeterDataTransferActivity.this);
         loadingView = layoutInflater.inflate(R.layout.popupwindow_query_loading, null);
         loadingWindow = new PopupWindow(loadingView, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         frameAnimation = (ImageView) loadingView.findViewById(R.id.frame_animation);
@@ -423,7 +420,7 @@ public class MeterDataTransferFragment extends Fragment {
 
     //show上传数据加载动画
     public void showUploadLoadingWindow(String fileName) {
-        layoutInflater = LayoutInflater.from(getActivity());
+        layoutInflater = LayoutInflater.from(MeterDataTransferActivity.this);
         loadingView = layoutInflater.inflate(R.layout.popupwindow_meter_upload_loading, null);
         loadingWindow = new PopupWindow(loadingView, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         title = (TextView) loadingView.findViewById(R.id.title);
@@ -466,14 +463,14 @@ public class MeterDataTransferFragment extends Fragment {
 
     //设置背景透明度
     public void backgroundAlpha(float bgAlpha) {
-        WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
+        WindowManager.LayoutParams lp = MeterDataTransferActivity.this.getWindow().getAttributes();
         lp.alpha = bgAlpha; //0.0-1.0
         if (bgAlpha == 1) {
-            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);//不移除该Flag的话,在有视频的页面上的视频会出现黑屏的bug
+            MeterDataTransferActivity.this.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);//不移除该Flag的话,在有视频的页面上的视频会出现黑屏的bug
         } else {
-            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);//此行代码主要是解决在华为手机上半透明效果无效的bug
+            MeterDataTransferActivity.this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);//此行代码主要是解决在华为手机上半透明效果无效的bug
         }
-        getActivity().getWindow().setAttributes(lp);
+        MeterDataTransferActivity.this.getWindow().setAttributes(lp);
     }
 
     //请求抄表本的数据
@@ -601,9 +598,9 @@ public class MeterDataTransferFragment extends Fragment {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 0:
-                    fileAdapter = new MeterFileSelectListAdapter(getActivity(), fileList, 1);
+                    fileAdapter = new MeterFileSelectListAdapter(MeterDataTransferActivity.this, fileList, 1);
                     fileListView.setAdapter(fileAdapter);
-                    MyAnimationUtils.viewGroupOutAnimation(getActivity(), fileListView, 0.1F);
+                    MyAnimationUtils.viewGroupOutAnimation(MeterDataTransferActivity.this, fileListView, 0.1F);
                     break;
                 case 1:
                     try {
@@ -622,11 +619,11 @@ public class MeterDataTransferFragment extends Fragment {
                     break;
                 case 2:
                     loadingWindow.dismiss();
-                    Toast.makeText(getActivity(), "没有抄表本数据哦！", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MeterDataTransferActivity.this, "没有抄表本数据哦！", Toast.LENGTH_SHORT).show();
                     break;
                 case 3:
                     loadingWindow.dismiss();
-                    Toast.makeText(getActivity(), "网络请求超时！", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MeterDataTransferActivity.this, "网络请求超时！", Toast.LENGTH_SHORT).show();
                     break;
                 case 4:
                     try {
@@ -640,7 +637,7 @@ public class MeterDataTransferFragment extends Fragment {
                             areaInfoArrayList.add(item);
                         }
                         if (bookInfoArrayList.size() != 0 || areaInfoArrayList.size() != 0) {
-                            Intent intent = new Intent(getActivity(), MeterDataDownloadActivity.class);
+                            Intent intent = new Intent(MeterDataTransferActivity.this, MeterDataDownloadActivity.class);
                             Bundle bundle = new Bundle();
                             bundle.putParcelableArrayList("bookInfoArrayList", bookInfoArrayList);
                             bundle.putParcelableArrayList("areaInfoArrayList", areaInfoArrayList);
@@ -654,7 +651,7 @@ public class MeterDataTransferFragment extends Fragment {
                     break;
                 case 5:
                     loadingWindow.dismiss();
-                    Toast.makeText(getActivity(), "没有抄表分区数据哦！", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MeterDataTransferActivity.this, "没有抄表分区数据哦！", Toast.LENGTH_SHORT).show();
                     break;
                 case 6:
                     noData.setVisibility(View.VISIBLE);
@@ -675,7 +672,7 @@ public class MeterDataTransferFragment extends Fragment {
                     break;
                 case 9:
                     resultListview.setVisibility(View.VISIBLE);
-                    adapter = new MeterUploadResulrtListAdapter(getActivity(), uploadResultListItems);
+                    adapter = new MeterUploadResulrtListAdapter(MeterDataTransferActivity.this, uploadResultListItems);
                     adapter.notifyDataSetChanged();
                     resultListview.setAdapter(adapter);
                     break;
@@ -688,12 +685,12 @@ public class MeterDataTransferFragment extends Fragment {
                         frameAnimation.setVisibility(View.GONE);
                         if (uploadResultListItems.size() != 0) {
                             title.setText("数据上传完成，但有" + uploadResultListItems.size() + "个用户上传失败，原因详情如下：");
-                        }else {
+                        } else {
                             title.setText("数据上传完成！");
                         }
                         line.setVisibility(View.VISIBLE);
                         confirm.setVisibility(View.VISIBLE);
-                        Toast.makeText(getActivity(), "数据上传完成！", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MeterDataTransferActivity.this, "数据上传完成！", Toast.LENGTH_SHORT).show();
                     }
                     break;
                 default:

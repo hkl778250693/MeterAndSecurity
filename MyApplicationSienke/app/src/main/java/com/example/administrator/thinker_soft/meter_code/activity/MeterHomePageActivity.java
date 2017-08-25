@@ -9,6 +9,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -32,8 +34,6 @@ import android.widget.Toast;
 import com.baidu.mapapi.SDKInitializer;
 import com.example.administrator.thinker_soft.R;
 import com.example.administrator.thinker_soft.meter_code.adapter.MeterHomePageViewPagerAdapter;
-import com.example.administrator.thinker_soft.meter_code.fragment.CustomQueryFragment;
-import com.example.administrator.thinker_soft.meter_code.fragment.MeterDataTransferFragment;
 import com.example.administrator.thinker_soft.meter_code.fragment.MeterHomePageFragment;
 import com.example.administrator.thinker_soft.meter_code.fragment.MyInfoFragment;
 import com.example.administrator.thinker_soft.meter_code.model.MeterUserListviewItem;
@@ -59,7 +59,7 @@ public class MeterHomePageActivity extends FragmentActivity {
     private ImageView back, more, frameAnimation;
     private List<Fragment> fragmentList;
     private MeterHomePageViewPagerAdapter adapter;
-    private RadioButton radio_button0, radio_button1, radio_button2, radio_button3;
+    private RadioButton radio_button0, radio_button1;
     private SharedPreferences sharedPreferences_login, sharedPreferences;
     private SQLiteDatabase db;  //数据库
     private TempDataTools tools;
@@ -68,6 +68,8 @@ public class MeterHomePageActivity extends FragmentActivity {
     private boolean isFirst = true;
     private static final int REQUEST_CODE_SCAN = 0x0000;
     private ArrayList<MeterUserListviewItem> userLists = new ArrayList<>();
+    private SoundPool sp;//声明一个SoundPool
+    private int music;//定义一个整型用load（）；来设置suondID
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,13 +110,13 @@ public class MeterHomePageActivity extends FragmentActivity {
         viewPager = (ViewPager) findViewById(R.id.view_pager);
         radio_button0 = (RadioButton) findViewById(R.id.radio_button0);
         radio_button1 = (RadioButton) findViewById(R.id.radio_button1);
-        radio_button2 = (RadioButton) findViewById(R.id.radio_button2);
-        radio_button3 = (RadioButton) findViewById(R.id.radio_button3);
         rootRelative = (RelativeLayout) findViewById(R.id.root_relative);
     }
 
     //初始化设置
     private void defaultSetting() {
+        sp= new SoundPool(10, AudioManager.STREAM_SYSTEM, 5);//第一个参数为同时播放数据流的最大个数，第二数据流类型，第三为声音质量
+        music = sp.load(this, R.raw.beep, 1); //把你的声音素材放到res/raw里，第2个参数即为资源文件，第3个为音乐的优先级
         sharedPreferences_login = this.getSharedPreferences("login_info", Context.MODE_PRIVATE);
         sharedPreferences = MeterHomePageActivity.this.getSharedPreferences(sharedPreferences_login.getString("login_name", "") + "data", Context.MODE_PRIVATE);
         MySqliteHelper helper = new MySqliteHelper(MeterHomePageActivity.this, 1);
@@ -223,8 +225,6 @@ public class MeterHomePageActivity extends FragmentActivity {
         fragmentList = new ArrayList<>();
         //添加fragment到list
         fragmentList.add(new MeterHomePageFragment());
-        fragmentList.add(new CustomQueryFragment());
-        fragmentList.add(new MeterDataTransferFragment());
         fragmentList.add(new MyInfoFragment());
         //避免报空指针
         if (fragmentList != null) {
@@ -239,8 +239,6 @@ public class MeterHomePageActivity extends FragmentActivity {
         more.setOnClickListener(onClickListener);
         radio_button0.setOnClickListener(onClickListener);
         radio_button1.setOnClickListener(onClickListener);
-        radio_button2.setOnClickListener(onClickListener);
-        radio_button3.setOnClickListener(onClickListener);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -254,29 +252,11 @@ public class MeterHomePageActivity extends FragmentActivity {
                         titleName.setText("首页");
                         radio_button0.setChecked(true);
                         radio_button1.setChecked(false);
-                        radio_button2.setChecked(false);
-                        radio_button3.setChecked(false);
                         break;
                     case 1:
                         titleName.setText("查询");
                         radio_button0.setChecked(false);
                         radio_button1.setChecked(true);
-                        radio_button2.setChecked(false);
-                        radio_button3.setChecked(false);
-                        break;
-                    case 2:
-                        titleName.setText("传输");
-                        radio_button0.setChecked(false);
-                        radio_button1.setChecked(false);
-                        radio_button2.setChecked(true);
-                        radio_button3.setChecked(false);
-                        break;
-                    case 3:
-                        titleName.setText("我");
-                        radio_button0.setChecked(false);
-                        radio_button1.setChecked(false);
-                        radio_button2.setChecked(false);
-                        radio_button3.setChecked(true);
                         break;
                 }
             }
@@ -299,20 +279,14 @@ public class MeterHomePageActivity extends FragmentActivity {
                     showMoreWindow();
                     break;
                 case R.id.radio_button0:
+                    sp.play(music, 1, 1, 0, 0, 1);
                     titleName.setText("首页");
                     viewPager.setCurrentItem(0);
                     break;
                 case R.id.radio_button1:
-                    titleName.setText("查询");
-                    viewPager.setCurrentItem(1);
-                    break;
-                case R.id.radio_button2:
-                    titleName.setText("传输");
-                    viewPager.setCurrentItem(2);
-                    break;
-                case R.id.radio_button3:
+                    sp.play(music, 1, 1, 0, 0, 1);
                     titleName.setText("我");
-                    viewPager.setCurrentItem(3);
+                    viewPager.setCurrentItem(1);
                     break;
                 default:
                     break;

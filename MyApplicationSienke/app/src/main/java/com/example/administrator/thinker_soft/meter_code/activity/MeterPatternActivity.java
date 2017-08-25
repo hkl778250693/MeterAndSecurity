@@ -74,6 +74,4 @@ public class MeterPatternActivity extends Activity {
             }
         }
     };
-
-
 }
