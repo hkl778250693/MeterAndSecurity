@@ -53,7 +53,7 @@ public class MeterUserNameQueryActivity extends Activity {
         MySqliteHelper helper = new MySqliteHelper(MeterUserNameQueryActivity.this, 1);
         db = helper.getWritableDatabase();
         sharedPreferences_login = this.getSharedPreferences("login_info", Context.MODE_PRIVATE);
-        sharedPreferences = MeterUserNameQueryActivity.this.getSharedPreferences(sharedPreferences_login.getString("login_name","")+"data", Context.MODE_PRIVATE);
+        sharedPreferences = MeterUserNameQueryActivity.this.getSharedPreferences(sharedPreferences_login.getString("userId","")+"data", Context.MODE_PRIVATE);
     }
 
     //点击事件

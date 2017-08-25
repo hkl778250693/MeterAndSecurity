@@ -38,7 +38,7 @@ public class MeterPatternActivity extends Activity {
     //初始化设置
     private void defaultSetting() {
         sharedPreferences_login = getSharedPreferences("login_info", Context.MODE_PRIVATE);
-        sharedPreferences = MeterPatternActivity.this.getSharedPreferences(sharedPreferences_login.getString("login_name", "") + "data", Context.MODE_PRIVATE);
+        sharedPreferences = MeterPatternActivity.this.getSharedPreferences(sharedPreferences_login.getString("userId", "") + "data", Context.MODE_PRIVATE);
         if (sharedPreferences.getBoolean("detail_meter", true)) {
             openBluetoothTb.setChecked(true);
         } else {

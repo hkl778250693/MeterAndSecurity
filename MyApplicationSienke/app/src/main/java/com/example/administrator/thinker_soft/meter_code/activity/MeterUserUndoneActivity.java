@@ -91,7 +91,7 @@ public class MeterUserUndoneActivity extends Activity {
         MySqliteHelper helper = new MySqliteHelper(MeterUserUndoneActivity.this, 1);
         db = helper.getWritableDatabase();
         sharedPreferences_login = this.getSharedPreferences("login_info", Context.MODE_PRIVATE);
-        sharedPreferences = MeterUserUndoneActivity.this.getSharedPreferences(sharedPreferences_login.getString("login_name", "") + "data", Context.MODE_PRIVATE);
+        sharedPreferences = MeterUserUndoneActivity.this.getSharedPreferences(sharedPreferences_login.getString("userId", "") + "data", Context.MODE_PRIVATE);
         /**
          * 设置 下拉刷新 Header 和 footer 风格样式
          */

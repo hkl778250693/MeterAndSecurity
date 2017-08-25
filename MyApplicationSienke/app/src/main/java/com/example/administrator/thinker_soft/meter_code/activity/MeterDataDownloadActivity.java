@@ -471,11 +471,11 @@ public class MeterDataDownloadActivity extends Activity {
                                     for (int i = 0; i < userJsonArray.length(); i++) {
                                         try {
                                             userObject = userJsonArray.getJSONObject(i);
+                                            insertMeterUserData();   //将抄表用户数据插入本地数据库
+                                            bookMap.put(userObject.optInt("n_book_id", 0) + "", userObject.optString("c_book_name", ""));
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
-                                        insertMeterUserData();   //将抄表用户数据插入本地数据库
-                                        bookMap.put(userObject.optInt("n_book_id", 0) + "", userObject.optString("c_book_name", ""));
                                     }
                                     for (String bookID : bookMap.keySet()) {
                                         insertMeterBook(bookID, bookMap.get(bookID));   //将抄表本数据保存至本地 MeterBook 表

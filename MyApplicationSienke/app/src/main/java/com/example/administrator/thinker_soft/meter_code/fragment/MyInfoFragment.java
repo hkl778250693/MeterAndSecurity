@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.administrator.thinker_soft.R;
+import com.example.administrator.thinker_soft.meter_code.activity.MapMeterActivity;
 import com.example.administrator.thinker_soft.meter_code.activity.MeterDeleteFileActivity;
 import com.example.administrator.thinker_soft.meter_code.activity.MeterMapDownloadActivity;
 import com.example.administrator.thinker_soft.meter_code.activity.MeterSettingsActivity;
@@ -21,7 +22,7 @@ import com.example.administrator.thinker_soft.meter_code.zxing.android.CaptureAc
  */
 public class MyInfoFragment extends Fragment{
     private View view;
-    private CardView scanCode,fileManage,mapManage,meterTrack,meterSettings;
+    private CardView scanCode,mapMeter,fileManage,mapManage,meterTrack,meterSettings;
 
     @Nullable
     @Override
@@ -37,6 +38,7 @@ public class MyInfoFragment extends Fragment{
     //绑定控件
     private void bindView() {
         scanCode = (CardView) view.findViewById(R.id.scan_code);
+        mapMeter = (CardView) view.findViewById(R.id.map_meter_cardview);
         fileManage = (CardView) view.findViewById(R.id.file_manage);
         mapManage = (CardView) view.findViewById(R.id.map_manage);
         meterTrack = (CardView) view.findViewById(R.id.meter_track);
@@ -51,6 +53,7 @@ public class MyInfoFragment extends Fragment{
     //点击事件
     public void setViewClickListener() {
         scanCode.setOnClickListener(clickListener);
+        mapMeter.setOnClickListener(clickListener);
         fileManage.setOnClickListener(clickListener);
         mapManage.setOnClickListener(clickListener);
         meterTrack.setOnClickListener(clickListener);
@@ -64,6 +67,10 @@ public class MyInfoFragment extends Fragment{
             switch (v.getId()) {
                 case R.id.scan_code:
                     intent = new Intent(getActivity(), CaptureActivity.class);
+                    startActivity(intent);
+                    break;
+                case R.id.map_meter:
+                    intent = new Intent(getActivity(), MapMeterActivity.class);
                     startActivity(intent);
                     break;
                 case R.id.file_manage:

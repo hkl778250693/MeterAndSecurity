@@ -91,7 +91,7 @@ public class MeterHomePageFragment extends Fragment {
         MySqliteHelper helper = new MySqliteHelper(getActivity(), 1);
         db = helper.getWritableDatabase();
         sharedPreferences_login = getActivity().getSharedPreferences("login_info", Context.MODE_PRIVATE);
-        sharedPreferences = getActivity().getSharedPreferences(sharedPreferences_login.getString("login_name","")+"data", Context.MODE_PRIVATE);
+        sharedPreferences = getActivity().getSharedPreferences(sharedPreferences_login.getString("userId","")+"data", Context.MODE_PRIVATE);
     }
 
     //点击事件
@@ -400,6 +400,7 @@ public class MeterHomePageFragment extends Fragment {
         fileList.clear();
         Cursor cursor;
         if (sharedPreferences.getBoolean("show_temp_data", false)) {
+            Log.i("getFileInfo","演示数据进来了");
             cursor = db.rawQuery("select * from MeterFile where login_user_id=?", new String[]{"0"});//查询并获得游标
         }else {
             cursor = db.rawQuery("select * from MeterFile where login_user_id=?", new String[]{sharedPreferences_login.getString("userId", "")});//查询并获得游标

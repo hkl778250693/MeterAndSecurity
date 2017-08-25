@@ -79,7 +79,7 @@ public class MeterStatisticsActivity extends Activity {
         MySqliteHelper helper = new MySqliteHelper(MeterStatisticsActivity.this, 1);
         db = helper.getWritableDatabase();
         sharedPreferences_login = this.getSharedPreferences("login_info", Context.MODE_PRIVATE);
-        sharedPreferences = MeterStatisticsActivity.this.getSharedPreferences(sharedPreferences_login.getString("login_name", "") + "data", Context.MODE_PRIVATE);
+        sharedPreferences = MeterStatisticsActivity.this.getSharedPreferences(sharedPreferences_login.getString("userId", "") + "data", Context.MODE_PRIVATE);
         if (!"".equals(sharedPreferences.getString("currentFileName", ""))) {
             fileName.setText(sharedPreferences.getString("currentFileName", ""));
             bookName.setText("所有抄表本");
@@ -235,7 +235,12 @@ public class MeterStatisticsActivity extends Activity {
     //查询抄表本信息
     public void getBookInfo() {
         bookList.clear();
-        Cursor cursor = db.rawQuery("select * from MeterBook where login_user_id=? and fileName=?", new String[]{sharedPreferences_login.getString("userId", ""), sharedPreferences.getString("currentFileName", "")});//查询并获得游标
+        Cursor cursor;
+        if (sharedPreferences.getBoolean("show_temp_data", false)) {   //显示演示数据
+            cursor = db.rawQuery("select * from MeterBook where login_user_id=? and fileName=?", new String[]{"0", sharedPreferences.getString("currentFileName", "")});//查询并获得游标
+        } else {
+            cursor = db.rawQuery("select * from MeterBook where login_user_id=? and fileName=?", new String[]{sharedPreferences_login.getString("userId", ""), sharedPreferences.getString("currentFileName", "")});//查询并获得游标
+        }
         Log.i("meterHomePage", "抄表本个数为：" + cursor.getCount());
         //如果游标为空，则显示没有数据图片
         if (cursor.getCount() == 0) {

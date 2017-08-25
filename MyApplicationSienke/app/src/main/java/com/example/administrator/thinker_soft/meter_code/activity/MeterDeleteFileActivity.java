@@ -80,7 +80,7 @@ public class MeterDeleteFileActivity extends Activity {
         MySqliteHelper helper = new MySqliteHelper(MeterDeleteFileActivity.this, 1);
         db = helper.getWritableDatabase();
         sharedPreferences_login = MeterDeleteFileActivity.this.getSharedPreferences("login_info", Context.MODE_PRIVATE);
-        sharedPreferences = MeterDeleteFileActivity.this.getSharedPreferences(sharedPreferences_login.getString("login_name", "") + "data", Context.MODE_PRIVATE);
+        sharedPreferences = MeterDeleteFileActivity.this.getSharedPreferences(sharedPreferences_login.getString("userId", "") + "data", Context.MODE_PRIVATE);
         new Thread() {
             @Override
             public void run() {
@@ -199,7 +199,13 @@ public class MeterDeleteFileActivity extends Activity {
     //查询抄表文件信息
     public void getFileInfo() {
         fileList.clear();
-        Cursor cursor = db.rawQuery("select * from MeterFile where login_user_id=?", new String[]{sharedPreferences_login.getString("userId", "")});//查询并获得游标
+        Cursor cursor;
+        if (sharedPreferences.getBoolean("show_temp_data", false)) {   //显示演示数据
+            cursor = db.rawQuery("select * from MeterFile where login_user_id=?", new String[]{"0"});//查询并获得游标
+        } else {
+            cursor = db.rawQuery("select * from MeterFile where login_user_id=?", new String[]{sharedPreferences_login.getString("userId", "")});//查询并获得游标
+        }
+
         Log.i("meterHomePage", "所有表册ID个数为：" + cursor.getCount());
         fileCount = cursor.getCount();
         //如果游标为空，则显示没有数据图片

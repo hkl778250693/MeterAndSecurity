@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -36,8 +38,9 @@ public class MeterTrackActivity extends AppCompatActivity {
     private ImageView back;
     private SQLiteDatabase db;  //数据库
     private SharedPreferences sharedPreferences_login, sharedPreferences;
+    private CoordinatorLayout coordinatorLayout;
     // 抄表轨迹折线
-    Polyline mPolyline;
+    Polyline mPolyline,mTexturePolyline;
     // 地图相关
     MapView mMapView;
     BaiduMap mBaiduMap;
@@ -46,6 +49,7 @@ public class MeterTrackActivity extends AppCompatActivity {
     BitmapDescriptor startMarkerIcon = BitmapDescriptorFactory.fromResource(R.mipmap.start_point_icon);
     BitmapDescriptor middleMarkerIcon = BitmapDescriptorFactory.fromResource(R.mipmap.footprint);
     BitmapDescriptor terminalMarkerIcon = BitmapDescriptorFactory.fromResource(R.mipmap.terminal);
+    BitmapDescriptor mGreenTexture = BitmapDescriptorFactory.fromAsset("icon_road_green_arrow.png");
     public Marker mMarker;
 
     @Override
@@ -62,6 +66,7 @@ public class MeterTrackActivity extends AppCompatActivity {
     private void bindView() {
         back = (ImageView) findViewById(R.id.back);
         mMapView = (MapView) findViewById(R.id.map_meter);
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
     }
 
     //初始化设置
@@ -69,7 +74,7 @@ public class MeterTrackActivity extends AppCompatActivity {
         MySqliteHelper helper = new MySqliteHelper(MeterTrackActivity.this, 1);
         db = helper.getWritableDatabase();
         sharedPreferences_login = this.getSharedPreferences("login_info", Context.MODE_PRIVATE);
-        sharedPreferences = MeterTrackActivity.this.getSharedPreferences(sharedPreferences_login.getString("login_name", "") + "data", Context.MODE_PRIVATE);
+        sharedPreferences = MeterTrackActivity.this.getSharedPreferences(sharedPreferences_login.getString("userId", "") + "data", Context.MODE_PRIVATE);
         mBaiduMap = mMapView.getMap();
         new Thread(){
             @Override
@@ -98,10 +103,21 @@ public class MeterTrackActivity extends AppCompatActivity {
                                     setMiddleMarker(latLngList.get(i));
                                 }
                             }
-                            OverlayOptions ooPolyline = new PolylineOptions().width(10).color(0xAAFF0000).points(latLngList);
-                            mPolyline = (Polyline) mBaiduMap.addOverlay(ooPolyline);
+                            /*OverlayOptions ooPolyline = new PolylineOptions().width(10).color(0xAAFF0000).points(latLngList);
+                            mPolyline = (Polyline) mBaiduMap.addOverlay(ooPolyline);*/
+                            OverlayOptions ooPolyline11 = new PolylineOptions().width(15).points(latLngList).dottedLine(true).customTexture(mGreenTexture);
+                            mTexturePolyline = (Polyline) mBaiduMap.addOverlay(ooPolyline11);
                         }else {
-
+                            LatLng center = new LatLng(29.5956,106.579369);
+                            MapStatus mMapStatus = new MapStatus.Builder()
+                                    .target(center)
+                                    .zoom(14.0F)
+                                    .build();
+                            //定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
+                            MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
+                            //改变地图状态
+                            mBaiduMap.setMapStatus(mMapStatusUpdate);
+                            Snackbar.make(coordinatorLayout,"您今天还没有抄表轨迹哦！",Snackbar.LENGTH_INDEFINITE).show();
                         }
                     }
                 });

@@ -116,12 +116,14 @@ public class MeterHomePageActivity extends FragmentActivity {
     //初始化设置
     private void defaultSetting() {
         sharedPreferences_login = this.getSharedPreferences("login_info", Context.MODE_PRIVATE);
-        sharedPreferences = MeterHomePageActivity.this.getSharedPreferences(sharedPreferences_login.getString("login_name", "") + "data", Context.MODE_PRIVATE);
+        sharedPreferences = MeterHomePageActivity.this.getSharedPreferences(sharedPreferences_login.getString("userId", "") + "data", Context.MODE_PRIVATE);
         MySqliteHelper helper = new MySqliteHelper(MeterHomePageActivity.this, 1);
         db = helper.getWritableDatabase();
         radio_button0.setChecked(true);
         titleName.setText("移动抄表");
+        Log.i("MeterHomePageActivity","演示数据状态："+sharedPreferences.getBoolean("show_temp_data", false));
         if (sharedPreferences.getBoolean("show_temp_data", false)) {
+            Log.i("MeterHomePageActivity","演示数据进来了");
             if (isFirst) {
                 db.delete("MeterUser", null, null);  //删除User表中当前用户的所有数据（官方推荐方法）
                 db.delete("MeterFile", null, null);

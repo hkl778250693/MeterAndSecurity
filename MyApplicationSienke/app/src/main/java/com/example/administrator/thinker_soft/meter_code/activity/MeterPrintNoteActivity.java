@@ -42,7 +42,7 @@ public class MeterPrintNoteActivity extends Activity{
 	//初始化设置
 	private void defaultSetting() {
 		sharedPreferences_login = MeterPrintNoteActivity.this.getSharedPreferences("login_info", Context.MODE_PRIVATE);
-		sharedPreferences = MeterPrintNoteActivity.this.getSharedPreferences(sharedPreferences_login.getString("login_name","")+"data", Context.MODE_PRIVATE);
+		sharedPreferences = MeterPrintNoteActivity.this.getSharedPreferences(sharedPreferences_login.getString("userId","")+"data", Context.MODE_PRIVATE);
 		if(!"".equals(sharedPreferences.getString("meter_print_note",""))){
 			editPrintNote.setText(sharedPreferences.getString("meter_print_note",""));
 		}else {
