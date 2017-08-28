@@ -90,7 +90,7 @@ public class MoveLoginActivity extends Activity{
     private void defaultSetting() {
         sharedPreferences_login = getSharedPreferences("login_info", Context.MODE_PRIVATE);
         public_sharedPreferences = this.getSharedPreferences("data", Context.MODE_PRIVATE);
-        sharedPreferences = this.getSharedPreferences(sharedPreferences_login.getString("login_name","")+"data", Context.MODE_PRIVATE);
+        sharedPreferences = this.getSharedPreferences(sharedPreferences_login.getString("userId","")+"data", Context.MODE_PRIVATE);
         editor = sharedPreferences_login.edit();
         Log.i("MobileSecurityLogin", "默认设置进来了！是否记住账号："+sharedPreferences_login.getBoolean("remind_me",false));
         if(sharedPreferences_login.getBoolean("remind_me",false)){
@@ -176,6 +176,7 @@ public class MoveLoginActivity extends Activity{
                     break;
                 case R.id.temp_login:
                     editor.putBoolean("have_logined",false).apply();
+                    sharedPreferences.edit().putBoolean("show_temp_data",true).apply();
                     Intent intent1 = new Intent(MoveLoginActivity.this, MoveHomePageActivity.class);
                     startActivity(intent1);
                     finish();

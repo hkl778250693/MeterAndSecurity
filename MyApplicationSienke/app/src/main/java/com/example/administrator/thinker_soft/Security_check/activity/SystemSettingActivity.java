@@ -38,7 +38,6 @@ public class SystemSettingActivity extends Activity {
         back = (ImageView) findViewById(R.id.back);
         ip = (CardView) findViewById(R.id.ip);
         tempdata_cardview = (CardView) findViewById(R.id.tempdata_cardview);
-        clearData = (CardView) findViewById(R.id.clear_data);
         show_tempdata = (CheckBox) findViewById(R.id.show_tempdata);
     }
 
@@ -63,7 +62,6 @@ public class SystemSettingActivity extends Activity {
     private void setViewClickListener() {
         back.setOnClickListener(clickListener);
         ip.setOnClickListener(clickListener);
-        clearData.setOnClickListener(clickListener);
         show_tempdata.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -86,10 +84,6 @@ public class SystemSettingActivity extends Activity {
                     break;
                 case R.id.ip:
                     intent = new Intent(SystemSettingActivity.this, IpSettingActivity.class);
-                    startActivity(intent);
-                    break;
-                case R.id.clear_data:
-                    intent = new Intent(SystemSettingActivity.this, TaskFileDeleteActivity.class);
                     startActivity(intent);
                     break;
                 default:

@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.view.Gravity;
@@ -99,8 +100,17 @@ public class SecurityChooseFragment extends Fragment {
             Intent intent;
             switch (v.getId()) {
                 case R.id.user_list_cardview:
-                    intent = new Intent(getActivity(), UserListActivity.class);
-                    startActivity(intent);
+                    if (sharedPreferences.getBoolean("show_temp_data", false)) {  //显示演示数据
+                        intent = new Intent(getActivity(), UserListActivity.class);
+                        startActivity(intent);
+                    }else {
+                        if (!"".equals(sharedPreferences.getString("currentTaskId",""))) {
+                            intent = new Intent(getActivity(), UserListActivity.class);
+                            startActivity(intent);
+                        }else {
+                            Snackbar.make(coordinatorLayout,"请您先选择任务！",Snackbar.LENGTH_SHORT).show();
+                        }
+                    }
                     break;
                 case R.id.task_cardview:
                     taskChooseWindow();

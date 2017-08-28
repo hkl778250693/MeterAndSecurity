@@ -168,6 +168,8 @@
             android:screenOrientation="portrait" />
         <activity android:name=".Security_check.activity.DataTransferActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".Security_check.activity.TaskFileDeleteActivity"
+            android:screenOrientation="portrait"/>
 
         //掌上办公
         <activity

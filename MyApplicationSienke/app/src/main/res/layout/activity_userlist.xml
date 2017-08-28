@@ -28,6 +28,17 @@
             android:textColor="@android:color/white"
             android:textSize="22sp" />
 
+        <ImageView
+            android:id="@+id/more"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/page_turning_icon_selector"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"/>
+
     </RelativeLayout>
 
     <LinearLayout
